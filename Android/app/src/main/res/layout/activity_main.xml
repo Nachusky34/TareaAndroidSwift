@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/lay_titulo"
         android:layout_width="match_parent"
-        android:layout_height="268dp"
+        android:layout_height="200dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -32,7 +32,7 @@
             android:gravity="center"
             android:shadowColor="#020202"
             android:shadowRadius="10"
-            android:text="APP NAME"
+            android:text="PC ERA"
             android:textColor="#55B7E8"
             android:textSize="48sp" />
 
@@ -40,8 +40,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="456dp"
+        android:layout_height="350dp"
         android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="93dp"
+            app:srcCompat="@drawable/logo_provisional" />
 
         <TextView
             android:id="@+id/tv_signin"
@@ -75,63 +81,69 @@
             android:inputType="textPassword" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="106dp"
-            android:orientation="horizontal">
+            android:id="@+id/linearLayout_btngoogle"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="317dp"
+            android:background="#CC000000"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView_google"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="25dp"
+                android:id="@+id/iv_google"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:foregroundGravity="center_vertical"
                 app:srcCompat="@drawable/logo_google" />
 
-            <Button
-                android:id="@+id/btn_google"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="25dp"
-                android:layout_marginRight="70dp"
-                android:backgroundTint="#000000"
+            <TextView
+                android:id="@+id/tv_google"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:fontFamily="serif"
-                android:text="SIGN IN with GOOGLE"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
-
+                android:gravity="center_horizontal|center_vertical"
+                android:text="SIGN IN with Google"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:orientation="horizontal">
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:text="Not have account yet?" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_signup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="110dp"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:text="SIGN UP"
-                android:textColor="#2196F3" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:text="Not have account yet?" />
+
+        <TextView
+            android:id="@+id/tv_signup"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="90dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:text="SIGN UP"
+            android:textColor="#2196F3" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:orientation="horizontal">
 
         <Button
