@@ -13,19 +13,19 @@
         android:theme="@style/Theme.TareaFinal"
         tools:targetApi="31">
         <activity
-            android:name=".Tienda"
+            android:name=".UI.Login"
             android:exported="false" />
         <activity
-            android:name=".Tabs"
+            android:name=".UI.Tabs"
             android:exported="false" />
         <activity
             android:name=".Tab"
             android:exported="false" />
         <activity
-            android:name=".Registro"
+            android:name=".UI.Registro"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

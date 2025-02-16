@@ -1,4 +1,4 @@
-package com.example.tareafinal;
+package com.example.tareafinal.UI;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.tareafinal.R;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
