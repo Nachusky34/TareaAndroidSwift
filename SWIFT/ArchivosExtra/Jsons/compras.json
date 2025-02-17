@@ -1,0 +1,25 @@
+{
+  "compra": {
+    "compra1": {
+      "idUsuario": "1",
+      "idProducto": "1",
+      "fecha": "12/12/2012",
+      "hora": "11:12",
+      "cantidad": "12"
+    },
+    "compra2": {
+      "idUsuario": "2",
+      "idProducto": "2",
+      "fecha": "12/12/2012",
+      "hora": "11:12",
+      "cantidad": "100"
+    },
+    "compra3": {
+      "idUsuario": "2",
+      "idProducto": "3",
+      "fecha": "12/12/2012",
+      "hora": "11:12",
+      "cantidad": "3"
+    }
+  }
+}

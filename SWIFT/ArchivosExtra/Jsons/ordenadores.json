@@ -1,0 +1,28 @@
+{
+  "producto": {
+    "pc1": {
+      "id": "1",
+      "nombre": "pc1",
+      "descripcion": "este es el pc1",
+      "precio": "3000"
+    },
+    "pc2": {
+      "id": "2",
+      "nombre": "pc2",
+      "descripcion": "este es el pc2",
+      "precio": "2000"
+    },
+    "pc3": {
+      "id": "3",
+      "nombre": "pc3",
+      "descripcion": "este es el pc3",
+      "precio": "1000"
+    },
+    "pc4": {
+      "id": "4",
+      "nombre": "pc4",
+      "descripcion": "este es el pc4",
+      "precio": "4000"
+    }
+  }
+}

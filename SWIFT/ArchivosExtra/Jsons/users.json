@@ -1,0 +1,18 @@
+{
+  "usuario": {
+    "user1": {
+      "id": "1",
+      "username": "MarioSeoane",
+      "email": "mario@gmail.com",
+      "postalcode": "01234",
+      "foto": "foto"
+    },
+    "user2": {
+      "id": "2",
+      "username": "Nachusky34",
+      "email": "nacho@gmail.com",
+      "postalcode": "43210",
+      "foto": "foto"
+    }
+  }
+}
