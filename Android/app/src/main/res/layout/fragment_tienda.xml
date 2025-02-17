@@ -31,17 +31,17 @@
                 android:text="TIENDA"
                 android:textSize="40dp" />
 
-            <ImageButton
-                android:id="@+id/btn_carrito"
-                android:layout_width="60dp"
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="7dp"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="30dp"
-                android:background="#FFFFFF"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
+                android:layout_weight="1"
+                tools:src="@drawable/icono_carrito_compra_negro" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="649dp" />
 

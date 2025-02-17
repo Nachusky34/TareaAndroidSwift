@@ -6,6 +6,7 @@ public class Ordenador {
     private int img;
     private String name;
     private int price;
+    private String descripcion;
 
     public Ordenador(String name, int price) {
         this.name = name;
