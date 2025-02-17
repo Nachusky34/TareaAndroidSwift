@@ -22,9 +22,8 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="300dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -51,6 +50,12 @@
                 android:gravity="center"
                 android:text="hh:mm" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="#55B7E8"
+            android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,20 +85,29 @@
                 <TextView
                     android:id="@+id/tv_cantidad"
                     android:layout_width="115dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:gravity="right"
                     android:text="Cantidad:" />
 
                 <TextView
                     android:id="@+id/tv_num_cantidad"
-                    android:layout_width="match_parent"
+                    android:layout_width="31dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:gravity="center"
+                    android:gravity="center|end"
                     android:text="3"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="110dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="53dp"
+                android:layout_marginEnd="60dp"
+                android:layout_weight="0"
+                android:background="#55B7E8"
+                android:orientation="horizontal"></LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
