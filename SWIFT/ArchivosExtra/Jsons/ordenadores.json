@@ -2,27 +2,63 @@
   "producto": {
     "pc1": {
       "id": "1",
-      "nombre": "pc1",
-      "descripcion": "este es el pc1",
-      "precio": "3000"
+      "nombre": "PC Gamer Alpha",
+      "descripcion": "Potente PC para gaming en 1080p.",
+      "precio": "1500"
     },
     "pc2": {
       "id": "2",
-      "nombre": "pc2",
-      "descripcion": "este es el pc2",
-      "precio": "2000"
+      "nombre": "PC Creator Pro",
+      "descripcion": "Estación de trabajo para edición de video y diseño gráfico.",
+      "precio": "2500"
     },
     "pc3": {
       "id": "3",
-      "nombre": "pc3",
-      "descripcion": "este es el pc3",
-      "precio": "1000"
+      "nombre": "PC Office Basic",
+      "descripcion": "Ideal para oficina y tareas básicas.",
+      "precio": "800"
     },
     "pc4": {
       "id": "4",
-      "nombre": "pc4",
-      "descripcion": "este es el pc4",
+      "nombre": "PC Ultra Gaming",
+      "descripcion": "Rendimiento extremo para gaming 4K.",
       "precio": "4000"
+    },
+    "pc5": {
+      "id": "5",
+      "nombre": "PC Streamer Edition",
+      "descripcion": "Optimizado para streaming y multitarea.",
+      "precio": "3000"
+    },
+    "pc6": {
+      "id": "6",
+      "nombre": "PC Mini ITX Compact",
+      "descripcion": "Diseño compacto con gran rendimiento.",
+      "precio": "1800"
+    },
+    "pc7": {
+      "id": "7",
+      "nombre": "PC Workstation AI",
+      "descripcion": "Máquina potente para IA y aprendizaje automático.",
+      "precio": "5000"
+    },
+    "pc8": {
+      "id": "8",
+      "nombre": "PC Budget Gamer",
+      "descripcion": "PC gamer económico con buen rendimiento en eSports.",
+      "precio": "1200"
+    },
+    "pc9": {
+      "id": "9",
+      "nombre": "PC Server Home",
+      "descripcion": "Servidor casero para almacenamiento y redes.",
+      "precio": "2200"
+    },
+    "pc10": {
+      "id": "10",
+      "nombre": "PC Silent Office",
+      "descripcion": "PC silencioso para oficina sin ruido.",
+      "precio": "1000"
     }
   }
 }
