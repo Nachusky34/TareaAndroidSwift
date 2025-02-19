@@ -40,6 +40,7 @@
                 android:id="@+id/tv_fecha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="serif"
                 android:gravity="center"
                 android:text="dd/mm/yyyy" />
 
@@ -47,6 +48,7 @@
                 android:id="@+id/tv_hora"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="serif"
                 android:gravity="center"
                 android:text="hh:mm" />
         </LinearLayout>
@@ -72,6 +74,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
+                android:fontFamily="serif"
                 android:gravity="center"
                 android:text="Name Product"
                 android:textSize="24sp"
@@ -87,6 +90,7 @@
                     android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
+                    android:fontFamily="serif"
                     android:gravity="right"
                     android:text="Cantidad:" />
 
@@ -95,6 +99,7 @@
                     android:layout_width="31dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
+                    android:fontFamily="serif"
                     android:gravity="center|end"
                     android:text="3"
                     android:textStyle="bold" />
@@ -122,6 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
+                    android:fontFamily="serif"
                     android:gravity="right"
                     android:text="Total Price:" />
 
@@ -131,6 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
+                    android:fontFamily="serif"
                     android:gravity="center"
                     android:text="1.099,99$" />
             </LinearLayout>

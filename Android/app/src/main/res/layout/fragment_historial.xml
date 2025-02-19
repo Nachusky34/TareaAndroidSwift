@@ -9,7 +9,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
         android:orientation="vertical">
 
         <LinearLayout
@@ -28,6 +29,7 @@
                 android:fontFamily="serif"
                 android:gravity="center"
                 android:text="HISTORIAL DE COMPRA"
+                android:textColor="#55B7E8"
                 android:textSize="40dp" />
 
             <ImageButton
@@ -42,7 +44,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="736dp" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="wrap_content"
