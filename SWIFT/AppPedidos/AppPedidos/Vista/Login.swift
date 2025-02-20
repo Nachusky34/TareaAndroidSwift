@@ -81,5 +81,5 @@ struct Login: View {
 }
 
 #Preview {
-    ContentView()
+    Login()
 }
