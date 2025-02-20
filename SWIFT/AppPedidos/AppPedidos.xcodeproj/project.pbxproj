@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AC7B36662D5E403D00A727FF /* AppPedidos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppPedidos.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC7B36762D5E403F00A727FF /* AppPedidosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppPedidosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC7B36802D5E403F00A727FF /* AppPedidosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppPedidosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC7B36662D5E403D00A727FF /* AppPedidos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = AppPedidos.app; path = "/Users/Guest/Desktop/TareaAndroidSwift/SWIFT/AppPedidos/build/Debug-iphoneos/AppPedidos.app"; sourceTree = "<absolute>"; };
+		AC7B36762D5E403F00A727FF /* AppPedidosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AppPedidosTests.xctest; path = "/Users/Guest/Desktop/TareaAndroidSwift/SWIFT/AppPedidos/build/Debug-iphoneos/AppPedidos.app/PlugIns/AppPedidosTests.xctest"; sourceTree = "<absolute>"; };
+		AC7B36802D5E403F00A727FF /* AppPedidosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AppPedidosUITests.xctest; path = "/Users/Guest/Desktop/TareaAndroidSwift/SWIFT/AppPedidos/build/Debug-iphoneos/AppPedidosUITests-Runner.app/PlugIns/AppPedidosUITests.xctest"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,18 +78,7 @@
 				AC7B36682D5E403D00A727FF /* AppPedidos */,
 				AC7B36792D5E403F00A727FF /* AppPedidosTests */,
 				AC7B36832D5E403F00A727FF /* AppPedidosUITests */,
-				AC7B36672D5E403D00A727FF /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		AC7B36672D5E403D00A727FF /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				AC7B36662D5E403D00A727FF /* AppPedidos.app */,
-				AC7B36762D5E403F00A727FF /* AppPedidosTests.xctest */,
-				AC7B36802D5E403F00A727FF /* AppPedidosUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +185,7 @@
 			mainGroup = AC7B365D2D5E403D00A727FF;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = AC7B36672D5E403D00A727FF /* Products */;
+			productRefGroup = AC7B365D2D5E403D00A727FF;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

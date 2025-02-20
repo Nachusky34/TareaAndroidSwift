@@ -4,61 +4,71 @@
       "id": "1",
       "nombre": "PC Gamer Alpha",
       "descripcion": "Potente PC para gaming en 1080p.",
-      "precio": "1500"
+      "precio": "1500",
+      "img": "Ordenador1"
     },
     "pc2": {
       "id": "2",
       "nombre": "PC Creator Pro",
       "descripcion": "Estación de trabajo para edición de video y diseño gráfico.",
-      "precio": "2500"
+      "precio": "2500",
+      "img": "Ordenador2"
     },
     "pc3": {
       "id": "3",
       "nombre": "PC Office Basic",
       "descripcion": "Ideal para oficina y tareas básicas.",
-      "precio": "800"
+      "precio": "800",
+      "img": "Ordenador3"
     },
     "pc4": {
       "id": "4",
       "nombre": "PC Ultra Gaming",
       "descripcion": "Rendimiento extremo para gaming 4K.",
-      "precio": "4000"
+      "precio": "4000",
+      "img": "Ordenador4"
     },
     "pc5": {
       "id": "5",
       "nombre": "PC Streamer Edition",
       "descripcion": "Optimizado para streaming y multitarea.",
-      "precio": "3000"
+      "precio": "3000",
+      "img": "Ordenador5"
     },
     "pc6": {
       "id": "6",
       "nombre": "PC Mini ITX Compact",
       "descripcion": "Diseño compacto con gran rendimiento.",
-      "precio": "1800"
+      "precio": "1800",
+      "img": "Ordenador6"
     },
     "pc7": {
       "id": "7",
       "nombre": "PC Workstation AI",
       "descripcion": "Máquina potente para IA y aprendizaje automático.",
-      "precio": "5000"
+      "precio": "5000",
+      "img": "Ordenador7"
     },
     "pc8": {
       "id": "8",
       "nombre": "PC Budget Gamer",
       "descripcion": "PC gamer económico con buen rendimiento en eSports.",
-      "precio": "1200"
+      "precio": "1200",
+      "img": "Ordenador8"
     },
     "pc9": {
       "id": "9",
       "nombre": "PC Server Home",
       "descripcion": "Servidor casero para almacenamiento y redes.",
-      "precio": "2200"
+      "precio": "2200",
+      "img": "Ordenador9"
     },
     "pc10": {
       "id": "10",
       "nombre": "PC Silent Office",
       "descripcion": "PC silencioso para oficina sin ruido.",
-      "precio": "1000"
+      "precio": "1000",
+      "img": "Ordenador10"
     }
   }
 }
