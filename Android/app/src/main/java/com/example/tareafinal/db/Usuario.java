@@ -4,13 +4,15 @@ public class Usuario {
 
     private int id;
     private String username;
+    private String pwd;
     private String email;
     private int postalCode;
     private String fotoPerfil;
 
-    public Usuario(int id, String username, String email, int postalCode, String fotoPerfil) {
+    public Usuario(int id, String username, String pwd, String email, int postalCode, String fotoPerfil) {
         this.id = id;
         this.username = username;
+        this.pwd = pwd;
         this.email = email;
         this.postalCode = postalCode;
         this.fotoPerfil = fotoPerfil;
@@ -32,6 +34,14 @@ public class Usuario {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getEmail() {
