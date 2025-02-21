@@ -25,7 +25,7 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
-                android:background="#FFFCFC"
+                android:background="#FFFFFF"
                 app:srcCompat="@drawable/icono_carrito_compra_negro" />
 
         </LinearLayout>
@@ -40,22 +40,26 @@
             android:id="@+id/tv_nombre_ordenador"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:fontFamily="serif"
             android:gravity="center"
-            android:text="TextView"
+            android:text="NAME PRODUCT"
             android:textSize="38sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_descripcion"
             android:layout_width="match_parent"
-            android:layout_height="193dp"
+            android:layout_height="160dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="10dp"
             android:fontFamily="serif"
-            android:text="Procesador: No se Tarjeta Grafica: No se Placa Base: No se Ram: No se Fuente: No se Refrigeracion: No se Disipador: No se Caja: No se pero es bonita jjajjaj" />
+            android:text="SOME RANDOM DESCRIPTION" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="59dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -74,8 +78,8 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
-                    android:text="Precio:"
-                    android:textSize="16sp"
+                    android:text="Price:"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -86,7 +90,7 @@
                     android:fontFamily="serif"
                     android:gravity="center"
                     android:text="1.249,99 $"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -108,7 +112,7 @@
                     android:fontFamily="serif"
                     android:gravity="center"
                     android:text="1"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -152,6 +156,54 @@
                 </LinearLayout>
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/borde_pc_rounded"
+            android:backgroundTint="#55B7E8"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_agregar_carrito"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="ADD TO CART"
+                    android:textColor="#101010"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.5"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="1.249,99 $"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
