@@ -9,6 +9,8 @@ import SwiftUI
 
 struct Login: View {
     
+    let usuarios: [Usuario] = CargarDatosUsuario()
+    
     @State var username: String = ""
     @State var password: String = ""
     
@@ -29,8 +31,6 @@ struct Login: View {
                 .padding(.top, -120)
             
             Spacer()
-            
-            
                         
             VStack {
                 Text("SIGN IN")
@@ -56,7 +56,12 @@ struct Login: View {
             
            
             Button(action: {
-                print("Sign In tapped")
+                ForEach(usuarios) {
+                    usuario in
+                    if (usuario.nombre == username && usuario.pwd == password){
+                        Tab()
+                    }
+                }
             }) {
                 Text("SIGN IN")
                     .font(.custom("Times New Roman", size: 18))
@@ -81,5 +86,5 @@ struct Login: View {
 }
 
 #Preview {
-    ContentView()
+    Login()
 }
