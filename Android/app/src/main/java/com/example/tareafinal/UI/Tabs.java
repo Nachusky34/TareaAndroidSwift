@@ -35,6 +35,8 @@ public class Tabs extends AppCompatActivity {
         tiTienda = findViewById(R.id.tiTienda);
         tiHistorial = findViewById(R.id.tiHistorial);
 
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

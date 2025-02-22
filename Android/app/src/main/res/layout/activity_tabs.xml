@@ -5,6 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
     android:orientation="vertical"
     tools:context=".UI.Login">
 
@@ -21,12 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="6"
+        android:backgroundTint="#FFFFFF"
+        android:pointerIcon="none"
+        android:scrollbarSize="4dp"
         app:tabGravity="fill"
-        app:tabIndicatorColor="#55B7E8"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorGravity="bottom"
-        app:tabIndicatorHeight="8dp"
-        app:tabInlineLabel="true"
+        app:tabIconTint="@color/black"
+        app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
         app:tabSelectedTextColor="#55B7E8"
         app:tabTextColor="#000">
@@ -35,18 +37,21 @@
             android:id="@+id/tiPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/icono_perfil"
             android:text="Perfil" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tiTienda"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/icono_tienda"
             android:text="Tienda" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tiHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/icono_historial"
             android:text="Historial" />
 
     </com.google.android.material.tabs.TabLayout>
