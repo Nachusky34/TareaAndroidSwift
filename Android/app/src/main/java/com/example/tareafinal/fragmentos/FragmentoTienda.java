@@ -1,5 +1,6 @@
 package com.example.tareafinal.fragmentos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import com.example.tareafinal.adaptadores.AdaptadorTienda;
 import com.example.tareafinal.db.Ordenador;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,8 +29,10 @@ public class FragmentoTienda extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private RecyclerView rv;
-    private AdaptadorTienda tiendaAdapter;
+    RecyclerView rv;
+    AdaptadorTienda tiendaAdapter;
+    List<Ordenador> listaOrdenadores;
+    // DatabaseReference dbReference; para la referencia de la base de datos de Firebase
 
     public FragmentoTienda() {}
 
@@ -51,34 +55,52 @@ public class FragmentoTienda extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<Ordenador> pc = new ArrayList<>();
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_tienda, container, false);
 
-        rv = getView().findViewById(R.id.rv_tienda);
+        rv = view.findViewById(R.id.rv_tienda);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        listaOrdenadores = new ArrayList<>();
 
-        pc.add(new Ordenador("pc1", 1800));
-        pc.add(new Ordenador("pc2", 1500));
-        pc.add(new Ordenador("pc3", 1200));
+        rv.setAdapter(tiendaAdapter);
 
-        tiendaAdapter = new AdaptadorTienda(pc);
-        View.OnClickListener listener = new View.OnClickListener() {
+        /*
+        dbReference = FirebaseDatabase.getInstance().getReference("Ordenadores");
+
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listaOrdenadores.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Ordenador pc = ds.getValue(Ordenador.class);
+                    listaOrdenadores.add(pc);
+                }
+                tiendaAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Error al cargar los datos");
+            }
+        });
+
+        */
+
+        tiendaAdapter = new AdaptadorTienda(listaOrdenadores);
+        tiendaAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println("Se ha pulsado una pc");
+                // aqui lanzariamos el intent para ir a el fragmento del pc seleccionado
             }
-        };
-        tiendaAdapter.setOnClickListener(listener);
-        rv.setAdapter(tiendaAdapter);
-    }
+        });
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tienda, container, false);
+        return view;
+
     }
 
 }

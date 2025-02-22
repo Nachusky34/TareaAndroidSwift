@@ -45,7 +45,9 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
 
     @Override
     public void onBindViewHolder(@NonNull AdaptadorTienda.TiendaHolder holder, int position) {
-
+        holder.imageOrdenador.setImageResource(listaOrdenadores.get(position).getImg());
+        holder.tvNombreOrdenador.setText(listaOrdenadores.get(position).getName());
+        holder.tvPrecio.setText(listaOrdenadores.get(position).getPrice());
     }
 
     @Override
