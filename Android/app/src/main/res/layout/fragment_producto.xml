@@ -33,14 +33,13 @@
         <ImageView
             android:id="@+id/iv_ordenador"
             android:layout_width="match_parent"
-            android:layout_height="284dp"
+            android:layout_height="257dp"
             android:src="@drawable/pc_prueba" />
 
         <TextView
             android:id="@+id/tv_nombre_ordenador"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:fontFamily="serif"
             android:gravity="center"
             android:text="NAME PRODUCT"
@@ -52,9 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="serif"
-            android:text="SOME RANDOM DESCRIPTION" />
+            android:paddingHorizontal="10dp"
+            android:text="Procesador: No se \nTarjeta Grafica: No se \nPlaca Base: No se \nRam: No se \nFuente: No se \nRefrigeracion: No se \nDisipador: No se \nCaja: No se pero es bonita jjajjaj" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_marginHorizontal="15dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/borde_pc_rounded"
             android:backgroundTint="#55B7E8"
             android:orientation="horizontal">
