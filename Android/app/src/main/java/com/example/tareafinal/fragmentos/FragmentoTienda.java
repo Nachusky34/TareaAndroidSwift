@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tareafinal.R;
-import com.example.tareafinal.adapters.TiendaAdapter;
+import com.example.tareafinal.adaptadores.AdaptadorTienda;
 import com.example.tareafinal.db.Ordenador;
 
 import java.util.ArrayList;
@@ -27,10 +27,8 @@ public class FragmentoTienda extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private RecyclerView rv;
-    private TiendaAdapter tiendaAdapter;
+    private AdaptadorTienda tiendaAdapter;
 
     public FragmentoTienda() {}
 
@@ -55,21 +53,17 @@ public class FragmentoTienda extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         ArrayList<Ordenador> pc = new ArrayList<>();
 
-        rv = getView().findViewById(R.id.rv);
+        rv = getView().findViewById(R.id.rv_tienda);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         pc.add(new Ordenador("pc1", 1800));
         pc.add(new Ordenador("pc2", 1500));
         pc.add(new Ordenador("pc3", 1200));
 
-        tiendaAdapter = new TiendaAdapter(pc);
+        tiendaAdapter = new AdaptadorTienda(pc);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
