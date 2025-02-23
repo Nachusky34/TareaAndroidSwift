@@ -16,11 +16,11 @@ import java.util.List;
 
 public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.TiendaHolder> implements View.OnClickListener{
 
-    public List<Ordenador> listaOrdenadores;
+    public List<Ordenador> listaOrdenadoresTienda;
     public View.OnClickListener listener;
 
-    public AdaptadorTienda(List<Ordenador> listaOrdenadores) {
-        this.listaOrdenadores = listaOrdenadores;
+    public AdaptadorTienda(List<Ordenador> listaOrdenadoresTienda) {
+        this.listaOrdenadoresTienda = listaOrdenadoresTienda;
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
@@ -45,14 +45,14 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
 
     @Override
     public void onBindViewHolder(@NonNull AdaptadorTienda.TiendaHolder holder, int position) {
-        holder.imageOrdenador.setImageResource(listaOrdenadores.get(position).getImg());
-        holder.tvNombreOrdenador.setText(listaOrdenadores.get(position).getName());
-        holder.tvPrecio.setText(listaOrdenadores.get(position).getPrice());
+        holder.imageOrdenador.setImageResource(listaOrdenadoresTienda.get(position).getImg());
+        holder.tvNombreOrdenador.setText(listaOrdenadoresTienda.get(position).getName());
+        holder.tvPrecio.setText(listaOrdenadoresTienda.get(position).getPrice() + " $");
     }
 
     @Override
     public int getItemCount() {
-        return listaOrdenadores.size();
+        return listaOrdenadoresTienda.size();
     }
 
     public class TiendaHolder extends RecyclerView.ViewHolder {

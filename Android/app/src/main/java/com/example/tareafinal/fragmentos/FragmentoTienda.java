@@ -28,10 +28,9 @@ public class FragmentoTienda extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     RecyclerView rv;
     AdaptadorTienda tiendaAdapter;
-    List<Ordenador> listaOrdenadores;
+    List<Ordenador> listaOrdenadoresTienda;
     // DatabaseReference dbReference; para la referencia de la base de datos de Firebase
 
     public FragmentoTienda() {}
@@ -64,7 +63,9 @@ public class FragmentoTienda extends Fragment {
 
         rv = view.findViewById(R.id.rv_tienda);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        listaOrdenadores = new ArrayList<>();
+
+        listaOrdenadoresTienda = new ArrayList<>();
+        tiendaAdapter = new AdaptadorTienda(listaOrdenadoresTienda);
 
         rv.setAdapter(tiendaAdapter);
 
@@ -74,30 +75,21 @@ public class FragmentoTienda extends Fragment {
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaOrdenadores.clear();
+                listaOrdenadoresTienda.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Ordenador pc = ds.getValue(Ordenador.class);
-                    listaOrdenadores.add(pc);
+                    listaOrdenadoresTienda.add(pc);
                 }
                 tiendaAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("Error al cargar los datos");
+                Toast.makeText(getContext(), "Error al cargar los datos", Toast.LENGTH_SHORT).show();
             }
         });
 
         */
-
-        tiendaAdapter = new AdaptadorTienda(listaOrdenadores);
-        tiendaAdapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Se ha pulsado una pc");
-                // aqui lanzariamos el intent para ir a el fragmento del pc seleccionado
-            }
-        });
 
         return view;
 

@@ -16,11 +16,6 @@ public class Ordenador {
         this.descripcion = descripcion;
     }
 
-    public Ordenador(String name, int price){
-        this.name = name;
-        this.price = price;
-    }
-
     public int getId() {
         return id;
     }

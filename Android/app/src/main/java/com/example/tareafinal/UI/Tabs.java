@@ -12,6 +12,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tareafinal.R;
+import com.example.tareafinal.fragmentos.FragmentoHistorial;
+import com.example.tareafinal.fragmentos.FragmentoPerfil;
+import com.example.tareafinal.fragmentos.FragmentoTienda;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
@@ -49,21 +52,21 @@ public class Tabs extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 transaction = fragmentManager.beginTransaction();
-                /*
+
                 if (tab.getPosition() == 0) {
-                    transaction.replace(R.id.flContenedor, new Perfil());
+                    transaction.replace(R.id.flContenedor, new FragmentoPerfil());
                     transaction.addToBackStack(null);
                 }
                 if (tab.getPosition() == 1) {
-                    transaction.replace(R.id.flContenedor, new Tienda());
+                    transaction.replace(R.id.flContenedor, new FragmentoTienda());
                     transaction.addToBackStack(null);
                 }
                 if (tab.getPosition() == 2) {
-                    transaction.replace(R.id.flContenedor, new Historial());
+                    transaction.replace(R.id.flContenedor, new FragmentoHistorial());
                     transaction.addToBackStack(null);
                 }
                 transaction.commit();
-                 */
+
             }
 
             @Override
