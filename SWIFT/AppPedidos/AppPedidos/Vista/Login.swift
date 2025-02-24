@@ -13,6 +13,8 @@ struct Login: View {
     
     @State var username: String = ""
     @State var password: String = ""
+    @State var mostrarAlerta: Bool = false
+    @State var isAuthenticated: Bool = false
     
     var body: some View {
         VStack {
@@ -56,12 +58,17 @@ struct Login: View {
             
            
             Button(action: {
-                ForEach(usuarios) {
-                    usuario in
-                    if (usuario.nombre == username && usuario.pwd == password){
-                        Tab()
+                for usuario in usuarios {
+                    if (usuario.nombre == username && usuario.pwd == password) {
+                        mostrarAlerta = false
+                        isAuthenticated = true
+                    } else {
+                        mostrarAlerta = true
                     }
                 }
+                
+                    
+                
             }) {
                 Text("SIGN IN")
                     .font(.custom("Times New Roman", size: 18))
@@ -74,6 +81,18 @@ struct Login: View {
                     .padding(.trailing, 160)
                     .padding(.bottom, -60 )
                 }
+            .alert(isPresented: $mostrarAlerta) {
+                                Alert(
+                                    title: Text("Error"),
+                                    message: Text("Username or password incorrect"),
+                                    dismissButton: .default(Text("OK"))
+                                )
+                            }
+                        
+                        // Navegar a Tab() cuando el login es exitoso
+                        NavigationLink(destination: Tab(), isActive: $isAuthenticated) {
+                            EmptyView()
+                        }
             Image(.imgDeco1)
                 .resizable()
                 .frame(width: 225, height: 225)

@@ -65,7 +65,7 @@ class GestorDatos: ObservableObject {
     
     // Agrega una nueva persona y guarda los cambios
     func agregarCompra(idUsuario: Int, idProducto: Int) {
-        let newCompra = Compra(idUsuario: <#T##Int#>, idProducto: <#T##Int#>, fecha: obtenerDia(), hora: obtenerHora(), cantidad: <#T##Int#>)
+        let newCompra = Compra(id: <#T##String#>, fecha: <#T##String#>, hora: <#T##String#>, cantidad: <#T##Int#>)
         compra.append(newCompra)
         salvarJSON()
     }
