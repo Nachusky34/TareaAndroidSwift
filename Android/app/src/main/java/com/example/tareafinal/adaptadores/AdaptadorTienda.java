@@ -18,6 +18,9 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
 
     public List<Ordenador> listaOrdenadoresTienda;
     public View.OnClickListener listener;
+    private int[] imgOrdenadores = {R.drawable.ordenador1, R.drawable.ordenador2,
+            R.drawable.ordenador3, R.drawable.ordenador4, R.drawable.ordenador5, R.drawable.ordenador6,
+            R.drawable.ordenador7, R.drawable.ordenador8, R.drawable.ordenador9, R.drawable.ordenador10};
 
     public AdaptadorTienda(List<Ordenador> listaOrdenadoresTienda) {
         this.listaOrdenadoresTienda = listaOrdenadoresTienda;
@@ -45,7 +48,9 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
 
     @Override
     public void onBindViewHolder(@NonNull AdaptadorTienda.TiendaHolder holder, int position) {
-        holder.imageOrdenador.setImageResource(listaOrdenadoresTienda.get(position).getImg());
+        int imgIndex = listaOrdenadoresTienda.get(position).getId() % imgOrdenadores.length;
+        holder.imageOrdenador.setImageResource(imgOrdenadores[imgIndex]); // porque las imagenes estan en local
+
         holder.tvNombreOrdenador.setText(listaOrdenadoresTienda.get(position).getName());
         holder.tvPrecio.setText(listaOrdenadoresTienda.get(position).getPrice() + " $");
     }

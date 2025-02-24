@@ -66,9 +66,6 @@ public class FragmentoTienda extends Fragment {
 
         listaOrdenadoresTienda = new ArrayList<>();
         tiendaAdapter = new AdaptadorTienda(listaOrdenadoresTienda);
-
-        rv.setAdapter(tiendaAdapter);
-
         /*
         dbReference = FirebaseDatabase.getInstance().getReference("Ordenadores");
 
@@ -90,6 +87,7 @@ public class FragmentoTienda extends Fragment {
         });
 
         */
+        rv.setAdapter(tiendaAdapter);
 
         return view;
 

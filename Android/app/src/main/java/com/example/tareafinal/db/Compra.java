@@ -10,6 +10,7 @@ public class Compra {
     private Date fecha;
     private Time hora;
     private int cantidad;
+    private boolean comprado;
 
     public Compra(){}
 
@@ -52,4 +53,9 @@ public class Compra {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+    public boolean isComprado() {return comprado;}
+
+    public void setComprado(boolean comprado) {this.comprado = comprado;}
+
 }

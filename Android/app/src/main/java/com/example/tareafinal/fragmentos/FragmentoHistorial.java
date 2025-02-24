@@ -112,11 +112,11 @@ public class FragmentoHistorial extends Fragment {
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
-                    if (compra != null) {
+                    if (compra.isComprado() == true) {
                         listaCompras.add(compra);
 
                         // busca el ordenador correspondiente a la compra
-                        for (Ordenador ordenador : listaOrdenadoresHistorial) {
+                        for (Ordenador ordenador : listaCompras) {
                             if (ordenador.getId() == compra.getIdProducto()) {
                                 ordenadoresFiltrados.add(ordenador);
                                 break;

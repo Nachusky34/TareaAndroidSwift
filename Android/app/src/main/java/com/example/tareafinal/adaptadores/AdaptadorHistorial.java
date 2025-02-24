@@ -17,34 +17,25 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.HistorialHolder> implements View.OnClickListener {
+public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.HistorialHolder>{
 
     private List<Ordenador> listaOrdenadoresHistorial;
     private List<Compra> listaCompras;
-    private View.OnClickListener listener;
+    private int[] imgOrdenadores = {R.drawable.ordenador1, R.drawable.ordenador2,
+            R.drawable.ordenador3, R.drawable.ordenador4, R.drawable.ordenador5, R.drawable.ordenador6,
+            R.drawable.ordenador7, R.drawable.ordenador8, R.drawable.ordenador9, R.drawable.ordenador10};
 
     public AdaptadorHistorial(List<Ordenador> listaOrdenadoresHistorial, List<Compra> listaCompras) {
         this.listaOrdenadoresHistorial = listaOrdenadoresHistorial;
         this.listaCompras = listaCompras;
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (listener != null) {
-            listener.onClick(view);
-        }
-    }
-
     @NonNull
     @Override
     public AdaptadorHistorial.HistorialHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarjeta_pc_historial, parent, false);
-        v.setOnClickListener(this);
-        return new HistorialHolder(v);
+        HistorialHolder holder = new HistorialHolder(v);
+        return holder;
     }
 
     @Override
@@ -58,7 +49,8 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
         holder.tvCantidad.setText(String.valueOf(listaCompras.get(position).getCantidad()));
         holder.tvPrecioTotal.setText((listaCompras.get(position).getCantidad() * listaOrdenadoresHistorial.get(position).getPrice()) + "$");
 
-        holder.imageOrdenador.setImageResource(R.drawable.pc_prueba); // porque las imagenes estan en local
+        int imgIndex = listaOrdenadoresHistorial.get(position).getId() % imgOrdenadores.length;
+        holder.imageOrdenador.setImageResource(imgOrdenadores[imgIndex]); // porque las imagenes estan en local
     }
 
     @Override
