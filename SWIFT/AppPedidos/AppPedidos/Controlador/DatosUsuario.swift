@@ -28,3 +28,21 @@ func CargarDatosUsuario() -> [Usuario] {
     }
 }
 
+func CargarDatosUsuarioPorID(id: Int) -> Usuario? {
+    guard let url = Bundle.main.url(forResource: "usuarios", withExtension: "json"),
+          let data = try? Data(contentsOf: url) else {
+        fatalError("Failed to load usuarios.json from the bundle.")
+    }
+    
+    do {
+        let decodedData = try JSONDecoder().decode([String: [Usuario]].self, from: data)
+        if let usuarios = decodedData["usuario"] {
+            // Filtrar y devolver el usuario con el ID específico
+            return usuarios.first { $0.id == id }
+        } else {
+            fatalError("Key 'usuario' not found.")
+        }
+    } catch {
+        fatalError("Failed to decode JSON: \(error)")
+    }
+}

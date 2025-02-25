@@ -1,29 +1,26 @@
-//
-//  Tab.swift
-//  AppPedidos
-//
-//  Created by Mario Seoane on 20/2/25.
-//
-
 import SwiftUI
 
-// La vista principal de la aplicación que contiene el TabView.
 struct Tab: View {
+    // Aquí almacenas el usuario autenticado
+    let usuario =  1
+    
     var body: some View {
         TabView {
-            Perfil()
+            // Primero, pasa el usuario correctamente a la vista Perfil
+            Perfil(usuario: usuario)
                 .tabItem {
                     Label("Perfil", systemImage: "person")
                 }
-                .tag(1) // tag se utiliza para identificar cada tab de forma única
+                .tag(1)
             
-            Perfil()
+            // Otros tabs, por ejemplo, Tienda y Historial, también deberían tener la instancia del usuario si es necesario.
+            Text("Tienda")
                 .tabItem {
                     Label("Tienda", systemImage: "house")
                 }
                 .tag(2)
             
-            Perfil()
+            Text("Historial")
                 .tabItem {
                     Label("Historial", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                 }

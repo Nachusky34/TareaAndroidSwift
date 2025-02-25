@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct Perfil: View {
-    
-    @State var username: String = ""
-    @State var email: String = ""
-    @State var postalCode: Int? = nil
-    @State var subscription: Bool = false
+    @EnvironmentObject var usuario: UserData
+    @State private var username: String = ""
+    @State private var email: String = ""
+    @State private var postalCode: String = ""
+    @State private var subscription: Bool = false
     
     var body: some View {
         VStack {
@@ -27,7 +27,7 @@ struct Perfil: View {
                         .frame(width: 150, height: 150)
                         .foregroundColor(.white)
                         
-                    Text("username")
+                    Text($usuario.username) // Muestra el nombre de usuario aquí
                         .font(.custom("Times New Roman", size: 32))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -36,8 +36,6 @@ struct Perfil: View {
             }
             .padding(.bottom, 100)
             
-            
-                        
             VStack {
                 VStack(alignment: .leading) {
                     HStack{
@@ -53,6 +51,9 @@ struct Perfil: View {
                         TextField("Email", text: $email)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .font(.custom("Times New Roman", size: 25))
+                            .onAppear {
+                                email = usuario.email
+                            }
                     }
                     .padding(.bottom, 30)
                 
@@ -66,14 +67,20 @@ struct Perfil: View {
                                 .foregroundColor(.white)
                         }
 
-                        TextField("Postal Code", text: $email)
+                        TextField("Postal Code", text: $postalCode)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .font(.custom("Times New Roman", size: 25))
+                            .onAppear {
+                                postalCode = String(usuario.postalcode)
+                            }
                     }
                     
-                    Toggle("Newsletter subscription:",isOn: $subscription)
+                    Toggle("Newsletter subscription:", isOn: $subscription)
                         .font(.custom("Times New Roman", size: 23))
                         .padding(.top, 60)
+                        .onAppear {
+                            subscription = usuario.newsletter
+                        }
                 }
             }
                 .padding(.horizontal, 25)
