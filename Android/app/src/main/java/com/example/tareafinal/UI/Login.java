@@ -3,6 +3,7 @@ package com.example.tareafinal.UI;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -60,7 +61,7 @@ public class Login extends AppCompatActivity {
         launcherRegistro.launch(intent);
     }
 
-    public void login() {
+    public void login(View view) {
         Intent intent = new Intent();
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
