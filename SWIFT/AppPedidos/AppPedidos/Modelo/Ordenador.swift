@@ -9,6 +9,7 @@ struct Ordenador: Codable, Identifiable {
     let id: Int
     let nombre: String
     let descripcion: String
-    let precio: Int
+    let precio: Double
     let img: String
+    
 }

@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AC7B36662D5E403D00A727FF /* AppPedidos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = AppPedidos.app; path = "/Users/Guest/Desktop/TareaAndroidSwift/SWIFT/AppPedidos/build/Debug-iphoneos/AppPedidos.app"; sourceTree = "<absolute>"; };
-		AC7B36762D5E403F00A727FF /* AppPedidosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AppPedidosTests.xctest; path = "/Users/Guest/Desktop/TareaAndroidSwift/SWIFT/AppPedidos/build/Debug-iphoneos/AppPedidos.app/PlugIns/AppPedidosTests.xctest"; sourceTree = "<absolute>"; };
-		AC7B36802D5E403F00A727FF /* AppPedidosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AppPedidosUITests.xctest; path = "/Users/Guest/Desktop/TareaAndroidSwift/SWIFT/AppPedidos/build/Debug-iphoneos/AppPedidosUITests-Runner.app/PlugIns/AppPedidosUITests.xctest"; sourceTree = "<absolute>"; };
+		ACAFA7832D6E42E200EA4BAA /* AppPedidos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppPedidos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACAFA7842D6E42E200EA4BAA /* AppPedidosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppPedidosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACAFA7852D6E42E200EA4BAA /* AppPedidosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppPedidosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,6 +78,9 @@
 				AC7B36682D5E403D00A727FF /* AppPedidos */,
 				AC7B36792D5E403F00A727FF /* AppPedidosTests */,
 				AC7B36832D5E403F00A727FF /* AppPedidosUITests */,
+				ACAFA7832D6E42E200EA4BAA /* AppPedidos.app */,
+				ACAFA7842D6E42E200EA4BAA /* AppPedidosTests.xctest */,
+				ACAFA7852D6E42E200EA4BAA /* AppPedidosUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +106,7 @@
 			packageProductDependencies = (
 			);
 			productName = AppPedidos;
-			productReference = AC7B36662D5E403D00A727FF /* AppPedidos.app */;
+			productReference = ACAFA7832D6E42E200EA4BAA /* AppPedidos.app */;
 			productType = "com.apple.product-type.application";
 		};
 		AC7B36752D5E403F00A727FF /* AppPedidosTests */ = {
@@ -126,7 +129,7 @@
 			packageProductDependencies = (
 			);
 			productName = AppPedidosTests;
-			productReference = AC7B36762D5E403F00A727FF /* AppPedidosTests.xctest */;
+			productReference = ACAFA7842D6E42E200EA4BAA /* AppPedidosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		AC7B367F2D5E403F00A727FF /* AppPedidosUITests */ = {
@@ -149,7 +152,7 @@
 			packageProductDependencies = (
 			);
 			productName = AppPedidosUITests;
-			productReference = AC7B36802D5E403F00A727FF /* AppPedidosUITests.xctest */;
+			productReference = ACAFA7852D6E42E200EA4BAA /* AppPedidosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
