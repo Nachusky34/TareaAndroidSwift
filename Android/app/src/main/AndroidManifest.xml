@@ -1,5 +1,6 @@
-<<<<<<< Original<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
 <application
     android:allowBackup="true"
@@ -12,13 +13,7 @@ xmlns:tools="http://schemas.android.com/tools">
     android:theme="@style/Theme.TareaFinal"
     tools:targetApi="31">
     <activity
-        android:name=".UI.Login"
-        android:exported="false" />
-    <activity
         android:name=".UI.Tabs"
-        android:exported="false" />
-    <activity
-        android:name=".Tab"
         android:exported="false" />
     <activity
         android:name=".UI.Registro"
@@ -34,14 +29,4 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
 </application>
 
-</manifest>=======
-
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<application>
-    <activity
-        android:name="com.example.tareafinal.UI.Ordenador"
-        android:exported="false"
-
-        />
-</application>
-</manifest>>>>>>>> Added
+</manifest>

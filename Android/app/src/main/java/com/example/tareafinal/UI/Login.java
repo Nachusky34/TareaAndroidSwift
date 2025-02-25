@@ -13,11 +13,28 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tareafinal.R;
+import com.example.tareafinal.db.Usuario;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.lang.reflect.Array;
 
 
 public class Login extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> launcherRegistro = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == RESULT_OK){
+                        Intent data = result.getData();
+
+                    }
+                }
+            });
+
+
+    ActivityResultLauncher<Intent> launcherTienda = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -45,16 +62,19 @@ public class Login extends AppCompatActivity {
 
     public void login() {
         Intent intent = new Intent();
-        String username = this.username.getText().toString();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        String email = username.getText().toString() + "@PCeras.com";
         String pwd = this.pwd.getText().toString();
 
-        if (username.equals(this.username) && pwd.equals(this.pwd)){
-            startActivity(intent);
-        } else {
-            Toast.makeText(this,
-                    "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
-        }
+        auth.signInWithEmailAndPassword(email, pwd)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        launcherTienda.launch(intent);
+                    } else {
+                        Toast.makeText(this, "Usuario o contraseña incorrectos",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-
-
 }
