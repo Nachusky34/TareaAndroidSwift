@@ -65,7 +65,7 @@ class GestorDatos: ObservableObject {
     
     // Agrega una nueva persona y guarda los cambios
     func agregarCompra(idUsuario: Int, idProducto: Int) {
-        let newCompra = Compra(id: <#T##String#>, fecha: <#T##String#>, hora: <#T##String#>, cantidad: <#T##Int#>)
+        let newCompra = Compra(id: "", fecha: "", hora: "", cantidad: 0)
         compra.append(newCompra)
         salvarJSON()
     }
@@ -76,8 +76,9 @@ class GestorDatos: ObservableObject {
         let components = calendar.dateComponents([.day, .month, .year], from: currentDate)
 
         if let day = components.day, let month = components.month, let year = components.year {
-            return("Día: /(day), Mes: /(month), Año: /(year)")
+            return("Día: \(day), Mes: \(month), Año: \(year)")
         }
+        return ""
     }
     
     func obtenerHora() -> String{
@@ -86,7 +87,9 @@ class GestorDatos: ObservableObject {
         let components = calendar.dateComponents([.hour, .minute], from: currentDate)
 
         if let hour = components.hour, let minute = components.minute {
-            return("Hora: /(hour):/(minute)")
+            return("Hora: \(hour):\(minute)")
         }
+        
+        return ""
     }
 }

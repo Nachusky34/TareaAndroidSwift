@@ -3,7 +3,7 @@
     "user1": {
       "id": "1",
       "username": "MarioSeoane",
-      "pasword": "mario12",
+      "password": "mario12",
       "email": "mario@gmail.com",
       "postalcode": "01234",
       "newsletter": false,
@@ -12,7 +12,7 @@
     "user2": {
       "id": "2",
       "username": "Nachusky34",
-      "pasword": "nacho12",
+      "password": "nacho12",
       "email": "nacho@gmail.com",
       "postalcode": "43210",
       "newsletter": false,

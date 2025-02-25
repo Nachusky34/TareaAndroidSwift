@@ -12,15 +12,19 @@ func CargarDatosUsuario() -> [Usuario] {
           let data = try? Data(contentsOf: url) else {
         fatalError("Failed to load usuarios.json from the bundle.")
     }
-    
+
     do {
-        let decodedData = try JSONDecoder().decode([String: [Usuario]].self, from: data)
-        if let usuarios = decodedData["usuarios"] {
-            return usuarios
+        // Decode the JSON as a dictionary with user identifiers as keys and Usuario objects as values.
+        let decodedData = try JSONDecoder().decode([String: [String: Usuario]].self, from: data)
+        
+        // Extract the "usuario" key and flatten the user dictionary into an array.
+        if let usuarios = decodedData["usuario"]?.values {
+            return Array(usuarios) // Convert the dictionary values to an array
         } else {
-            fatalError("Key 'usuarios' not found.")
+            fatalError("Key 'usuario' not found.")
         }
     } catch {
         fatalError("Failed to decode JSON: \(error)")
     }
 }
+

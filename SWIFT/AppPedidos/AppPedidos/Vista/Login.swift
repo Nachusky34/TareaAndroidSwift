@@ -59,7 +59,7 @@ struct Login: View {
            
             Button(action: {
                 for usuario in usuarios {
-                    if (usuario.nombre == username && usuario.pwd == password) {
+                    if (usuario.username == username && usuario.password == password) {
                         mostrarAlerta = false
                         isAuthenticated = true
                     } else {

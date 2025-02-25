@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct Usuario: Codable, Identifiable {
-    let id: Int
-    let nombre: String
-    let pwd: String
+struct Usuario: Decodable {
+    let id: String
+    let username: String
+    let password: String
     let email: String
-    let postalCode: Int
+    let postalcode: String
+    let newsletter: Bool
     let foto: String
 }
