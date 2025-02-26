@@ -1,5 +1,6 @@
 package com.example.tareafinal.adaptadores;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tareafinal.R;
@@ -21,36 +23,65 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
 
     private List<Ordenador> listaOrdenadoresHistorial;
     private List<Compra> listaCompras;
-    private int[] imgOrdenadores = {R.drawable.ordenador1, R.drawable.ordenador2,
-            R.drawable.ordenador3, R.drawable.ordenador4, R.drawable.ordenador5, R.drawable.ordenador6,
-            R.drawable.ordenador7, R.drawable.ordenador8, R.drawable.ordenador9, R.drawable.ordenador10};
+    boolean estaMarcado;
 
-    public AdaptadorHistorial(List<Ordenador> listaOrdenadoresHistorial, List<Compra> listaCompras) {
+
+    public AdaptadorHistorial(List<Ordenador> listaOrdenadoresHistorial, List<Compra> listaCompras, boolean estaMarcado) {
         this.listaOrdenadoresHistorial = listaOrdenadoresHistorial;
         this.listaCompras = listaCompras;
+        this.estaMarcado = estaMarcado;
+    }
+
+    public void setEstaMarcado(boolean estaMarcado) {
+        this.estaMarcado = estaMarcado;
+        notifyDataSetChanged();  // para que notiofique y se cambie el diseño del layout
+    }
+
+    public int getItemViewType(int position) {
+        return estaMarcado ? 1 : 0; // 1 = Grid, 0 = Linear
     }
 
     @NonNull
     @Override
     public AdaptadorHistorial.HistorialHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarjeta_pc_historial, parent, false);
+        int layout;
+        if (viewType == 1) {
+            layout = R.layout.tarjeta_pc_historial_grid;
+        } else {
+            layout = R.layout.tarjeta_pc_historial;
+        }
+        View v = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         HistorialHolder holder = new HistorialHolder(v);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdaptadorHistorial.HistorialHolder holder, int position) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String precioStr = listaOrdenadoresHistorial.get(position).getPrecio();
+        Double precio = Double.parseDouble(precioStr);
 
-        holder.tvFechaCompra.setText(dateFormat.format(listaCompras.get(position).getFecha()));
-        holder.tvHoraCompra.setText(timeFormat.format(listaCompras.get(position).getHora()));
-        holder.tvNombreOrdenador.setText(listaOrdenadoresHistorial.get(position).getName());
+        String cantidadStr = listaCompras.get(position).getCantidad();
+        int cantidad = Integer.parseInt(cantidadStr);
+
+        holder.tvFechaCompra.setText(listaCompras.get(position).getFecha());
+        holder.tvHoraCompra.setText(listaCompras.get(position).getHora());
+        holder.tvNombreOrdenador.setText(listaOrdenadoresHistorial.get(position).getNombre());
         holder.tvCantidad.setText(String.valueOf(listaCompras.get(position).getCantidad()));
-        holder.tvPrecioTotal.setText((listaCompras.get(position).getCantidad() * listaOrdenadoresHistorial.get(position).getPrice()) + "$");
+        holder.tvPrecioTotal.setText((cantidad * precio) + "$");
 
-        int imgIndex = listaOrdenadoresHistorial.get(position).getId() % imgOrdenadores.length;
-        holder.imageOrdenador.setImageResource(imgOrdenadores[imgIndex]); // porque las imagenes estan en local
+        Ordenador pc = listaOrdenadoresHistorial.get(position);
+        Context context = holder.itemView.getContext();
+
+        // Obtener el ID de la imagen desde los recursos de drawable
+        int imageResource = context.getResources().getIdentifier(
+                pc.getImg(), "drawable", context.getPackageName());
+
+        // Cargar imagen de forma segura con ContextCompat
+        if (imageResource != 0) {
+            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
+        } else {
+            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
+        }
     }
 
     @Override

@@ -1,14 +1,15 @@
 package com.example.tareafinal.adaptadores;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tareafinal.R;
@@ -23,9 +24,6 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
     private List<Compra> listaCompras;
     private OnItemClickListener listenerEliminar;
 
-    private int[] imgOrdenadores = {R.drawable.ordenador1, R.drawable.ordenador2, R.drawable.ordenador3,
-            R.drawable.ordenador4, R.drawable.ordenador5, R.drawable.ordenador6,
-            R.drawable.ordenador7, R.drawable.ordenador8, R.drawable.ordenador9, R.drawable.ordenador10};
 
     public AdaptadorCarrito(List<Ordenador> listaOrdenadoresCarrito, List<Compra> listaCompras) {
         this.listaOrdenadoresCarrito = listaOrdenadoresCarrito;
@@ -52,12 +50,29 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
         Ordenador ordenador = listaOrdenadoresCarrito.get(position);
         Compra compra = listaCompras.get(position);
 
-        holder.tvNombreOrdenador.setText(ordenador.getName());
-        holder.tvCantidad.setText(String.valueOf(compra.getCantidad()));
-        holder.tvPrecioTotal.setText((compra.getCantidad() * ordenador.getPrice()) + "$");
+        String precioStr = listaOrdenadoresCarrito.get(position).getPrecio();
+        Double precio = Double.parseDouble(precioStr);
 
-        int imgIndex = ordenador.getId() % imgOrdenadores.length;
-        holder.imageOrdenador.setImageResource(imgOrdenadores[imgIndex]);
+        String cantidadStr = listaCompras.get(position).getCantidad();
+        int cantidad = Integer.parseInt(cantidadStr);
+
+        holder.tvNombreOrdenador.setText(ordenador.getNombre());
+        holder.tvCantidad.setText(String.valueOf(compra.getCantidad()));
+        holder.tvPrecioTotal.setText((cantidad * precio) + "$");
+
+        Ordenador pc = listaOrdenadoresCarrito.get(position);
+        Context context = holder.itemView.getContext();
+
+        //  Obtener el ID de la imagen desde los recursos de drawable
+        int imageResource = context.getResources().getIdentifier(
+                pc.getImg(), "drawable", context.getPackageName());
+
+        // Cargar imagen de forma segura con ContextCompat
+        if (imageResource != 0) {
+            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
+        } else {
+            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
+        }
 
         // HACER QUE SOLO EL BOTÓN SEA CLICKEABLE
         holder.btnEliminar.setOnClickListener(v -> {

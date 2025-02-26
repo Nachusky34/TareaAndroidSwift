@@ -1,5 +1,6 @@
 package com.example.tareafinal.adaptadores;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tareafinal.R;
@@ -18,16 +20,20 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
 
     public List<Ordenador> listaOrdenadoresTienda;
     public View.OnClickListener listener;
-    private int[] imgOrdenadores = {R.drawable.ordenador1, R.drawable.ordenador2,
-            R.drawable.ordenador3, R.drawable.ordenador4, R.drawable.ordenador5, R.drawable.ordenador6,
-            R.drawable.ordenador7, R.drawable.ordenador8, R.drawable.ordenador9, R.drawable.ordenador10};
+    boolean estaMarcado;
 
-    public AdaptadorTienda(List<Ordenador> listaOrdenadoresTienda) {
+    public AdaptadorTienda(List<Ordenador> listaOrdenadoresTienda, boolean estaMarcado) {
         this.listaOrdenadoresTienda = listaOrdenadoresTienda;
+        this.estaMarcado = estaMarcado;
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setEstaMarcado(boolean estaMarcado) {
+        this.estaMarcado = estaMarcado;
+        notifyDataSetChanged();  // para que notiofique y se cambie el diseño del layout
     }
 
     @Override
@@ -37,10 +43,21 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return estaMarcado ? 1 : 0; // 1 = Grid, 0 = Linear
+    }
+
     @NonNull
     @Override
     public AdaptadorTienda.TiendaHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarjeta_pc_tienda, parent, false);
+        int layout;
+        if (viewType == 1) {
+            layout = R.layout.tarjeta_pc_tienda_grid;
+        } else {
+            layout = R.layout.tarjeta_pc_tienda;
+        }
+        View v = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         TiendaHolder holder = new TiendaHolder(v);
         v.setOnClickListener(this);
         return holder;
@@ -48,12 +65,24 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
 
     @Override
     public void onBindViewHolder(@NonNull AdaptadorTienda.TiendaHolder holder, int position) {
-        int imgIndex = listaOrdenadoresTienda.get(position).getId() % imgOrdenadores.length;
-        holder.imageOrdenador.setImageResource(imgOrdenadores[imgIndex]); // porque las imagenes estan en local
+        Ordenador pc = listaOrdenadoresTienda.get(position);
+        Context context = holder.itemView.getContext();
 
-        holder.tvNombreOrdenador.setText(listaOrdenadoresTienda.get(position).getName());
-        holder.tvPrecio.setText(listaOrdenadoresTienda.get(position).getPrice() + " $");
+        // 🔹 Obtener el ID de la imagen desde los recursos de drawable
+        int imageResource = context.getResources().getIdentifier(
+                pc.getImg(), "drawable", context.getPackageName());
+
+        // Cargar imagen de forma segura con ContextCompat
+        if (imageResource != 0) {
+            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
+        } else {
+            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
+        }
+
+        holder.tvNombreOrdenador.setText(pc.getNombre());
+        holder.tvPrecio.setText(pc.getPrecio() + " $");
     }
+
 
     @Override
     public int getItemCount() {

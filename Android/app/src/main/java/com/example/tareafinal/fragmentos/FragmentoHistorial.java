@@ -4,18 +4,25 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorHistorial;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +39,17 @@ public class FragmentoHistorial extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private RecyclerView rvHistorial;
-    private AdaptadorHistorial adaptadorHistorial;
+    RecyclerView rvHistorial;
+    AdaptadorHistorial adaptadorHistorial;
 
-    private List<Compra> listaCompras;
-    private List<Ordenador> listaOrdenadoresHistorial;
+    List<Compra> listaCompras;
+    List<Ordenador> listaOrdenadoresHistorial;
 
-    //private DatabaseReference dbReferenceCompras;
-    //private DatabaseReference dbReferenceOrdenadores;
+    Switch switchLayout;
+
+    FirebaseDatabase database;
+    DatabaseReference dbReferenceCompras;
+    DatabaseReference dbReferenceOrdenadores;
 
     public FragmentoHistorial() {
     }
@@ -68,22 +78,41 @@ public class FragmentoHistorial extends Fragment {
         View view = inflater.inflate(R.layout.fragment_historial, container, false);
 
         rvHistorial = view.findViewById(R.id.rv_historial);
-        rvHistorial.setLayoutManager(new LinearLayoutManager(getContext()));
+        switchLayout = view.findViewById(R.id.switch_tipolayout);
+
+        boolean estadoSwitch = switchLayout.isChecked();
+
+        // Configurar el RecyclerView según el estado inicial del Switch
+        if (estadoSwitch) {
+            rvHistorial.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        } else {
+            rvHistorial.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
 
         listaOrdenadoresHistorial = new ArrayList<>();
         listaCompras = new ArrayList<>();
 
-        adaptadorHistorial = new AdaptadorHistorial(listaOrdenadoresHistorial, listaCompras);
+        adaptadorHistorial = new AdaptadorHistorial(listaOrdenadoresHistorial, listaCompras, estadoSwitch);
         rvHistorial.setAdapter(adaptadorHistorial);
 
-        //dbReferenceCompras = FirebaseDatabase.getInstance().getReference("compras");
-        //dbReferenceOrdenadores = FirebaseDatabase.getInstance().getReference("ordenadores");
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbReferenceCompras = database.getReference("compras");
+        dbReferenceOrdenadores = database.getReference("productos");
 
-        //cargarOrdenadores();
+        cargarOrdenadores();
+
+        switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                rvHistorial.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            } else{
+                rvHistorial.setLayoutManager(new LinearLayoutManager(getContext()));
+            }
+            adaptadorHistorial.setEstaMarcado(isChecked); // Actualiza el adaptador
+        });
 
         return view;
     }
-/*
+
     private void cargarOrdenadores() {
         dbReferenceOrdenadores.addValueEventListener(new ValueEventListener() {
             @Override
@@ -112,22 +141,26 @@ public class FragmentoHistorial extends Fragment {
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
-                    if (compra.isComprado() == true) {
+                    if (compra != null && compra.isComprado() && compra.getIdUsuario().equals("1")) {
                         listaCompras.add(compra);
 
                         // busca el ordenador correspondiente a la compra
-                        for (Ordenador ordenador : listaCompras) {
-                            if (ordenador.getId() == compra.getIdProducto()) {
+                        for (Ordenador ordenador : listaOrdenadoresHistorial) {
+                            if (ordenador.getId().equals(compra.getIdProducto())) {
                                 ordenadoresFiltrados.add(ordenador);
                                 break;
                             }
+                        }
+                    } else {
+                        if (listaCompras.isEmpty()) {
+                            Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
 
                 // actualizar el adaptador con los datos obtenidos
-                adaptadorHistorial = new AdaptadorHistorial(ordenadoresFiltrados, listaCompras);
-                rvHistorial.setAdapter(adaptadorHistorial);
+                listaOrdenadoresHistorial.clear();
+                listaOrdenadoresHistorial.addAll(ordenadoresFiltrados);
                 adaptadorHistorial.notifyDataSetChanged();
             }
 
@@ -137,5 +170,4 @@ public class FragmentoHistorial extends Fragment {
             }
         });
     }
- */
 }

@@ -37,7 +37,7 @@
             android:id="@+id/tiPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/icono_perfil"
+            android:icon="@drawable/icono_perfil_negro"
             android:text="Perfil" />
 
         <com.google.android.material.tabs.TabItem

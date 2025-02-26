@@ -1,5 +1,6 @@
 package com.example.tareafinal.fragmentos;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorCarrito;
@@ -37,6 +40,8 @@ public class FragmentoCarrito extends Fragment {
     private List<Compra> listaCarrito; // estan agregados al carrito pero no comprados
     private List<Ordenador> listaOrdenadoresCarrito;
 
+    TextView btnComprarYa;
+
     //private DatabaseReference dbReferenceCompras;
     //private DatabaseReference dbReferenceOrdenadores;
 
@@ -59,6 +64,13 @@ public class FragmentoCarrito extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        btnComprarYa = getView().findViewById(R.id.btn_comprarya);
+
     }
 
     @Override
