@@ -2,55 +2,52 @@ package com.example.tareafinal.db;
 
 public class Ordenador {
 
-    private int id;
-    private int img;
-    private String name;
-    private int price;
+    private String id;
+    private String img;
+    private String nombre;
+    private String precio;
     private String descripcion;
 
-    public Ordenador(int id, int img, String name, int price, String descripcion) {
+    public Ordenador(String id, String img, String name, String price, String descripcion) {
         this.id = id;
         this.img = img;
-        this.name = name;
-        this.price = price;
+        this.nombre = name;
+        this.precio = price;
         this.descripcion = descripcion;
     }
 
-    public Ordenador(String name, int price){
-        this.name = name;
-        this.price = price;
-    }
+    public Ordenador() {} // firebase necesita un constructor vacio
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public int getPrice() {
-        return price;
+    public String getPrecio() {
+        return precio;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPrecio(String precio) {
+        this.precio = precio;
     }
 
     public String getDescripcion() {

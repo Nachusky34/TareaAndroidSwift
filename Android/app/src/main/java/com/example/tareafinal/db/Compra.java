@@ -5,51 +5,57 @@ import java.util.Date;
 
 public class Compra {
 
-    private int idUsuario;
-    private int idProducto;
-    private Date fecha;
-    private Time hora;
-    private int cantidad;
+    private String idUsuario;
+    private String idProducto;
+    private String fecha;
+    private String hora;
+    private String cantidad;
+    private boolean comprado;
 
     public Compra(){}
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 
-    public int getIdProducto() {
+    public String getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(String idProducto) {
         this.idProducto = idProducto;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
-    public Time getHora() {
+    public String getHora() {
         return hora;
     }
 
-    public void setHora(Time hora) {
+    public void setHora(String hora) {
         this.hora = hora;
     }
 
-    public int getCantidad() {
+    public String getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
     }
+
+    public boolean isComprado() {return comprado;}
+
+    public void setComprado(boolean comprado) {this.comprado = comprado;}
+
 }
