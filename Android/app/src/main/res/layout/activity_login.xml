@@ -71,7 +71,7 @@
             android:inputType="text" />
 
         <EditText
-            android:id="@+id/et_pass"
+            android:id="@+id/et_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="70dp"
@@ -154,6 +154,7 @@
             android:layout_weight="1"
             android:backgroundTint="#C4ECFD"
             android:fontFamily="serif"
+            android:onClick="login"
             android:text="SIGN IN"
             android:textColor="#2196F3"
             android:textStyle="bold" />
