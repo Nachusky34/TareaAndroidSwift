@@ -17,7 +17,7 @@ struct Tab: View {
                 }
                 .tag(1) // tag se utiliza para identificar cada tab de forma única
             
-            Perfil()
+            Tienda()
                 .tabItem {
                     Label("Tienda", systemImage: "house")
                 }

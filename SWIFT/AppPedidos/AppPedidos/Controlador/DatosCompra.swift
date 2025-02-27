@@ -1,95 +1,87 @@
-//
-//  Created by Ignacio bermejo on 20/2/25.
-//
-
-
-import SwiftUI
 import Foundation
 
-class GestorDatos: ObservableObject {
-    @Published var compra: [Compra] = []
+func CargarDatosCompra() -> [Compra] {
+    let fileURL = obtenerURLArchivo()
+    print("Ruta del archivo JSON: \(fileURL.path)")
     
-    private let compraJson = "compras.json"
-
-    init() {
-        cargarJSON()
-    }
-    
-    // Obtiene la URL del archivo en el directorio de documentos
-    private func obtenerDirectorioDocumentos() -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
-    
-    // Obtiene la ruta completa del archivo JSON en el directorio de documentos
-    private func obtenerURLArchivo() -> URL {
-        obtenerDirectorioDocumentos().appendingPathComponent(compraJson)
-    }
-    
-    // Carga el JSON (si no existe, lo copia desde el bundle)
-    func cargarJSON() {
-        let fileURL = obtenerURLArchivo()
-        print("Ruta del archivo JSON: \(fileURL.path)")
-        
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-            // Copiar el archivo desde el bundle si no existe
-            if let bundleURL = Bundle.main.url(forResource: "datos", withExtension: "json") {
-                do {
-                    try FileManager.default.copyItem(at: bundleURL, to: fileURL)
-                } catch {
-                    print("Error copiando el JSON desde el bundle: \(error)")
-                }
+    // Si el archivo no existe, lo copia desde el bundle
+    if !FileManager.default.fileExists(atPath: fileURL.path) {
+        if let bundleURL = Bundle.main.url(forResource: "compras", withExtension: "json") {
+            do {
+                try FileManager.default.copyItem(at: bundleURL, to: fileURL)
+                print("Archivo copiado desde el bundle.")
+            } catch {
+                print("Error copiando el archivo JSON: \(error)")
             }
+        } else {
+            print("No se encontró el archivo en el bundle.")
         }
+    }
+    
+    // Cargar datos desde el archivo
+    do {
+        let data = try Data(contentsOf: fileURL)
+        let decoder = JSONDecoder()
+        let decodedData = try decoder.decode([String: [Compra]].self, from: data)
         
-        do {
-            let data = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            self.compra = try decoder.decode([Compra].self, from: data)
-        } catch {
-            print("Error al cargar el JSON: \(error)")
+        if let compras = decodedData["compra"] {
+            print("Datos de compras cargados correctamente.")
+            return compras
+        } else {
+            print("Clave 'compra' no encontrada.")
+            return []
         }
-    }
-    
-    // Guarda los datos en el JSON
-    func salvarJSON() {
-        let fileURL = obtenerURLArchivo()
-        do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let dataCompra = try encoder.encode(compra)
-            try dataCompra.write(to: fileURL, options: .atomicWrite)
-        } catch {
-            print("Error al guardar el JSON: \(error)")
-        }
-    }
-    
-    // Agrega una nueva persona y guarda los cambios
-    func agregarCompra(idUsuario: Int, idProducto: Int) {
-        let newCompra = Compra(id: "", fecha: "", hora: "", cantidad: 0)
-        compra.append(newCompra)
-        salvarJSON()
-    }
-    
-    func obtenerDia() -> String{
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.day, .month, .year], from: currentDate)
-
-        if let day = components.day, let month = components.month, let year = components.year {
-            return("Día: \(day), Mes: \(month), Año: \(year)")
-        }
-        return ""
-    }
-    
-    func obtenerHora() -> String{
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: currentDate)
-
-        if let hour = components.hour, let minute = components.minute {
-            return("Hora: \(hour):\(minute)")
-        }
-        
-        return ""
+    } catch {
+        print("Error al cargar el JSON: \(error)")
+        return []
     }
 }
+
+func guardarCompras(compras: [Compra]) {
+    let fileURL = obtenerURLArchivo()
+    
+    do {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(["compra": compras])
+        try data.write(to: fileURL)
+        print("Compras guardadas correctamente.")
+    } catch {
+        print("Error al guardar el JSON: \(error)")
+    }
+}
+
+func agregarCompra(compras: inout [Compra], idUsuario: Int, idProducto: Int, cantidad: Int) {
+    let nuevaCompra = Compra(
+        idUsuario: idUsuario,
+        idProducto: idProducto,
+        fecha: obtenerFecha(),
+        hora: obtenerHora(),
+        cantidad: cantidad,
+        comprado: false
+    )
+    
+    compras.append(nuevaCompra)
+    guardarCompras(compras: compras)
+    print("Compra agregada.")
+}
+
+func obtenerFecha() -> String {
+    let formato = DateFormatter()
+    formato.dateFormat = "dd/MM/yyyy"
+    return formato.string(from: Date())
+}
+
+func obtenerHora() -> String {
+    let formato = DateFormatter()
+    formato.dateFormat = "HH:mm"
+    return formato.string(from: Date())
+}
+
+func obtenerURLArchivo() -> URL {
+    let fileManager = FileManager.default
+    let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+    let documentsDirectory = urls[0]
+    return documentsDirectory.appendingPathComponent("compras.json")
+}
+

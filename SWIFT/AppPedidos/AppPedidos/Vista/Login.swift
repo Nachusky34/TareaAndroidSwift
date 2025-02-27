@@ -13,7 +13,7 @@ struct Login: View {
         NavigationStack {
             if isAuthenticated {
                 Tab()
-                    .navigationBarBackButtonHidden(true) // Evita volver atrás
+                    //.navigationBarBackButtonHidden(true) // Evita volver atrás
             } else {
                 VStack {
                     Image(.imgDeco2)

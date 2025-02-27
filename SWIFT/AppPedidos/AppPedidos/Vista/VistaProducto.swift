@@ -12,33 +12,23 @@ struct VistaProducto: View {
     let ordenador: Ordenador
     
     @State private var cantidad: Int = 1
-    let precio: Double = 1249.95
     
     var precioTotal: Double {
-            return Double(cantidad) * precio
+        return Double(cantidad) * ordenador.precio
         }
     
     var body: some View {
         VStack {
-            Button(action: {
-                // aqui nos lleva a la pestaña de CARRITO
-            }) {
-                Image(systemName: "cart")
-                    .padding(.leading, 280)
-                    .font(.system(size: 40))
-                    .foregroundColor(.black)
-            }
             
-            Image(.ordenador1)
-                .padding(.top, -40)
-            
+            Image(ordenador.img)
+
             VStack(alignment: .leading) {
-                Text("ORDENADOR 1")
+                Text(ordenador.nombre)
                     .font(.custom("Times New Roman", size: 32))
                     .fontWeight(.bold)
                     .padding()
                 
-                Text("Descripcion aleatoria....")
+                Text(ordenador.descripcion)
                     .font(.custom("Times New Roman", size: 22))
             }
             .padding(.horizontal, 15)
@@ -50,7 +40,7 @@ struct VistaProducto: View {
                 HStack {
                     Text("Precio:")
                         .font(.custom("Times New Roman", size: 22))
-                    Text(String(format: "%.2f$", precio))
+                    Text(String(format: "%.2f$", ordenador.precio))
                         .font(.custom("Times New Roman", size: 22))
                 }
                     .padding()
@@ -111,5 +101,6 @@ struct VistaProducto: View {
 }
 
 #Preview {
-    VistaProducto(ordenador: Ordenador(id: 1, nombre: "Ordenador 1", descripcion: "Descripción aleatoria...", precio: 1249.95, img: "ordenador1"))
+    VistaProducto(ordenador: Ordenador(id: 1, nombre: "PC Ejemplo", descripcion: "mas ejemplo", precio: 1500.0, img: "Ordenador1"))
 }
+

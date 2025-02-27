@@ -2,55 +2,70 @@
 //  Tienda.swift
 //  AppPedidos
 //
-//  Created by Usuario invitado on 25/2/25.
+//  Created by Mario Seoane on 25/2/25.
 //
 
 import SwiftUI
 
 struct Tienda: View {
     
-    @State private var ordenadores: [Ordenador] = [
-        Ordenador(id: 1, nombre: "Ordenador 1", descripcion: "Descripción aleatoria...", precio: 1249.95, img: "ordenador1"),
-        Ordenador(id: 2, nombre: "Ordenador 2", descripcion: "Otro ordenador...", precio: 999.99, img: "ordenador2"),
-        Ordenador(id: 3, nombre: "Ordenador 3", descripcion: "Más potente aún...", precio: 1499.99, img: "ordenador3")
-    ]
+    @State private var ordenadores: [Ordenador] = CargarDatosOrdenador()
     
     @State private var ordenadorSeleccionado: Ordenador?
-    
+
     var body: some View {
-        NavigationView {
-            List(ordenadores) { ordenador in
+        VStack {
+            HStack {
+                Text("Tienda")
+                    .font(.custom("Times New Roman", size: 40))
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
+                
+                Spacer()
+                
                 Button(action: {
-                    ordenadorSeleccionado = ordenador
+                    // aqui nos lleva a la pestaña de CARRITO
                 }) {
-                    HStack {
-                        Image(ordenador.img)
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(8)
-                            .padding()
-                        
-                        VStack(alignment: .leading) {
-                            Text(ordenador.nombre)
-                                .font(.custom("Times New Roman", size: 30))
-                                .foregroundColor(.black)
-                            
-                            Text(String(format: "%.2f$", ordenador.precio))
-                                .font(.custom("Times New Roman", size: 30))
-                                .foregroundColor(.gray)
-                                .padding()
-                                .padding(.leading, 60)
-                            
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(8)
+                    Image(systemName: "cart")
+                        .font(.system(size: 40))
+                        .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
                 }
             }
-            .navigationTitle("Tienda")
-    
+            .padding(.horizontal, 30)
+            
+            NavigationView {
+                List(ordenadores) { ordenador in
+                    Button(action: {
+                        ordenadorSeleccionado = ordenador
+                    }) {
+                        HStack {
+                            Image(ordenador.img)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(8)
+                            
+                            VStack(alignment: .leading) {
+                                Text(ordenador.nombre)
+                                    .font(.custom("Times New Roman", size: 30))
+                                    .foregroundColor(.black)
+                                
+                                Text(String(format: "%.2f$", ordenador.precio))
+                                    .font(.custom("Times New Roman", size: 25))
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                    .padding(.leading, 30)
+                                
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(8)
+                    }
+                }
+            }
         }
+        
+    
         .sheet(item: $ordenadorSeleccionado) { ordenador in
             VistaProducto(ordenador : ordenador)
         }
