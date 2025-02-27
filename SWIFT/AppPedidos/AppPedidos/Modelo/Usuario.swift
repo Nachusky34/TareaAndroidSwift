@@ -15,4 +15,15 @@ struct Usuario: Decodable {
     let postalcode: String
     let newsletter: Bool
     let foto: String
+    
+    
+    init(id: Int, username: String, password: String, email: String, postalcode: String, newsletter: Bool, foto: String) {
+        self.id = id
+        self.username = username
+        self.password = password
+        self.email = email
+        self.postalcode = postalcode
+        self.newsletter = newsletter
+        self.foto = foto
+    }
 }

@@ -14,31 +14,12 @@ func CargarDatosUsuario() -> [Usuario] {
     }
 
     do {
-        // Decode the JSON as a dictionary with user identifiers as keys and Usuario objects as values.
+        // Decodificar el JSON como un diccionario de usuarios
         let decodedData = try JSONDecoder().decode([String: [String: Usuario]].self, from: data)
-        
-        // Extract the "usuario" key and flatten the user dictionary into an array.
-        if let usuarios = decodedData["usuario"]?.values {
-            return Array(usuarios) // Convert the dictionary values to an array
-        } else {
-            fatalError("Key 'usuario' not found.")
-        }
-    } catch {
-        fatalError("Failed to decode JSON: \(error)")
-    }
-}
 
-func CargarDatosUsuarioPorID(id: Int) -> Usuario? {
-    guard let url = Bundle.main.url(forResource: "usuarios", withExtension: "json"),
-          let data = try? Data(contentsOf: url) else {
-        fatalError("Failed to load usuarios.json from the bundle.")
-    }
-    
-    do {
-        let decodedData = try JSONDecoder().decode([String: [Usuario]].self, from: data)
-        if let usuarios = decodedData["usuario"] {
-            // Filtrar y devolver el usuario con el ID específico
-            return usuarios.first { $0.id == id }
+        // Extraer los valores de la clave "usuario" y convertirlo en un array
+        if let usuarios = decodedData["usuario"]?.values {
+            return Array(usuarios) // Convertir los valores del diccionario en un array
         } else {
             fatalError("Key 'usuario' not found.")
         }

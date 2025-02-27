@@ -2,12 +2,11 @@ import SwiftUI
 
 struct Tab: View {
     // Aquí almacenas el usuario autenticado
-    let usuario =  1
+    @Binding var usuario: Usuario
     
     var body: some View {
         TabView {
-            // Primero, pasa el usuario correctamente a la vista Perfil
-            Perfil(usuario: usuario)
+            Perfil(usuario: $usuario)
                 .tabItem {
                     Label("Perfil", systemImage: "person")
                 }
@@ -31,5 +30,6 @@ struct Tab: View {
 }
 
 #Preview {
-    Tab()
+    let usuarioFicticio = Usuario(id: 12, username: "marioseoane", password: "12", email: "marioseoane@marioseoane.marioseoane", postalcode: "12345", newsletter: true, foto: "marioseoane")
+    Tab(usuario: .constant(usuarioFicticio))
 }

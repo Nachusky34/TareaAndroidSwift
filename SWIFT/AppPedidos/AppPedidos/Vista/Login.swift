@@ -14,15 +14,16 @@ struct Login: View {
     @State private var password: String = ""
     @State private var mostrarAlerta: Bool = false
     @State private var isAuthenticated: Bool = false
-    @State private var usuarioAutenticado: Int? = nil  // Para almacenar el usuario autenticado
-
+    @State private var usuarioAutenticado: Usuario? = nil
+    
     var body: some View {
         NavigationStack {
-            if isAuthenticated {
-                NavigationLink(destination: Perfil(id: usuarioAutenticado)) {
-                    Text("Ir al Perfil")
-                }
-                .navigationBarBackButtonHidden(true) // Evita volver atrás
+            if isAuthenticated, let usuario = usuarioAutenticado {
+                Tab(usuario: Binding(
+                    get: { usuario },
+                    set: { usuarioAutenticado = $0 }
+                ))
+                .navigationBarBackButtonHidden(true)
             } else {
                 VStack {
                     Image(.imgDeco2)
@@ -52,10 +53,12 @@ struct Login: View {
                                 .font(.custom("Times New Roman", size: 25))
                                 .padding(.bottom, 20)
                                 .padding(.top, 30)
+                                .autocapitalization(.none)
                             
                             SecureField("Password", text: $password)
                                 .font(.custom("Times New Roman", size: 25))
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .autocapitalization(.none)
                         }
                     }
                     .padding(.horizontal, 45)
@@ -63,9 +66,10 @@ struct Login: View {
 
                     Button(action: {
                         if let usuarioValido = usuarios.first(where: { $0.username == username && $0.password == password }) {
-                            usuarioAutenticado = usuarioValido.id
+                            usuarioAutenticado = usuarioValido
                             isAuthenticated = true
                             mostrarAlerta = false
+                            
                         } else {
                             mostrarAlerta = true
                         }

@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct Perfil: View {
-    @EnvironmentObject var usuario: UserData
+    
+    @Binding var usuario: Usuario
+    
     @State private var username: String = ""
     @State private var email: String = ""
     @State private var postalCode: String = ""
@@ -27,14 +29,14 @@ struct Perfil: View {
                         .frame(width: 150, height: 150)
                         .foregroundColor(.white)
                         
-                    Text($usuario.username) // Muestra el nombre de usuario aquí
+                    Text(usuario.username ?? "maritotito")
                         .font(.custom("Times New Roman", size: 32))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(.top, 20)
                 }
             }
-            .padding(.bottom, 100)
+            .padding(.bottom, 80)
             
             VStack {
                 VStack(alignment: .leading) {
@@ -52,7 +54,7 @@ struct Perfil: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .font(.custom("Times New Roman", size: 25))
                             .onAppear {
-                                email = usuario.email
+                                email = usuario.email ?? "mario@hola.es"
                             }
                     }
                     .padding(.bottom, 30)
@@ -71,7 +73,7 @@ struct Perfil: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .font(.custom("Times New Roman", size: 25))
                             .onAppear {
-                                postalCode = String(usuario.postalcode)
+                                postalCode = String(usuario.postalcode ?? "12345")
                             }
                     }
                     
@@ -79,8 +81,32 @@ struct Perfil: View {
                         .font(.custom("Times New Roman", size: 23))
                         .padding(.top, 60)
                         .onAppear {
-                            subscription = usuario.newsletter
+                            subscription = usuario.newsletter ?? false
                         }
+                    
+                    HStack {
+                        Spacer() // Empuja el botón hacia el centro verticalmente
+                        Button(action: {
+                            // Acción de cerrar sesión
+                        }) {
+                            HStack {
+                                Text("SIGN OUT")
+                                    .padding(.leading, 35)
+                                
+                                Image(systemName: "rectangle.portrait.and.arrow.right")
+                                    .padding(.leading, 10)
+                            }.font(.custom("Times New Roman", size: 18))
+                                .frame(width: 200, height: 20)
+                                .padding()
+                                .background(Color.red.opacity(0.9))
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .cornerRadius(10)
+                        }
+                        .padding(.top, 30)
+                        Spacer() // Empuja el botón hacia el centro verticalmente
+                    }
+
                 }
             }
                 .padding(.horizontal, 25)
@@ -92,5 +118,6 @@ struct Perfil: View {
 }
 
 #Preview {
-    Perfil()
+    let usuarioFicticio = Usuario(id: 12, username: "marioseoane", password: "12", email: "marioseoane@marioseoane.marioseoane", postalcode: "12345", newsletter: true, foto: "marioseoane")
+    Perfil(usuario: .constant(usuarioFicticio))
 }

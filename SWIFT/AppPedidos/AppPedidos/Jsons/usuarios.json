@@ -1,8 +1,8 @@
 {
   "usuario": {
     "user1": {
-      "id": "1",
-      "username": "MarioSeoane",
+      "id": 1,
+      "username": "marioSeoane",
       "password": "mario12",
       "email": "mario@gmail.com",
       "postalcode": "01238",
@@ -10,8 +10,8 @@
       "foto": "foto"
     },
     "user2": {
-      "id": "2",
-      "username": "Nachusky34",
+      "id": 2,
+      "username": "nachusky34",
       "password": "nacho12",
       "email": "nacho@gmail.com",
       "postalcode": "43210",
