@@ -136,6 +136,7 @@
             android:layout_weight="1"
             android:fontFamily="serif"
             android:gravity="center"
+            android:onClick="iniciarRegistro"
             android:text="SIGN UP"
             android:textColor="#2196F3" />
     </LinearLayout>

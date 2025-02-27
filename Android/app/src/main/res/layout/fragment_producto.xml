@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".fragmentos.FragmentoTienda">
+    tools:context=".fragmentos.FragmentoProducto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -169,15 +169,17 @@
             <TextView
                 android:id="@+id/tv_agregar_carrito2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:clickable="true"
                 android:fontFamily="serif"
                 android:gravity="center"
                 android:text="ADD TO CART"
                 android:textColor="#101010"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="agregarAlCarrito"/>
 
             <LinearLayout
                 android:layout_width="2dp"

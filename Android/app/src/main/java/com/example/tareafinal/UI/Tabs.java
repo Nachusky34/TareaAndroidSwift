@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tareafinal.R;
+import com.example.tareafinal.db.Usuario;
 import com.example.tareafinal.fragmentos.FragmentoHistorial;
 import com.example.tareafinal.fragmentos.FragmentoPerfil;
 import com.example.tareafinal.fragmentos.FragmentoTienda;
@@ -31,6 +33,10 @@ public class Tabs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_tabs);
+
+        Usuario usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usuario", usuario);
 
         flContenedor = findViewById(R.id.flContenedor);
         tb = findViewById(R.id.tb);
@@ -54,15 +60,21 @@ public class Tabs extends AppCompatActivity {
                 transaction = fragmentManager.beginTransaction();
 
                 if (tab.getPosition() == 0) {
-                    transaction.replace(R.id.flContenedor, new FragmentoPerfil());
+                    FragmentoPerfil fragmentoPerfil = new FragmentoPerfil();
+                    fragmentoPerfil.setArguments(bundle);
+                    transaction.replace(R.id.flContenedor, fragmentoPerfil);
                     transaction.addToBackStack(null);
                 }
                 if (tab.getPosition() == 1) {
-                    transaction.replace(R.id.flContenedor, new FragmentoTienda());
+                    FragmentoTienda fragmentoTienda = new FragmentoTienda();
+                    fragmentoTienda.setArguments(bundle);
+                    transaction.replace(R.id.flContenedor, fragmentoTienda);
                     transaction.addToBackStack(null);
                 }
                 if (tab.getPosition() == 2) {
-                    transaction.replace(R.id.flContenedor, new FragmentoHistorial());
+                    FragmentoHistorial fragmentoHistorial = new FragmentoHistorial();
+                    fragmentoHistorial.setArguments(bundle);
+                    transaction.replace(R.id.flContenedor, fragmentoHistorial);
                     transaction.addToBackStack(null);
                 }
                 transaction.commit();

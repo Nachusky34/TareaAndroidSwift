@@ -1,18 +1,20 @@
 package com.example.tareafinal.db;
 
-public class Usuario {
+import java.io.Serializable;
 
-    private int id;
+public class Usuario implements Serializable {
+
+    private String id;
     private String username;
-    private String pwd;
+    private String password;
     private String email;
-    private int postalCode;
+    private String postalCode;
     private String fotoPerfil;
 
-    public Usuario(int id, String username, String pwd, String email, int postalCode, String fotoPerfil) {
+    public Usuario(String id, String username, String pwd, String email, String postalCode, String fotoPerfil) {
         this.id = id;
         this.username = username;
-        this.pwd = pwd;
+        this.password = pwd;
         this.email = email;
         this.postalCode = postalCode;
         this.fotoPerfil = fotoPerfil;
@@ -20,11 +22,11 @@ public class Usuario {
 
     public Usuario() {}
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -36,12 +38,12 @@ public class Usuario {
         this.username = username;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getPassword() {  // ✅ Ahora coincide con la variable
+        return password;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setPassword(String password) {  // ✅ Setter también corregido
+        this.password = password;
     }
 
     public String getEmail() {
@@ -52,11 +54,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -71,10 +73,11 @@ public class Usuario {
     @Override
     public String toString() {
         return "Usuario{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", postalCode=" + postalCode +
+                ", postalCode='" + postalCode + '\'' +
                 ", fotoPerfil='" + fotoPerfil + '\'' +
                 '}';
     }

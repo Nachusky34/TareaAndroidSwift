@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tareafinal.R;
+import com.example.tareafinal.db.Compra;
+import com.example.tareafinal.db.Usuario;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +36,7 @@ public class FragmentoProducto extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Usuario usuario;
 
     public FragmentoProducto() {
         // Required empty public constructor
@@ -67,7 +75,25 @@ public class FragmentoProducto extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_producto, container, false);
+    }
+
+    public void agregarAlCarrito(View view) {
+        Compra compra = new Compra();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+        compra.setIdUsuario(usuario.getId());
+        //compra.setIdProducto();
+        compra.setCantidad(cantidad.getText().toString());
+        compra.setComprado(false);
+        compra.setFecha(dateFormat.format(calendar.getTime()));
+        compra.setHora(timeFormat.format(calendar.getTime()));
     }
 }

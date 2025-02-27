@@ -18,6 +18,7 @@ import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorHistorial;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
+import com.example.tareafinal.db.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,17 +42,18 @@ public class FragmentoHistorial extends Fragment {
     private RecyclerView rv;
     private Switch tipoLayout;
 
-    RecyclerView rvHistorial;
-    AdaptadorHistorial adaptadorHistorial;
+    private RecyclerView rvHistorial;
+    private AdaptadorHistorial adaptadorHistorial;
 
-    List<Compra> listaCompras;
-    List<Ordenador> listaOrdenadoresHistorial;
+    private List<Compra> listaCompras;
+    private List<Ordenador> listaOrdenadoresHistorial;
 
-    Switch switchLayout;
+    private Switch switchLayout;
 
-    FirebaseDatabase database;
-    DatabaseReference dbReferenceCompras;
-    DatabaseReference dbReferenceOrdenadores;
+    private FirebaseDatabase database;
+    private DatabaseReference dbReferenceCompras;
+    private DatabaseReference dbReferenceOrdenadores;
+    private Usuario usuario;
 
     public FragmentoHistorial() {
     }
@@ -103,13 +105,15 @@ public class FragmentoHistorial extends Fragment {
 
         cargarOrdenadores();
 
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+
         switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
                 rvHistorial.setLayoutManager(new GridLayoutManager(getContext(), 2));
             } else{
                 rvHistorial.setLayoutManager(new LinearLayoutManager(getContext()));
             }
-            adaptadorHistorial.setEstaMarcado(isChecked); // Actualiza el adaptador
+            adaptadorHistorial.setEstaMarcado(isChecked);
         });
 
         return view;
@@ -143,7 +147,7 @@ public class FragmentoHistorial extends Fragment {
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
-                    if (compra != null && compra.isComprado() && compra.getIdUsuario().equals("1")) {
+                    if (compra != null && compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         listaCompras.add(compra);
 
                         // busca el ordenador correspondiente a la compra
@@ -153,11 +157,11 @@ public class FragmentoHistorial extends Fragment {
                                 break;
                             }
                         }
-                    } else {
-                        if (listaCompras.isEmpty()) {
-                            Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
-                        }
                     }
+                }
+
+                if (listaCompras.isEmpty()) {
+                    Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
                 }
 
                 // actualizar el adaptador con los datos obtenidos

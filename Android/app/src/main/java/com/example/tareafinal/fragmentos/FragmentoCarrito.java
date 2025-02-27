@@ -18,6 +18,7 @@ import com.example.tareafinal.adaptadores.AdaptadorCarrito;
 import com.example.tareafinal.adaptadores.AdaptadorHistorial;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
+import com.example.tareafinal.db.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,8 @@ public class FragmentoCarrito extends Fragment {
     private List<Compra> listaCarrito; // estan agregados al carrito pero no comprados
     private List<Ordenador> listaOrdenadoresCarrito;
 
-    TextView btnComprarYa;
+    private TextView btnComprarYa;
+    private Usuario usuario;
 
     //private DatabaseReference dbReferenceCompras;
     //private DatabaseReference dbReferenceOrdenadores;
@@ -98,6 +100,8 @@ public class FragmentoCarrito extends Fragment {
         //dbReferenceOrdenadores = FirebaseDatabase.getInstance().getReference("ordenadores");
 
         //cargarOrdenadores();
+
+        usuario = (Usuario) getArguments().getSerializable("usuario");
 
         return view;
     }

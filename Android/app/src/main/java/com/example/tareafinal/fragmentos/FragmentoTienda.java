@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorTienda;
 import com.example.tareafinal.db.Ordenador;
+import com.example.tareafinal.db.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,12 +39,13 @@ public class FragmentoTienda extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    RecyclerView rvTienda;
-    AdaptadorTienda tiendaAdapter;
-    List<Ordenador> listaOrdenadoresTienda;
-    Switch switchLayout;
-    FirebaseDatabase database;
-    DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
+    private RecyclerView rvTienda;
+    private AdaptadorTienda tiendaAdapter;
+    private List<Ordenador> listaOrdenadoresTienda;
+    private Switch switchLayout;
+    private FirebaseDatabase database;
+    private DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
+    private Usuario usuario;
 
     public FragmentoTienda() {}
 
@@ -92,6 +94,8 @@ public class FragmentoTienda extends Fragment {
 
         database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
         dbReference = database.getReference("productos");
+
+        usuario = (Usuario) getArguments().getSerializable("usuario");
 
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
