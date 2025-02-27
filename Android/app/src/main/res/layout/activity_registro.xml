@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".UI.Login">
+    tools:context=".UI.Registro">
 
     <LinearLayout
         android:id="@+id/lay_titulo"
@@ -87,7 +87,7 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/et_postal"
+            android:id="@+id/et_postal_registro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="70dp"
@@ -149,7 +149,9 @@
             android:fontFamily="serif"
             android:text="SIGN UP"
             android:textColor="#2196F3"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="registrarse"/>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -175,11 +175,11 @@
                 android:clickable="true"
                 android:fontFamily="serif"
                 android:gravity="center"
+                android:onClick="agregarAlCarrito"
                 android:text="ADD TO CART"
                 android:textColor="#101010"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:onClick="agregarAlCarrito"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="2dp"

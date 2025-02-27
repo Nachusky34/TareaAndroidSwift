@@ -75,7 +75,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void iniciarRegistro(View view) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, Registro.class);
         launcherRegistro.launch(intent);
     }
 

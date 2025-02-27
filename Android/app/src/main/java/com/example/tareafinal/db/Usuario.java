@@ -10,14 +10,16 @@ public class Usuario implements Serializable {
     private String email;
     private String postalCode;
     private String fotoPerfil;
+    private boolean newsletter;
 
-    public Usuario(String id, String username, String pwd, String email, String postalCode, String fotoPerfil) {
+    public Usuario(String id, String username, String pwd, String email, String postalCode, String fotoPerfil, boolean newsletter) {
         this.id = id;
         this.username = username;
         this.password = pwd;
         this.email = email;
         this.postalCode = postalCode;
         this.fotoPerfil = fotoPerfil;
+        this.newsletter = newsletter;
     }
 
     public Usuario() {}
@@ -70,6 +72,14 @@ public class Usuario implements Serializable {
         this.fotoPerfil = fotoPerfil;
     }
 
+    public boolean isNewsletter() {
+        return newsletter;
+    }
+
+    public void setNewsletter(boolean newsletter) {
+        this.newsletter = newsletter;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
@@ -79,6 +89,7 @@ public class Usuario implements Serializable {
                 ", email='" + email + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", fotoPerfil='" + fotoPerfil + '\'' +
+                ", newsletter=" + newsletter +
                 '}';
     }
 }
