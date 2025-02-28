@@ -1,10 +1,12 @@
 package com.example.tareafinal.fragmentos;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +48,7 @@ public class FragmentoTienda extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
     private Usuario usuario;
+    private int pos_seleccionado;
 
     public FragmentoTienda() {}
 
@@ -90,8 +93,6 @@ public class FragmentoTienda extends Fragment {
         listaOrdenadoresTienda = new ArrayList<>();
         tiendaAdapter = new AdaptadorTienda(listaOrdenadoresTienda, estadoSwitch); // hay que pasarle el estado del switch al adaptador
 
-        rvTienda.setAdapter(tiendaAdapter);
-
         database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
         dbReference = database.getReference("productos");
 
@@ -118,8 +119,23 @@ public class FragmentoTienda extends Fragment {
             }
         });
 
+        rvTienda.setAdapter(tiendaAdapter);
 
+        /*
+        pos_seleccionado = -1;
 
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pos_seleccionado = rvTienda.getChildAdapterPosition(v);
+                iniciarFragmentoProducto(listaOrdenadoresTienda.get(pos_seleccionado));
+            }
+        };
+         */
+
+        tiendaAdapter.setOnItemClickListener(ordenador -> {
+            iniciarFragmentoProducto(ordenador);
+        });
 
         switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
@@ -135,4 +151,18 @@ public class FragmentoTienda extends Fragment {
 
     }
 
+    public void iniciarFragmentoProducto(Ordenador ordenador) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usuario", usuario);
+        bundle.putSerializable("ordenador", ordenador);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentoProducto fragmentoProducto = new FragmentoProducto()      ;
+        fragmentoProducto.setArguments(bundle);
+        transaction.replace(R.id.flContenedor, fragmentoProducto);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
 }

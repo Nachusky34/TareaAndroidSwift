@@ -1,5 +1,6 @@
 package com.example.tareafinal.fragmentos;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.db.Compra;
+import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +39,8 @@ public class FragmentoProducto extends Fragment {
     private String mParam1;
     private String mParam2;
     private Usuario usuario;
+    private Ordenador ordenador;
+    Bundle bundle;
 
     public FragmentoProducto() {
         // Required empty public constructor
@@ -63,24 +67,44 @@ public class FragmentoProducto extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = getView();
-        imagen = view.findViewById(R.id.iv_ordenador);
-        nombre = view.findViewById(R.id.tv_nombre_ordenador);
-        descripcion = view.findViewById(R.id.tv_descripcion);
-        precio = view.findViewById(R.id.tv_precio_valor);
-        cantidad = view.findViewById(R.id.tv_cantidad_producto);
-        total = view.findViewById(R.id.textView2);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        usuario = (Usuario) getArguments().getSerializable("usuario");
+        // Inflamos el layout correctamente
+        View view = inflater.inflate(R.layout.fragment_producto, container, false);
+        imagen = view.findViewById(R.id.iv_ordenador);
+        nombre = view.findViewById(R.id.tv_nombre_ordenador);
+        descripcion = view.findViewById(R.id.tv_descripcion);
+        precio = view.findViewById(R.id.tv_precio_valor);
+        cantidad = view.findViewById(R.id.tv_cantidad_producto);
+        total = view.findViewById(R.id.textView2);
+
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            System.out.println("El bundle no recibe la informacion");
+        }
+        usuario = (Usuario) bundle.getSerializable("usuario");
+        ordenador = (Ordenador) bundle.getSerializable("ordenador");
+
+        String imgOrdenador = ordenador.getImg();
+        //Obtenemos la imagen a traves de la que nos ha pasado
+        int idImagen = getResources().getIdentifier(imgOrdenador, "drawable", getContext().getPackageName());
+
+        if (idImagen != 0) { // Si la imagen existe
+            imagen.setImageResource(idImagen);
+        } else {
+            imagen.setImageResource(R.drawable.ordenador1); // Imagen por defecto si no se encuentra
+        }
+        nombre.setText(ordenador.getNombre());
+        descripcion.setText(ordenador.getDescripcion());
+        precio.setText(ordenador.getPrecio() + " $");
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_producto, container, false);
+        return view;
     }
 
     public void agregarAlCarrito(View view) {
@@ -90,7 +114,7 @@ public class FragmentoProducto extends Fragment {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
         compra.setIdUsuario(usuario.getId());
-        //compra.setIdProducto();
+        compra.setIdProducto(ordenador.getId());
         compra.setCantidad(cantidad.getText().toString());
         compra.setComprado(false);
         compra.setFecha(dateFormat.format(calendar.getTime()));

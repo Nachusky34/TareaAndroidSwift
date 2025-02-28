@@ -1,6 +1,8 @@
 package com.example.tareafinal.db;
 
-public class Ordenador {
+import java.io.Serializable;
+
+public class Ordenador implements Serializable {
 
     private String id;
     private String img;
