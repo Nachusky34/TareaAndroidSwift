@@ -14,12 +14,12 @@ func CargarDatosUsuario() -> [Usuario] {
     }
 
     do {
-        // Decode the JSON as a dictionary with user identifiers as keys and Usuario objects as values.
+        // Decodificar el JSON como un diccionario de usuarios
         let decodedData = try JSONDecoder().decode([String: [String: Usuario]].self, from: data)
-        
-        // Extract the "usuario" key and flatten the user dictionary into an array.
+
+        // Extraer los valores de la clave "usuario" y convertirlo en un array
         if let usuarios = decodedData["usuario"]?.values {
-            return Array(usuarios) // Convert the dictionary values to an array
+            return Array(usuarios) // Convertir los valores del diccionario en un array
         } else {
             fatalError("Key 'usuario' not found.")
         }
@@ -27,4 +27,3 @@ func CargarDatosUsuario() -> [Usuario] {
         fatalError("Failed to decode JSON: \(error)")
     }
 }
-
