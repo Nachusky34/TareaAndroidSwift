@@ -1,5 +1,6 @@
 package com.example.tareafinal.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -93,4 +94,21 @@ public class Tabs extends AppCompatActivity {
         });
 
     }
+
+    // Dentro de tu actividad que gestiona los fragmentos con el TabLayout
+    public void cerrarSesion() {
+        // Usar la clase de la actividad Login directamente
+        Intent intent = new Intent(Tabs.this, Login.class);  // Aquí es donde haces la corrección
+
+        // Para evitar que el usuario regrese a la actividad de Tabs con el botón de atrás
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // Iniciar la actividad de login
+        startActivity(intent);
+
+        // Finalizar la actividad actual (que es la de los tabs)
+        finish();
+    }
+
+
 }

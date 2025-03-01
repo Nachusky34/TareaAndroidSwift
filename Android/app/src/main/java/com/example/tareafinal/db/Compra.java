@@ -1,9 +1,10 @@
 package com.example.tareafinal.db;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
-public class Compra {
+public class Compra implements Serializable {
 
     private String idUsuario;
     private String idProducto;
