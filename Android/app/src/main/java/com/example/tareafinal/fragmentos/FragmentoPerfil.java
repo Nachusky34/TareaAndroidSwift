@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -12,16 +13,19 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tareafinal.R;
+import com.example.tareafinal.UI.Tabs;
 import com.example.tareafinal.db.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +36,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,12 +54,14 @@ public class FragmentoPerfil extends Fragment {
 
     private TextView username, email, postalcode;
     private ImageView imagePerfil;
+    private LinearLayout layoutCerrarSesion;
     private Switch newsletter;
     private Usuario usuario;
     private String idUser;
 
     private FirebaseDatabase database;
     private DatabaseReference dbReferencePerfil;
+    private String ruta;
 
     FirebaseStorage storage;
     StorageReference storageRef;
@@ -117,6 +126,11 @@ public class FragmentoPerfil extends Fragment {
         postalcode = view.findViewById(R.id.tv_postalCode);
         newsletter = view.findViewById(R.id.switch_newsletter);
         imagePerfil = view.findViewById(R.id.iv_user);
+        layoutCerrarSesion = view.findViewById(R.id.layout_cerrar_sesion);
+
+        layoutCerrarSesion.setOnClickListener(v -> cerrarSesion(v));
+
+        ruta = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_"; //Ruta de la imagen
 
         View layoutHacerFoto = view.findViewById(R.id.layout_hacer_foto);
         layoutHacerFoto.setOnClickListener(v -> hacerFoto(v));
@@ -125,6 +139,8 @@ public class FragmentoPerfil extends Fragment {
         dbReferencePerfil = database.getReference("usuarios");
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
+        System.out.println(usuario.getId());
+
         if (usuario != null) {
             idUser = usuario.getId();
         }
@@ -148,7 +164,7 @@ public class FragmentoPerfil extends Fragment {
                             postalcode.setText(usuario.getPostalCode());
                             newsletter.setChecked(usuario.isNewsletter());
 
-                            cargarImagenDesdeDrawable(usuario.getFotoPerfil());
+                            cargarImagenDesdeRutaAbsoluta(ruta);
                         }
                     }
                 } else {
@@ -163,7 +179,7 @@ public class FragmentoPerfil extends Fragment {
         });
     }
 
-    public void hacerFoto(View view){
+    public void hacerFoto(View view) {
         Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         fotoLauncher.launch(intentFoto);
     }
@@ -171,11 +187,7 @@ public class FragmentoPerfil extends Fragment {
     private void subirImagenAFirebase(Bitmap imageBitmap) {
         // Generar el nombre de la imagen dinámicamente
         String nombreImagen = "foto_perfil_" + idUser;
-
-        // Convertir Bitmap a bytes
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] data = outputStream.toByteArray();
+        guardarImagenEnInterno(imageBitmap, nombreImagen);
 
         // Subir imagen a Firebase Storage
         DatabaseReference userRef = dbReferencePerfil.child(idUser).child("fotoPerfil");
@@ -185,17 +197,51 @@ public class FragmentoPerfil extends Fragment {
     }
 
 
-    private void cargarImagenDesdeDrawable(String nombreImagen) {
-        Context context = getContext();
-        if (context != null) {
-            int imageResource = context.getResources().getIdentifier(nombreImagen, "drawable", context.getPackageName());
+    private void cargarImagenDesdeRutaAbsoluta(String rutaImagen) {
+        File archivoImagen = new File(rutaImagen + idUser + ".png");
 
-            if (imageResource != 0) {
-                imagePerfil.setImageResource(imageResource);
+        if (archivoImagen.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(archivoImagen.getAbsolutePath());
+            imagePerfil.setImageBitmap(bitmap);
+        } else {
+            // Si no encuentra la imagen, pone la de defecto
+            int idImagen = getResources().getIdentifier("foto_perfil_nacho", "drawable", getContext().getPackageName());
+
+            if (idImagen != 0) { // Si la imagen existe
+                imagePerfil.setImageResource(idImagen);
             } else {
-                // si no encuentra la imagen ponemos la de defecto
-                imagePerfil.setImageResource(R.drawable.icono_perfil_blanco);
+                imagePerfil.setImageResource(R.drawable.icono_perfil_blanco); // Imagen por defecto si no se encuentra
             }
         }
     }
+
+
+    private String guardarImagenEnInterno(Bitmap bitmap, String nombreArchivo) {
+        File directorio = new File(getContext().getFilesDir(), "fotoPerfil"); // Carpeta de almacenamiento interno (fotoPerfil)
+
+        //Crea la carpeta si no existe
+        if (!directorio.exists()) {
+            directorio.mkdirs();
+        }
+
+        File archivoImagen = new File(directorio, nombreArchivo + ".png");
+
+        try (FileOutputStream fos = new FileOutputStream(archivoImagen)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            return archivoImagen.getAbsolutePath(); // Retorna la ruta donde se guardó la imagen
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void cerrarSesion(View v) {
+        // Obtener la actividad que contiene este fragmento
+        if (getActivity() instanceof Tabs) {
+            Tabs tabsActivity = (Tabs) getActivity();  // Hacer el casting seguro
+            tabsActivity.cerrarSesion();  // Llamar al método de cerrar sesión de la actividad
+        }
+    }
+
 }
+

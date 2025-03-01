@@ -6,16 +6,21 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.SystemClock;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,7 +38,8 @@ public class FragmentoProducto extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ImageView imagen;
-    private TextView precio, cantidad, total, descripcion, nombre;
+    private TextView precio, cantidad, total, descripcion, nombre, sumar, restar, tv_agregarCarrito;
+    private LinearLayout layout_agregar_carrito;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -41,6 +47,9 @@ public class FragmentoProducto extends Fragment {
     private Usuario usuario;
     private Ordenador ordenador;
     Bundle bundle;
+    private FirebaseDatabase database;
+    private DatabaseReference dbRef;
+
 
     public FragmentoProducto() {
         // Required empty public constructor
@@ -81,11 +90,19 @@ public class FragmentoProducto extends Fragment {
         precio = view.findViewById(R.id.tv_precio_valor);
         cantidad = view.findViewById(R.id.tv_cantidad_producto);
         total = view.findViewById(R.id.textView2);
+        sumar = view.findViewById(R.id.tv_sumar);
+        restar = view.findViewById(R.id.tv_restar);
+        layout_agregar_carrito = view.findViewById(R.id.layout_agregarCarrito);
+        tv_agregarCarrito = view.findViewById(R.id.tv_agregar_carrito2);
+
+        sumar.setOnClickListener(v -> sumar(v));
+        restar.setOnClickListener(v -> restar(v));
 
         Bundle bundle = getArguments();
-        if (bundle == null) {
-            System.out.println("El bundle no recibe la informacion");
-        }
+
+        layout_agregar_carrito.setOnClickListener(v -> agregarAlCarrito(v));
+        tv_agregarCarrito.setOnClickListener(v -> agregarAlCarrito(v));
+
         usuario = (Usuario) bundle.getSerializable("usuario");
         ordenador = (Ordenador) bundle.getSerializable("ordenador");
 
@@ -101,6 +118,10 @@ public class FragmentoProducto extends Fragment {
         nombre.setText(ordenador.getNombre());
         descripcion.setText(ordenador.getDescripcion());
         precio.setText(ordenador.getPrecio() + " $");
+        total.setText(ordenador.getPrecio() + " $");
+
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbRef = database.getReference("compras");
 
 
         // Inflate the layout for this fragment
@@ -119,5 +140,50 @@ public class FragmentoProducto extends Fragment {
         compra.setComprado(false);
         compra.setFecha(dateFormat.format(calendar.getTime()));
         compra.setHora(timeFormat.format(calendar.getTime()));
+
+        bundle = new Bundle();
+        bundle.putSerializable("compra", compra);
+        dbRef.push().setValue(compra);
+        Toast.makeText(getContext(), "Se ha agregadop la compra", Toast.LENGTH_SHORT).show();
+
+        volverATienda();
+    }
+
+    public void volverATienda() {
+        if (getParentFragmentManager().getBackStackEntryCount() > 0) {
+            getParentFragmentManager().popBackStack();
+        } else {
+            requireActivity().getOnBackPressedDispatcher().onBackPressed(); // Si no hay más fragmentos en la pila, vuelve atrás en la actividad
+        }
+    }
+
+    public void sumar(View view) {
+
+        String precioTexto = precio.getText().toString().replace("$", "").trim();
+
+        int precioInt = Integer.parseInt(precioTexto);
+        int catidadInt = Integer.parseInt(cantidad.getText().toString()) + 1;
+
+        this.cantidad.setText(String.valueOf(catidadInt));
+        total.setText(String.valueOf(precioInt * catidadInt) + " $");
+    }
+
+    public void restar(View view) {
+        //Eliminamos el simbolo $
+        String precioTexto = precio.getText().toString().replace("$", "").trim();
+
+        int precioInt = Integer.parseInt(precioTexto);
+        int cantidadInt = Integer.parseInt(cantidad.getText().toString());
+
+        if (cantidadInt == 0) {
+            Toast.makeText(getContext(), "Mijo no puedes vender ordenadores",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        cantidadInt--;
+
+        this.cantidad.setText(String.valueOf(cantidadInt));
+        total.setText(String.valueOf(precioInt * cantidadInt) + " $");
     }
 }

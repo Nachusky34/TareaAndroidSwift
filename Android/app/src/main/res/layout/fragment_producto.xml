@@ -88,7 +88,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:fontFamily="serif"
-                    android:gravity="center"
+                    android:gravity="center|end"
+                    android:paddingEnd="10dp"
                     android:text="1.249,99 $"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -127,7 +128,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView12"
+                        android:id="@+id/tv_sumar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="serif"
@@ -144,7 +145,7 @@
                         android:orientation="vertical"></LinearLayout>
 
                     <TextView
-                        android:id="@+id/textView13"
+                        android:id="@+id/tv_restar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="serif"
@@ -158,6 +159,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_agregarCarrito"
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_marginHorizontal="15dp"
@@ -175,7 +177,6 @@
                 android:clickable="true"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:onClick="agregarAlCarrito"
                 android:text="ADD TO CART"
                 android:textColor="#101010"
                 android:textSize="24sp"
