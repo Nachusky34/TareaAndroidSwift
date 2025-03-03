@@ -135,7 +135,7 @@ public class FragmentoTienda extends Fragment {
             }
         };
          */
-        btnCarrito.setOnClickListener(v -> irCarrito());
+        btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
 
         tiendaAdapter.setOnItemClickListener(ordenador -> {
             iniciarFragmentoProducto(ordenador);
@@ -169,7 +169,7 @@ public class FragmentoTienda extends Fragment {
         transaction.commit();
     }
 
-    public void irCarrito() {
+    public void iniciarFragmentoCarrito() {
         Bundle bundle = new Bundle();
         bundle.putSerializable("usuario", usuario);
 

@@ -1,9 +1,9 @@
 package com.example.tareafinal.fragmentos;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,13 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorCarrito;
-import com.example.tareafinal.adaptadores.AdaptadorHistorial;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
@@ -41,9 +39,6 @@ public class FragmentoCarrito extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private TextView precio;
-    private RecyclerView rv;
-
     private RecyclerView rvCarrito;
     private AdaptadorCarrito adaptadorCarrito;
 
@@ -79,6 +74,24 @@ public class FragmentoCarrito extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Iniciar DDBB
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbReferenceCompras = database.getReference("compras");
+        dbReferenceOrdenadores = database.getReference("productos");
+
+        // Iniciamos las listas
+        listaOrdenadoresCarrito = new ArrayList<>();
+        listaCarrito = new ArrayList<>();
+
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+
+        cargarOrdenadores();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carrito, container, false);
@@ -87,24 +100,12 @@ public class FragmentoCarrito extends Fragment {
         rvCarrito = view.findViewById(R.id.rv_carrito);
         rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listaOrdenadoresCarrito = new ArrayList<>();
-        listaCarrito = new ArrayList<>();
-
         adaptadorCarrito = new AdaptadorCarrito(listaOrdenadoresCarrito, listaCarrito);
         rvCarrito.setAdapter(adaptadorCarrito);
-
 
         adaptadorCarrito.setOnItemClickListener(position -> {
             adaptadorCarrito.eliminarItem(position);
         });
-
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferenceCompras = database.getReference("compras");
-        dbReferenceOrdenadores = database.getReference("ordenadores");
-
-        cargarOrdenadores();
-
-        usuario = (Usuario) getArguments().getSerializable("usuario");
 
         return view;
     }
@@ -117,9 +118,11 @@ public class FragmentoCarrito extends Fragment {
                 listaOrdenadoresCarrito.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Ordenador pc = ds.getValue(Ordenador.class);
-                    listaOrdenadoresCarrito.add(pc);
+                    if (pc != null) {
+                        listaOrdenadoresCarrito.add(pc);
+                    }
                 }
-                cargarCompras(); // cargamos las compras
+                cargarCompras();
             }
 
             @Override
@@ -128,6 +131,7 @@ public class FragmentoCarrito extends Fragment {
             }
         });
     }
+
 
     private void cargarCompras() {
         dbReferenceCompras.addValueEventListener(new ValueEventListener() {
@@ -140,12 +144,12 @@ public class FragmentoCarrito extends Fragment {
                     Compra compra = ds.getValue(Compra.class);
 
                     // Filtrar solo los productos que NO han sido comprados
-                    if (!compra.isComprado()) {
+                    if (!compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         listaCarrito.add(compra);
 
                         // Buscar el ordenador correspondiente
                         for (Ordenador ordenador : listaOrdenadoresCarrito) {
-                            if (ordenador.getId().equals(compra.getIdProducto())) { // Usar equals() para comparar Strings
+                            if (ordenador.getId().equals(compra.getIdProducto())) {
                                 ordenadoresFiltrados.add(ordenador);
                                 break;
                             }

@@ -36,18 +36,22 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_carrito"
             android:layout_width="match_parent"
-            android:layout_height="772dp" />
+            android:layout_height="match_parent" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginTop="-62dp"
             android:background="#000000"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="0"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -100,6 +104,14 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="-2dp"
+            android:layout_weight="0"
+            android:background="#000000"
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 </FrameLayout>
