@@ -69,8 +69,17 @@ public class Registro extends AppCompatActivity {
         usuario.setEmail(email.getText().toString());
         usuario.setPostalCode(postalcode.getText().toString());
         usuario.setNewsletter(false);
-        usuario.setFotoPerfil("fotoperfil.png");
+        usuario.setFotoPerfil("fotoperfil.png"); // foto por defecto
         usuario.setId(id);
+
+        if (usuario.getEmail().contains("@")) {
+            Toast.makeText(this, "El correo debe contener un @", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        else if (usuario.getUsername().isEmpty() || usuario.getPassword().isEmpty() || usuario.getEmail().isEmpty() || usuario.getPostalCode().isEmpty()) {
+            Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+            return null;
+        }
 
         return usuario;
     }
