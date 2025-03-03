@@ -54,6 +54,7 @@ public class FragmentoCarrito extends Fragment {
     private DatabaseReference dbReferenceCompras;
     private DatabaseReference dbReferenceOrdenadores;
     private Double precioTotal;
+    private boolean compraEliminada;
 
     public FragmentoCarrito() {
     }
@@ -89,10 +90,13 @@ public class FragmentoCarrito extends Fragment {
         listaOrdenadores = new ArrayList<>();
         listaCarrito = new ArrayList<>();
         precioTotal = 0.0;
+        compraEliminada = false;
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
 
         cargarOrdenadores();
+
+        adaptadorCarrito = new AdaptadorCarrito(listaOrdenadores, listaCarrito);
     }
 
     @Override
@@ -105,11 +109,14 @@ public class FragmentoCarrito extends Fragment {
         rvCarrito = view.findViewById(R.id.rv_carrito);
         rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adaptadorCarrito = new AdaptadorCarrito(listaOrdenadores, listaCarrito);
         rvCarrito.setAdapter(adaptadorCarrito);
 
-        adaptadorCarrito.setOnItemClickListener(position -> {
-            adaptadorCarrito.eliminarItem(position);
+        adaptadorCarrito.setOnItemClickListener(compra -> {
+            if (eliminarCompra(compra)) {
+                Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;
@@ -144,15 +151,14 @@ public class FragmentoCarrito extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listaCarrito.clear();
                 List<Ordenador> ordenadoresFiltrados = new ArrayList<>();
+                precioTotal = 0.0;
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
 
-                    // Filtrar solo los productos que NO han sido comprados
                     if (!(compra == null) && !compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         listaCarrito.add(compra);
 
-                        // Buscar el ordenador correspondiente
                         for (Ordenador ordenador : listaOrdenadores) {
                             if (ordenador.getId().equals(compra.getIdProducto())) {
                                 ordenadoresFiltrados.add(ordenador);
@@ -164,12 +170,11 @@ public class FragmentoCarrito extends Fragment {
                     }
                 }
 
-                // actualizar el adaptador con los datos obtenidos
-                adaptadorCarrito = new AdaptadorCarrito(ordenadoresFiltrados, listaCarrito);
-                rvCarrito.setAdapter(adaptadorCarrito);
+                // Actualizar los datos del adaptador y notificarle de los cambios
+                adaptadorCarrito.listaOrdenadoresCarrito = ordenadoresFiltrados;
+                adaptadorCarrito.listaCompras = listaCarrito;
                 adaptadorCarrito.notifyDataSetChanged();
 
-                // Agrega $ al final
                 precio.setText(String.format("%.2f $", precioTotal));
             }
 
@@ -178,6 +183,19 @@ public class FragmentoCarrito extends Fragment {
                 Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean eliminarCompra(Compra compra) {
+        String id = compra.getIdUsuario() + "-" + compra.getIdProducto();
+        dbReferenceCompras.child(id).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    compraEliminada = true;
+                })
+                .addOnFailureListener(e -> {
+                    compraEliminada = false;
+                });
+        cargarCompras();
+        return compraEliminada;
     }
 
 }

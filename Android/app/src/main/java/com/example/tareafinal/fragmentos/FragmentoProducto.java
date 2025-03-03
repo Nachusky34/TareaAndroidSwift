@@ -142,7 +142,7 @@ public class FragmentoProducto extends Fragment {
 
         bundle = new Bundle();
         bundle.putSerializable("compra", compra);
-        dbRef.push().setValue(compra);
+        dbRef.child(usuario.getId() + "-" + ordenador.getId()).setValue(compra);
         Toast.makeText(getContext(), "Se ha agregadop la compra", Toast.LENGTH_SHORT).show();
 
         volverATienda();

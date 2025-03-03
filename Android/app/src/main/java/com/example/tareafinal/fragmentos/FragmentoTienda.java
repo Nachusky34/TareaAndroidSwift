@@ -162,7 +162,7 @@ public class FragmentoTienda extends Fragment {
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        FragmentoProducto fragmentoProducto = new FragmentoProducto()      ;
+        FragmentoProducto fragmentoProducto = new FragmentoProducto();
         fragmentoProducto.setArguments(bundle);
         transaction.replace(R.id.flContenedor, fragmentoProducto);
         transaction.addToBackStack(null);

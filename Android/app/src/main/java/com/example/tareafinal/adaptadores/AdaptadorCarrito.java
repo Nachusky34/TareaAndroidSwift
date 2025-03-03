@@ -20,8 +20,8 @@ import java.util.List;
 
 public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.CarritoHolder> {
 
-    private List<Ordenador> listaOrdenadoresCarrito;
-    private List<Compra> listaCompras;
+    public List<Ordenador> listaOrdenadoresCarrito;
+    public List<Compra> listaCompras;
     private OnItemClickListener listenerEliminar;
 
 
@@ -31,7 +31,7 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
     }
 
     public interface OnItemClickListener {
-        void onItemDelete(int position);
+        void onItemClick(Compra compra);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -76,8 +76,11 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
 
         // HACER QUE SOLO EL BOTÓN SEA CLICKEABLE
         holder.btnEliminar.setOnClickListener(v -> {
+            System.out.println("1");
             if (listenerEliminar != null) {
-                listenerEliminar.onItemDelete(holder.getAdapterPosition());
+                System.out.println("2");
+                listenerEliminar.onItemClick(compra);
+                System.out.println("3");
             }
         });
     }
@@ -99,15 +102,6 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
             tvPrecioTotal = itemView.findViewById(R.id.tv_price_carrito2);
             tvCantidad = itemView.findViewById(R.id.tv_num_cantidad_carrito);
             btnEliminar = itemView.findViewById(R.id.btn_papelera);
-        }
-    }
-
-    public void eliminarItem(int position) {
-        if (position >= 0 && position < listaOrdenadoresCarrito.size()) {
-            listaOrdenadoresCarrito.remove(position);
-            listaCompras.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, listaOrdenadoresCarrito.size());
         }
     }
 }
