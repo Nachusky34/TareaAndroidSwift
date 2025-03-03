@@ -22,7 +22,7 @@
         android:id="@+id/tb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="6"
+        android:layout_weight="9"
         android:backgroundTint="#FFFFFF"
         android:pointerIcon="none"
         android:scrollbarSize="4dp"

@@ -36,24 +36,32 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_carrito"
             android:layout_width="match_parent"
-            android:layout_height="772dp" />
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:clickable="false" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginTop="-62dp"
             android:background="#000000"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="0"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/design_default_color_background"
+                android:backgroundTint="@color/design_default_color_background"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -69,7 +77,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tv_carrito_precio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -100,6 +108,14 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="-2dp"
+            android:layout_weight="0"
+            android:background="#000000"
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

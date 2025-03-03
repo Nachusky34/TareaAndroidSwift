@@ -124,7 +124,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:background="#55B7E8"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal"/>
 
         <ImageButton
             android:id="@+id/btn_papelera"
@@ -133,6 +133,8 @@
             android:layout_marginTop="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginBottom="4dp"
+            android:clickable="true"
+            android:focusable="true"
             android:background="#E63131"
             app:srcCompat="@drawable/icono_delete_black" />
 

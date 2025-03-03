@@ -1,8 +1,9 @@
 package com.example.tareafinal.fragmentos;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,15 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorCarrito;
-import com.example.tareafinal.adaptadores.AdaptadorHistorial;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,19 +40,21 @@ public class FragmentoCarrito extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private TextView precio;
-    private RecyclerView rv;
 
     private RecyclerView rvCarrito;
     private AdaptadorCarrito adaptadorCarrito;
 
     private List<Compra> listaCarrito; // estan agregados al carrito pero no comprados
-    private List<Ordenador> listaOrdenadoresCarrito;
+    private List<Ordenador> listaOrdenadores;
 
     private TextView btnComprarYa;
     private Usuario usuario;
 
-    //private DatabaseReference dbReferenceCompras;
-    //private DatabaseReference dbReferenceOrdenadores;
+    private FirebaseDatabase database;
+    private DatabaseReference dbReferenceCompras;
+    private DatabaseReference dbReferenceOrdenadores;
+    private Double precioTotal;
+    private boolean compraEliminada;
 
     public FragmentoCarrito() {
     }
@@ -71,10 +78,25 @@ public class FragmentoCarrito extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        btnComprarYa = getView().findViewById(R.id.btn_comprarya);
 
+        // Iniciar DDBB
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbReferenceCompras = database.getReference("compras");
+        dbReferenceOrdenadores = database.getReference("productos");
+
+        // Iniciamos las listas
+        listaOrdenadores = new ArrayList<>();
+        listaCarrito = new ArrayList<>();
+        precioTotal = 0.0;
+        compraEliminada = false;
+
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+
+        cargarOrdenadores();
+
+        adaptadorCarrito = new AdaptadorCarrito(listaOrdenadores, listaCarrito);
     }
 
     @Override
@@ -82,41 +104,37 @@ public class FragmentoCarrito extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carrito, container, false);
 
+        precio = view.findViewById(R.id.tv_carrito_precio);
+        btnComprarYa = view.findViewById(R.id.btn_comprarya);
         rvCarrito = view.findViewById(R.id.rv_carrito);
         rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listaOrdenadoresCarrito = new ArrayList<>();
-        listaCarrito = new ArrayList<>();
-
-        adaptadorCarrito = new AdaptadorCarrito(listaOrdenadoresCarrito, listaCarrito);
         rvCarrito.setAdapter(adaptadorCarrito);
 
-
-        adaptadorCarrito.setOnItemClickListener(position -> {
-            adaptadorCarrito.eliminarItem(position);
+        adaptadorCarrito.setOnItemClickListener(compra -> {
+            if (eliminarCompra(compra)) {
+                Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
+            }
         });
-
-        //dbReferenceCompras = FirebaseDatabase.getInstance().getReference("compras");
-        //dbReferenceOrdenadores = FirebaseDatabase.getInstance().getReference("ordenadores");
-
-        //cargarOrdenadores();
-
-        usuario = (Usuario) getArguments().getSerializable("usuario");
 
         return view;
     }
-/*
+
 
     private void cargarOrdenadores() {
         dbReferenceOrdenadores.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaOrdenadoresCarrito.clear();
+                listaOrdenadores.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Ordenador pc = ds.getValue(Ordenador.class);
-                    listaOrdenadoresCarrito.add(pc);
+                    if (pc != null) {
+                        listaOrdenadores.add(pc);
+                    }
                 }
-                cargarCompras(); // cargamos las compras
+                cargarCompras();
             }
 
             @Override
@@ -126,32 +144,38 @@ public class FragmentoCarrito extends Fragment {
         });
     }
 
+
     private void cargarCompras() {
         dbReferenceCompras.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaCompras.clear();
+                listaCarrito.clear();
                 List<Ordenador> ordenadoresFiltrados = new ArrayList<>();
+                precioTotal = 0.0;
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
-                    if (compra.isComprado() == false) {
+
+                    if (!(compra == null) && !compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         listaCarrito.add(compra);
 
-                        // busca el ordenador correspondiente a la compra
-                        for (Ordenador ordenador : listaCarrito) {
-                            if (ordenador.getId() == compra.getIdProducto()) {
+                        for (Ordenador ordenador : listaOrdenadores) {
+                            if (ordenador.getId().equals(compra.getIdProducto())) {
                                 ordenadoresFiltrados.add(ordenador);
+                                precioTotal += Double.parseDouble(ordenador.getPrecio()) *
+                                        Double.parseDouble(compra.getCantidad());
                                 break;
                             }
                         }
                     }
                 }
 
-                // actualizar el adaptador con los datos obtenidos
-                adaptadorHistorial = new AdaptadorHistorial(ordenadoresFiltrados, listaCompras);
-                rvHistorial.setAdapter(adaptadorHistorial);
-                adaptadorHistorial.notifyDataSetChanged();
+                // Actualizar los datos del adaptador y notificarle de los cambios
+                adaptadorCarrito.listaOrdenadoresCarrito = ordenadoresFiltrados;
+                adaptadorCarrito.listaCompras = listaCarrito;
+                adaptadorCarrito.notifyDataSetChanged();
+
+                precio.setText(String.format("%.2f $", precioTotal));
             }
 
             @Override
@@ -159,6 +183,20 @@ public class FragmentoCarrito extends Fragment {
                 Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
- */
+    private boolean eliminarCompra(Compra compra) {
+        String id = compra.getIdUsuario() + "-" + compra.getIdProducto();
+        dbReferenceCompras.child(id).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    compraEliminada = true;
+                })
+                .addOnFailureListener(e -> {
+                    compraEliminada = false;
+                });
+        cargarCompras();
+        return compraEliminada;
+    }
+
 }
+
