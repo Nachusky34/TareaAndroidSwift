@@ -39,11 +39,13 @@ public class FragmentoCarrito extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private TextView precio;
+
     private RecyclerView rvCarrito;
     private AdaptadorCarrito adaptadorCarrito;
 
     private List<Compra> listaCarrito; // estan agregados al carrito pero no comprados
-    private List<Ordenador> listaOrdenadoresCarrito;
+    private List<Ordenador> listaOrdenadores;
 
     private TextView btnComprarYa;
     private Usuario usuario;
@@ -51,6 +53,7 @@ public class FragmentoCarrito extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference dbReferenceCompras;
     private DatabaseReference dbReferenceOrdenadores;
+    private Double precioTotal;
 
     public FragmentoCarrito() {
     }
@@ -83,8 +86,9 @@ public class FragmentoCarrito extends Fragment {
         dbReferenceOrdenadores = database.getReference("productos");
 
         // Iniciamos las listas
-        listaOrdenadoresCarrito = new ArrayList<>();
+        listaOrdenadores = new ArrayList<>();
         listaCarrito = new ArrayList<>();
+        precioTotal = 0.0;
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
 
@@ -96,11 +100,12 @@ public class FragmentoCarrito extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carrito, container, false);
 
+        precio = view.findViewById(R.id.tv_carrito_precio);
         btnComprarYa = view.findViewById(R.id.btn_comprarya);
         rvCarrito = view.findViewById(R.id.rv_carrito);
         rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adaptadorCarrito = new AdaptadorCarrito(listaOrdenadoresCarrito, listaCarrito);
+        adaptadorCarrito = new AdaptadorCarrito(listaOrdenadores, listaCarrito);
         rvCarrito.setAdapter(adaptadorCarrito);
 
         adaptadorCarrito.setOnItemClickListener(position -> {
@@ -115,11 +120,11 @@ public class FragmentoCarrito extends Fragment {
         dbReferenceOrdenadores.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaOrdenadoresCarrito.clear();
+                listaOrdenadores.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Ordenador pc = ds.getValue(Ordenador.class);
                     if (pc != null) {
-                        listaOrdenadoresCarrito.add(pc);
+                        listaOrdenadores.add(pc);
                     }
                 }
                 cargarCompras();
@@ -144,13 +149,15 @@ public class FragmentoCarrito extends Fragment {
                     Compra compra = ds.getValue(Compra.class);
 
                     // Filtrar solo los productos que NO han sido comprados
-                    if (!compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
+                    if (!(compra == null) && !compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         listaCarrito.add(compra);
 
                         // Buscar el ordenador correspondiente
-                        for (Ordenador ordenador : listaOrdenadoresCarrito) {
+                        for (Ordenador ordenador : listaOrdenadores) {
                             if (ordenador.getId().equals(compra.getIdProducto())) {
                                 ordenadoresFiltrados.add(ordenador);
+                                precioTotal += Double.parseDouble(ordenador.getPrecio()) *
+                                        Double.parseDouble(compra.getCantidad());
                                 break;
                             }
                         }
@@ -161,6 +168,9 @@ public class FragmentoCarrito extends Fragment {
                 adaptadorCarrito = new AdaptadorCarrito(ordenadoresFiltrados, listaCarrito);
                 rvCarrito.setAdapter(adaptadorCarrito);
                 adaptadorCarrito.notifyDataSetChanged();
+
+                // Agrega $ al final
+                precio.setText(String.format("%.2f $", precioTotal));
             }
 
             @Override
