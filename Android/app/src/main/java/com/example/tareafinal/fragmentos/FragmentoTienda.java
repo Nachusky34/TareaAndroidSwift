@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class FragmentoTienda extends Fragment {
     private DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
     private Usuario usuario;
     private int pos_seleccionado;
+    private ImageButton btnCarrito;
 
     public FragmentoTienda() {}
 
@@ -78,6 +80,7 @@ public class FragmentoTienda extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tienda, container, false);
 
+        btnCarrito = view.findViewById(R.id.btn_carrito);
         rvTienda = view.findViewById(R.id.rv_tienda);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
 
@@ -132,6 +135,7 @@ public class FragmentoTienda extends Fragment {
             }
         };
          */
+        btnCarrito.setOnClickListener(v -> irCarrito());
 
         tiendaAdapter.setOnItemClickListener(ordenador -> {
             iniciarFragmentoProducto(ordenador);
@@ -163,6 +167,18 @@ public class FragmentoTienda extends Fragment {
         transaction.replace(R.id.flContenedor, fragmentoProducto);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
 
+    public void irCarrito() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usuario", usuario);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentoCarrito fragmentoCarrito = new FragmentoCarrito();
+        fragmentoCarrito.setArguments(bundle);
+        transaction.replace(R.id.flContenedor, fragmentoCarrito);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

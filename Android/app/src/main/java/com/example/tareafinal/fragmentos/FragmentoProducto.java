@@ -40,16 +40,15 @@ public class FragmentoProducto extends Fragment {
     private ImageView imagen;
     private TextView precio, cantidad, total, descripcion, nombre, sumar, restar, tv_agregarCarrito;
     private LinearLayout layout_agregar_carrito;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private Usuario usuario;
     private Ordenador ordenador;
     Bundle bundle;
     private FirebaseDatabase database;
     private DatabaseReference dbRef;
 
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     public FragmentoProducto() {
         // Required empty public constructor
