@@ -108,13 +108,16 @@ public class FragmentoHistorial extends Fragment {
         usuario = (Usuario) getArguments().getSerializable("usuario");
 
         switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked){
+            if (isChecked) {
                 rvHistorial.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            } else{
+            } else {
                 rvHistorial.setLayoutManager(new LinearLayoutManager(getContext()));
             }
+
+            // Actualiza el adaptador para reflejar el nuevo diseño
             adaptadorHistorial.setEstaMarcado(isChecked);
         });
+
 
         return view;
     }
