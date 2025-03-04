@@ -87,7 +87,7 @@ struct Perfil: View {
                     HStack {
                         Spacer() // Empuja el botón hacia el centro verticalmente
                         Button(action: {
-                            // Acción de cerrar sesión
+                            usuario = Usuario(id: -1, username: "", password: "", email: "", postalcode: "", newsletter: false, foto: "")
                         }) {
                             HStack {
                                 Text("SIGN OUT")
