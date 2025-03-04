@@ -16,7 +16,7 @@ struct Tab: View {
                     .tag(1)
                 
                 // Otros tabs, por ejemplo, Tienda y Historial, también deberían tener la instancia del usuario si es necesario.
-                Text("Tienda")
+                Tienda(usuario: $usuario)
                     .tabItem {
                         Label("Tienda", systemImage: "house")
                     }

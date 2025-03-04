@@ -21,13 +21,13 @@ struct Carrito: View {
             if let ordenador = ordenadores.first(where: { $0.id == compra.idProducto }) {
                 return acumulador += Double(compra.cantidad) * ordenador.precio
             }
-            return acumulador
+            //return acumulador
         }
     }
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack {/*
                 List(comprasFiltradas) { compra in
                     if let ordenador = ordenadores.first(where: { $0.id == compra.idProducto }) {
                         HStack {
@@ -55,7 +55,7 @@ struct Carrito: View {
                         .padding(8)
                     }
                 }
-                
+                */
                 Text("Total: \(String(format: "%.2f$", total))")
                     .font(.custom("Times New Roman", size: 30))
                     .foregroundColor(.blue)

@@ -10,8 +10,10 @@ import SwiftUI
 struct VistaProducto: View {
     
     let ordenador: Ordenador
+    let usuario: Usuario
     
     @State private var cantidad: Int = 1
+    
     
     var precioTotal: Double {
         return Double(cantidad) * ordenador.precio
@@ -73,6 +75,7 @@ struct VistaProducto: View {
             
             
             Button(action: {
+                agregarCompra(idUsuario: usuario.id, idProducto: ordenador.id, cantidad: cantidad)
                 print("Producto agregado al carrito")
             }) {
                 HStack {
@@ -100,7 +103,27 @@ struct VistaProducto: View {
     }
 }
 
-#Preview {
-    VistaProducto(ordenador: Ordenador(id: 1, nombre: "PC Ejemplo", descripcion: "mas ejemplo", precio: 1500.0, img: "Ordenador1"))
+struct VistaProducto_Previews: PreviewProvider {
+    static var previews: some View {
+        let usuarioFicticio = Usuario(
+            id: 12,
+            username: "marioseoane",
+            password: "12",
+            email: "marioseoane@marioseoane.marioseoane",
+            postalcode: "12345",
+            newsletter: true,
+            foto: "marioseoane"
+        )
+        
+        let productoFicticio = Ordenador(
+            id: 1,
+            nombre: "PC Ejemplo",
+            descripcion: "Este es un ejemplo de PC.",
+            precio: 1500.0,
+            img: "Ordenador1"
+        )
+
+        VistaProducto(ordenador: productoFicticio, usuario: usuarioFicticio)
+    }
 }
 

@@ -2,19 +2,19 @@ import Foundation
 
 func CargarDatosCompra() -> [Compra] {
     let fileURL = obtenerURLArchivo()
-    print("Ruta del archivo JSON: \(fileURL.path)")
+    print("Ruta del archivo JSON en el contenedor: \(fileURL.path)")
     
-    // Si el archivo no existe, lo copia desde el bundle
+    // Si el archivo no existe, lo copia desde la carpeta Jsons dentro del bundle
     if !FileManager.default.fileExists(atPath: fileURL.path) {
-        if let bundleURL = Bundle.main.url(forResource: "compras", withExtension: "json") {
+        if let bundleURL = Bundle.main.url(forResource: "compras", withExtension: "json", subdirectory: "Jsons") {
             do {
                 try FileManager.default.copyItem(at: bundleURL, to: fileURL)
-                print("Archivo copiado desde el bundle.")
+                print("Archivo copiado desde la carpeta Jsons del bundle.")
             } catch {
-                print("Error copiando el archivo JSON: \(error)")
+                print("Error copiando el archivo JSON desde Jsons: \(error)")
             }
         } else {
-            print("No se encontró el archivo en el bundle.")
+            print("No se encontró el archivo 'compras.json' en la carpeta Jsons del bundle.")
         }
     }
     
@@ -28,7 +28,7 @@ func CargarDatosCompra() -> [Compra] {
             print("Datos de compras cargados correctamente.")
             return compras
         } else {
-            print("Clave 'compra' no encontrada.")
+            print("Clave 'compra' no encontrada en el archivo JSON.")
             return []
         }
     } catch {
@@ -37,21 +37,27 @@ func CargarDatosCompra() -> [Compra] {
     }
 }
 
-func guardarCompras(compras: [Compra]) {
+func guardarCompraJson(compra: Compra) {
     let fileURL = obtenerURLArchivo()
     
     do {
+        // Cargar compras existentes
+        var compras = CargarDatosCompra()
+        
+        compras.append(compra)
+        
+        // Guardar el array de compras con la nueva compra
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let data = try encoder.encode(["compra": compras])
         try data.write(to: fileURL)
-        print("Compras guardadas correctamente.")
+        print("Compra guardada correctamente.")
     } catch {
-        print("Error al guardar el JSON: \(error)")
+        print("Error al guardar la compra: \(error)")
     }
 }
 
-func agregarCompra(compras: inout [Compra], idUsuario: Int, idProducto: Int, cantidad: Int) {
+func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     let nuevaCompra = Compra(
         idUsuario: idUsuario,
         idProducto: idProducto,
@@ -61,8 +67,7 @@ func agregarCompra(compras: inout [Compra], idUsuario: Int, idProducto: Int, can
         comprado: false
     )
     
-    compras.append(nuevaCompra)
-    guardarCompras(compras: compras)
+    guardarCompraJson(compra: nuevaCompra)
     print("Compra agregada.")
 }
 

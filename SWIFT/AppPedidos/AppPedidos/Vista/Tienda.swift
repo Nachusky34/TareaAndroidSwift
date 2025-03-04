@@ -12,6 +12,8 @@ struct Tienda: View {
     @State private var ordenadores: [Ordenador] = CargarDatosOrdenador()
     
     @State private var ordenadorSeleccionado: Ordenador?
+    
+    @Binding var usuario: Usuario
 
     var body: some View {
         VStack {
@@ -67,11 +69,12 @@ struct Tienda: View {
         
     
         .sheet(item: $ordenadorSeleccionado) { ordenador in
-            VistaProducto(ordenador : ordenador)
+            VistaProducto(ordenador : ordenador, usuario: usuario)
         }
     }
 }
 
 #Preview {
-    Tienda()
+    let usuarioFicticio = Usuario(id: 12, username: "marioseoane", password: "12", email: "marioseoane@marioseoane.marioseoane", postalcode: "12345", newsletter: true, foto: "marioseoane")
+    Tienda(usuario: .constant(usuarioFicticio))
 }
