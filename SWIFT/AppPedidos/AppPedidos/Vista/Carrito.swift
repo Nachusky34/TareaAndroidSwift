@@ -3,7 +3,8 @@ import SwiftUI
 struct Carrito: View {
     @State private var ordenadores: [Ordenador] = CargarDatosOrdenador()
     @State private var compras: [Compra] = CargarDatosCompra()
-    @Environment(\.presentationMode) var presentacion 
+    @Environment(\.presentationMode) var presentacion
+    let usuario: Usuario
     
     var comprasFiltradas: [Compra] {
         compras.filter { !$0.comprado }
@@ -14,7 +15,7 @@ struct Carrito: View {
             if let ordenador = ordenadores.first(where: { $0.id == compra.idProducto }) {
                 return acumulador + (Double(compra.cantidad) * ordenador.precio)
             }
-            //return acumulador
+            return acumulador
         }
     }
     
@@ -106,10 +107,11 @@ struct Carrito: View {
     
     func eliminarCompra(_ compra: Compra) {
         compras.removeAll { $0.id == compra.id }
-        guardarCompras(compras: compras)
+        agregarCompra(idUsuario: compra.idUsuario, idProducto: compra.idProducto, cantidad: compra.cantidad)
     }
 }
 
 #Preview {
-    Carrito()
+    let usuarioFicticio = Usuario(id: 12, username: "marioseoane", password: "12", email: "marioseoane@marioseoane.marioseoane", postalcode: "12345", newsletter: true, foto: "marioseoane")
+    Carrito(usuario: usuarioFicticio)
 }

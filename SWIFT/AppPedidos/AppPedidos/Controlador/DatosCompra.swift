@@ -59,7 +59,7 @@ func guardarCompraJson(compra: Compra) {
 
 func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     let nuevaCompra = Compra(
-        id: compras.count + 1, // Añadimos el ID
+        id: "\(idUsuario)-\(idProducto)",
         idUsuario: idUsuario,
         idProducto: idProducto,
         fecha: obtenerFecha(),

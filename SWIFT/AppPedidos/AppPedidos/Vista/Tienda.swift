@@ -14,6 +14,7 @@ struct Tienda: View {
     @State private var ordenadorSeleccionado: Ordenador?
     
     @Binding var usuario: Usuario
+    
     @State private var mostrarCarrito = false
 
     var body: some View {
@@ -75,7 +76,7 @@ struct Tienda: View {
         }
         
         .fullScreenCover(isPresented: $mostrarCarrito) {
-                    Carrito()
+            Carrito(usuario: usuario)
         }
     }
 }

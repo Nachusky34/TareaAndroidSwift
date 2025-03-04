@@ -8,7 +8,7 @@
 import Foundation
 
 struct Compra: Codable, Identifiable {
-    var id: Int
+    let id : String
     var idUsuario: Int
     var idProducto: Int
     var fecha: String
