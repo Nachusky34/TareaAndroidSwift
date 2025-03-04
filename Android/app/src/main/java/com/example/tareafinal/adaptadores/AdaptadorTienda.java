@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.db.Ordenador;
+import com.google.android.material.transition.Hold;
 
 import java.util.List;
+import android.os.Handler;
 
 public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.TiendaHolder> {
     private List<Ordenador> listaOrdenadoresTienda;
@@ -57,7 +61,7 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
         Ordenador pc = listaOrdenadoresTienda.get(position);
         Context context = holder.itemView.getContext();
 
-        //Obtenemos la imagen de la carpeta drawable
+        // Obtener la imagen de la carpeta drawable
         int imageResource = context.getResources().getIdentifier(
                 pc.getImg(), "drawable", context.getPackageName());
 
@@ -77,6 +81,11 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
                 listener.onItemClick(pc);
             }
         });
+
+        // Cargar la animación
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview_tienda);
+
+        holder.itemView.startAnimation(animation);
     }
 
     @Override
