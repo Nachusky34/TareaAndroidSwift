@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,6 +75,11 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
         } else {
             holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
         }
+
+        // Cargar la animación
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
+
+        holder.itemView.startAnimation(animation);
 
         // HACER QUE SOLO EL BOTÓN SEA CLICKEABLE
         holder.btnEliminar.setOnClickListener(v -> {

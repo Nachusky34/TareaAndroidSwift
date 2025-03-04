@@ -1,12 +1,9 @@
 package com.example.tareafinal.fragmentos;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.SystemClock;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,7 +84,7 @@ public class FragmentoProducto extends Fragment {
         descripcion = view.findViewById(R.id.tv_descripcion);
         precio = view.findViewById(R.id.tv_precio_valor);
         cantidad = view.findViewById(R.id.tv_cantidad_producto);
-        total = view.findViewById(R.id.textView2);
+        total = view.findViewById(R.id.total);
         sumar = view.findViewById(R.id.tv_sumar);
         restar = view.findViewById(R.id.tv_restar);
         layout_agregar_carrito = view.findViewById(R.id.layout_agregarCarrito);
@@ -143,7 +139,7 @@ public class FragmentoProducto extends Fragment {
         bundle = new Bundle();
         bundle.putSerializable("compra", compra);
         dbRef.child(usuario.getId() + "-" + ordenador.getId()).setValue(compra);
-        Toast.makeText(getContext(), "Se ha agregadop la compra", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Se ha agregado al carrito", Toast.LENGTH_SHORT).show();
 
         volverATienda();
     }

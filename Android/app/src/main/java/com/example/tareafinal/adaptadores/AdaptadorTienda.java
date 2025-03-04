@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.db.Ordenador;
-import com.google.android.material.transition.Hold;
 
 import java.util.List;
-import android.os.Handler;
 
 public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.TiendaHolder> {
     private List<Ordenador> listaOrdenadoresTienda;
@@ -83,7 +81,7 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
         });
 
         // Cargar la animación
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview_tienda);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
 
         holder.itemView.startAnimation(animation);
     }

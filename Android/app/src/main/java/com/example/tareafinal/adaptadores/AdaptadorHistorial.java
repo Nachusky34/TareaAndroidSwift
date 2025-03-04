@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,9 +17,7 @@ import com.example.tareafinal.R;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.HistorialHolder>{
 
@@ -82,6 +82,10 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
         } else {
             holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
         }
+        // Cargar la animación
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
+
+        holder.itemView.startAnimation(animation);
     }
 
     @Override

@@ -119,6 +119,8 @@ public class FragmentoCarrito extends Fragment {
             }
         });
 
+        btnComprarYa.setOnClickListener(v -> comprarYa());
+
         return view;
     }
 
@@ -190,7 +192,7 @@ public class FragmentoCarrito extends Fragment {
         dbReferenceCompras.child(id).removeValue()
                 .addOnSuccessListener(aVoid -> {
                     compraEliminada = true;
-                    Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Producto eliminado correctamente", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     compraEliminada = false;
@@ -198,6 +200,15 @@ public class FragmentoCarrito extends Fragment {
                 });
         cargarCompras();
         return compraEliminada;
+    }
+
+    private void comprarYa() {
+        for (Compra compra : listaCarrito) {
+            compra.setComprado(true);
+            dbReferenceCompras.child(compra.getIdUsuario() + "-" + compra.getIdProducto()).setValue(compra);
+        }
+        cargarCompras();
+        Toast.makeText(getContext(), "Compra realizada correctamente", Toast.LENGTH_SHORT).show();
     }
 
 }

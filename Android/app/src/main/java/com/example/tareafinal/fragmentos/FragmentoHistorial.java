@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ public class FragmentoHistorial extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView rv;
     private Switch tipoLayout;
+    private ImageButton btnCarrito;
 
     private RecyclerView rvHistorial;
     private AdaptadorHistorial adaptadorHistorial;
@@ -83,6 +87,7 @@ public class FragmentoHistorial extends Fragment {
 
         rvHistorial = view.findViewById(R.id.rv_historial);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
+        btnCarrito = view.findViewById(R.id.btn_carrito);
 
         boolean estadoSwitch = switchLayout.isChecked();
 
@@ -118,6 +123,7 @@ public class FragmentoHistorial extends Fragment {
             adaptadorHistorial.setEstaMarcado(isChecked);
         });
 
+        btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
 
         return view;
     }
@@ -162,12 +168,11 @@ public class FragmentoHistorial extends Fragment {
                         }
                     }
                 }
-/*
+                /*
                 if (listaCompras.isEmpty()) {
                     Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
                 }
-
- */
+                */
 
                 // actualizar el adaptador con los datos obtenidos
                 listaOrdenadoresHistorial.clear();
@@ -180,5 +185,18 @@ public class FragmentoHistorial extends Fragment {
                 Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void iniciarFragmentoCarrito() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usuario", usuario);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentoCarrito fragmentoCarrito = new FragmentoCarrito();
+        fragmentoCarrito.setArguments(bundle);
+        transaction.replace(R.id.flContenedor, fragmentoCarrito);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
