@@ -58,7 +58,7 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
 
         holder.tvNombreOrdenador.setText(ordenador.getNombre());
         holder.tvCantidad.setText(String.valueOf(compra.getCantidad()));
-        holder.tvPrecioTotal.setText((cantidad * precio) + " $");
+        holder.tvPrecioTotal.setText(String.format("%.2f $",(cantidad * precio)));
 
         Ordenador pc = listaOrdenadoresCarrito.get(position);
         Context context = holder.itemView.getContext();

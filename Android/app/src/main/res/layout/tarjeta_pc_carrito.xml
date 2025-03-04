@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="serif"
                     android:gravity="right"
-                    android:text="Cantidad:" />
+                    android:text="Amount:" />
 
                 <TextView
                     android:id="@+id/tv_num_cantidad_carrito"

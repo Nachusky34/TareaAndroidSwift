@@ -67,7 +67,7 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
         holder.tvHoraCompra.setText(listaCompras.get(position).getHora());
         holder.tvNombreOrdenador.setText(listaOrdenadoresHistorial.get(position).getNombre());
         holder.tvCantidad.setText(String.valueOf(listaCompras.get(position).getCantidad()));
-        holder.tvPrecioTotal.setText((cantidad * precio) + "$");
+        holder.tvPrecioTotal.setText(String.format("%.2f $",(cantidad * precio)));
 
         Ordenador pc = listaOrdenadoresHistorial.get(position);
         Context context = holder.itemView.getContext();

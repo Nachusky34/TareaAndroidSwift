@@ -113,9 +113,9 @@ public class FragmentoCarrito extends Fragment {
 
         adaptadorCarrito.setOnItemClickListener(compra -> {
             if (eliminarCompra(compra)) {
-                Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -190,9 +190,11 @@ public class FragmentoCarrito extends Fragment {
         dbReferenceCompras.child(id).removeValue()
                 .addOnSuccessListener(aVoid -> {
                     compraEliminada = true;
+                    Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     compraEliminada = false;
+                    Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
                 });
         cargarCompras();
         return compraEliminada;

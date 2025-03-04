@@ -68,7 +68,9 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
         }
 
         holder.tvNombreOrdenador.setText(pc.getNombre());
-        holder.tvPrecio.setText(pc.getPrecio() + " $");
+        Double precio = Double.parseDouble(pc.getPrecio());
+        holder.tvPrecio.setText(String.format("%.2f $", precio));
+
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {

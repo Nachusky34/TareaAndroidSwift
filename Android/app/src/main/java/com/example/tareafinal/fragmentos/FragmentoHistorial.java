@@ -162,10 +162,12 @@ public class FragmentoHistorial extends Fragment {
                         }
                     }
                 }
-
+/*
                 if (listaCompras.isEmpty()) {
                     Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
                 }
+
+ */
 
                 // actualizar el adaptador con los datos obtenidos
                 listaOrdenadoresHistorial.clear();
