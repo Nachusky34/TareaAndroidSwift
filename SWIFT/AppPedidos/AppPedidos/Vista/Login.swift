@@ -1,10 +1,3 @@
-//
-//  Login.swift
-//  AppPedidos
-//
-//  Created by Mario Seoane on 13/2/25.
-//
-
 import SwiftUI
 
 struct Login: View {

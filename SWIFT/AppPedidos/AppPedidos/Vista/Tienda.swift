@@ -2,47 +2,75 @@
 //  Tienda.swift
 //  AppPedidos
 //
-//  Created by Mario Seoane on 20/2/25.
+//  Created by Mario Seoane on 25/2/25.
 //
 
 import SwiftUI
 
 struct Tienda: View {
     
-    @State var username: String = ""
-    @State var email: String = ""
-    @State var postalCode: Int? = nil
-    @State var subscription: Bool = false
+    @State private var ordenadores: [Ordenador] = CargarDatosOrdenador()
     
+    @State private var ordenadorSeleccionado: Ordenador?
+
     var body: some View {
         VStack {
-            Button(action: {
-                // aqui nos lleva a la pestaña de CARRITO
-            }) {
-                Image(systemName: "cart")
-                    .padding(.leading, 280)
-                    .font(.system(size: 40))
-                    .foregroundColor(.black)
-            }
-            
-            Image(.ordenador1)
-                .padding(.top, -40)
-            
-            
-            
-            VStack(alignment: .leading) {
-                Text("ORDENADOR 1")
-                    .font(.custom("Times New Roman", size: 32))
+            HStack {
+                Text("Tienda")
+                    .font(.custom("Times New Roman", size: 40))
                     .fontWeight(.bold)
+                    .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
+                
+                Spacer()
+                
+                Button(action: {
+                    // aqui nos lleva a la pestaña de CARRITO
+                }) {
+                    Image(systemName: "cart")
+                        .font(.system(size: 40))
+                        .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
+                }
             }
-            .padding(.horizontal, 25)
+            .padding(.horizontal, 30)
             
-            Spacer()
+            NavigationView {
+                List(ordenadores) { ordenador in
+                    Button(action: {
+                        ordenadorSeleccionado = ordenador
+                    }) {
+                        HStack {
+                            Image(ordenador.img)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(8)
+                            
+                            VStack(alignment: .leading) {
+                                Text(ordenador.nombre)
+                                    .font(.custom("Times New Roman", size: 30))
+                                    .foregroundColor(.black)
+                                
+                                Text(String(format: "%.2f$", ordenador.precio))
+                                    .font(.custom("Times New Roman", size: 25))
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                    .padding(.leading, 30)
+                                
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(8)
+                    }
+                }
+            }
         }
-        .padding()
+        
+    
+        .sheet(item: $ordenadorSeleccionado) { ordenador in
+            VistaProducto(ordenador : ordenador)
+        }
     }
 }
-
 
 #Preview {
     Tienda()

@@ -7,9 +7,11 @@
 
 import Foundation
 
-struct Compra: Codable, Identifiable {
-    let id: String
+struct Compra: Codable {
+    let idUsuario : Int
+    let idProducto : Int
     let fecha: String
     let hora: String
     let cantidad: Int
+    let comprado : Bool
 }
