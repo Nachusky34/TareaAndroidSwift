@@ -4,17 +4,14 @@
 //
 //  Created by Mario Seoane on 25/2/25.
 //
-
+/*
 import SwiftUI
 
-struct Tienda: View {
+struct Historial: View {
     
-    @State private var ordenadores: [Ordenador] = CargarDatosOrdenador()
+    @State private var compras: [Compra] = CargarDatosCompra()
     
-    @State private var ordenadorSeleccionado: Ordenador?
-    
-    @Binding var usuario: Usuario
-    @State private var mostrarCarrito = false
+
 
     var body: some View {
         VStack {
@@ -27,7 +24,7 @@ struct Tienda: View {
                 Spacer()
                 
                 Button(action: {
-                    mostrarCarrito = true
+                    // aqui nos lleva a la pestaña de CARRITO
                 }) {
                     Image(systemName: "cart")
                         .font(.system(size: 40))
@@ -35,7 +32,6 @@ struct Tienda: View {
                 }
             }
             .padding(.horizontal, 30)
-            .padding(.top, 20)
             
             NavigationView {
                 List(ordenadores) { ordenador in
@@ -57,7 +53,7 @@ struct Tienda: View {
                                     .font(.custom("Times New Roman", size: 25))
                                     .foregroundColor(.gray)
                                     .padding()
-                                    .padding(.leading, 60)
+                                    .padding(.leading, 30)
                                 
                             }
                             
@@ -69,18 +65,11 @@ struct Tienda: View {
             }
         }
         
-    
-        .sheet(item: $ordenadorSeleccionado) { ordenador in
-            VistaProducto(ordenador : ordenador, usuario: usuario)
-        }
-        
-        .fullScreenCover(isPresented: $mostrarCarrito) {
-                    Carrito()
-        }
+
     }
 }
 
 #Preview {
-    let usuarioFicticio = Usuario(id: 12, username: "marioseoane", password: "12", email: "marioseoane@marioseoane.marioseoane", postalcode: "12345", newsletter: true, foto: "marioseoane")
-    Tienda(usuario: .constant(usuarioFicticio))
+    Historial()
 }
+*/

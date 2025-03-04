@@ -59,6 +59,7 @@ func guardarCompraJson(compra: Compra) {
 
 func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     let nuevaCompra = Compra(
+        id: compras.count + 1, // Añadimos el ID
         idUsuario: idUsuario,
         idProducto: idProducto,
         fecha: obtenerFecha(),
@@ -70,6 +71,7 @@ func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     guardarCompraJson(compra: nuevaCompra)
     print("Compra agregada.")
 }
+
 
 func obtenerFecha() -> String {
     let formato = DateFormatter()
