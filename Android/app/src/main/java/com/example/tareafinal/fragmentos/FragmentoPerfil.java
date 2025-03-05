@@ -2,7 +2,6 @@ package com.example.tareafinal.fragmentos;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +10,9 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,12 +54,12 @@ public class FragmentoPerfil extends Fragment {
     private TextView username, email, postalcode;
     private ImageView imagePerfil;
     private LinearLayout layoutCerrarSesion;
-    private Switch newsletter;
+    private Switch newsletterSwitch;
     private Usuario usuario;
     private String idUser;
 
     private FirebaseDatabase database;
-    private DatabaseReference dbReferencePerfil;
+    private DatabaseReference dbReferenceUsuario;
     private String ruta;
 
     FirebaseStorage storage;
@@ -116,6 +115,14 @@ public class FragmentoPerfil extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbReferenceUsuario = database.getReference("usuarios");
+        ruta = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_"; //Ruta de la imagen
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -124,19 +131,22 @@ public class FragmentoPerfil extends Fragment {
         username = view.findViewById(R.id.tv_username);
         email = view.findViewById(R.id.tv_email);
         postalcode = view.findViewById(R.id.tv_postalCode);
-        newsletter = view.findViewById(R.id.switch_newsletter);
+        newsletterSwitch = view.findViewById(R.id.switch_newsletter);
         imagePerfil = view.findViewById(R.id.iv_user);
         layoutCerrarSesion = view.findViewById(R.id.layout_cerrar_sesion);
 
-        layoutCerrarSesion.setOnClickListener(v -> cerrarSesion(v));
+        newsletterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(true);
+            } else {
+                dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(false);
+            }
+        });
 
-        ruta = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_"; //Ruta de la imagen
+        layoutCerrarSesion.setOnClickListener(v -> cerrarSesion(v));
 
         View layoutHacerFoto = view.findViewById(R.id.layout_hacer_foto);
         layoutHacerFoto.setOnClickListener(v -> hacerFoto(v));
-
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferencePerfil = database.getReference("usuarios");
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
         System.out.println(usuario.getId());
@@ -152,7 +162,7 @@ public class FragmentoPerfil extends Fragment {
 
     private void cargarDatosUsuario() {
 
-        dbReferencePerfil.orderByChild("id").equalTo(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
+        dbReferenceUsuario.orderByChild("id").equalTo(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -162,7 +172,7 @@ public class FragmentoPerfil extends Fragment {
                             username.setText(usuario.getUsername());
                             email.setText(usuario.getEmail());
                             postalcode.setText(usuario.getPostalCode());
-                            newsletter.setChecked(usuario.isNewsletter());
+                            newsletterSwitch.setChecked(usuario.isNewsletter());
 
                             cargarImagenDesdeRutaAbsoluta(ruta);
                         }
@@ -190,7 +200,7 @@ public class FragmentoPerfil extends Fragment {
         guardarImagenEnInterno(imageBitmap, nombreImagen);
 
         // Subir imagen a Firebase Storage
-        DatabaseReference userRef = dbReferencePerfil.child(idUser).child("fotoPerfil");
+        DatabaseReference userRef = dbReferenceUsuario.child(idUser).child("fotoPerfil");
         userRef.setValue(nombreImagen)
                 .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Imagen alamcenada", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al guardar nombre", Toast.LENGTH_SHORT).show());

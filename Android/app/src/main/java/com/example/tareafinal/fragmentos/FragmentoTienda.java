@@ -49,7 +49,6 @@ public class FragmentoTienda extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
     private Usuario usuario;
-    private int pos_seleccionado;
     private ImageButton btnCarrito;
 
     public FragmentoTienda() {}

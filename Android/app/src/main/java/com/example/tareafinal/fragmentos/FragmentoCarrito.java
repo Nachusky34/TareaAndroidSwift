@@ -25,7 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -158,7 +162,8 @@ public class FragmentoCarrito extends Fragment {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
 
-                    if (!(compra == null) && !compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
+                    if (compra != null && !compra.isComprado()
+                            && compra.getIdUsuario().equals(usuario.getId())) {
                         listaCarrito.add(compra);
 
                         for (Ordenador ordenador : listaOrdenadores) {
@@ -203,13 +208,74 @@ public class FragmentoCarrito extends Fragment {
     }
 
     private void comprarYa() {
-        for (Compra compra : listaCarrito) {
-            compra.setComprado(true);
-            dbReferenceCompras.child(compra.getIdUsuario() + "-" + compra.getIdProducto()).setValue(compra);
+        Date now = new Date();
+        for (Compra compraAntigua : listaCarrito) {
+            String idCompra = compraAntigua.getIdUsuario() + "-" + compraAntigua.getIdProducto();
+
+            Compra compraNueva = new Compra();
+            compraNueva.setIdUsuario(compraAntigua.getIdUsuario());
+            compraNueva.setIdProducto(compraAntigua.getIdProducto());
+            compraNueva.setCantidad(compraAntigua.getCantidad());
+            compraNueva.setComprado(true);
+            compraNueva.setFecha(obtenerFechaFormateada(now));
+            compraNueva.setHora(obtenerHoraFormateada(now));
+
+            //Haseamos la clave
+            String idHassed = hassId(idCompra + "-" + obtenerMilisegundos(now));
+
+            dbReferenceCompras.child(idHassed).setValue(compraNueva).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // Si se crea la compra eliminamos la antigua
+                    dbReferenceCompras.child(idCompra).removeValue();
+                }
+            });
+
         }
-        cargarCompras();
         Toast.makeText(getContext(), "Compra realizada correctamente", Toast.LENGTH_SHORT).show();
+        volverATienda();
     }
 
+    private String obtenerFechaFormateada(Date now) {
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateTimeFormat.format(now);
+    }
+
+    private String obtenerHoraFormateada(Date now) {
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("HH:mm");
+        return dateTimeFormat.format(now);
+    }
+
+    private long obtenerMilisegundos(Date now) {
+        return now.getTime();
+    }
+
+    private String hassId(String id) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[]idBytes = id.getBytes();
+            md.update(idBytes);
+            byte[] resumen = md.digest();
+
+
+            // Haseamos en formato haxadecimal para que la base de datos no de error
+            StringBuilder hexId = new StringBuilder();
+            for (byte b : resumen) {
+                hexId.append(String.format("%02x", b)); // ("%02x") Representa formato hexadecimal
+            }
+
+            return hexId.toString();
+
+        }catch (Exception  e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void volverATienda() {
+        if (getParentFragmentManager().getBackStackEntryCount() > 0) {
+            getParentFragmentManager().popBackStack();
+        } else {
+            requireActivity().getOnBackPressedDispatcher().onBackPressed(); // Si no hay más fragmentos en la pila, vuelve atrás en la actividad
+        }
+    }
 }
 

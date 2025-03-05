@@ -144,7 +144,7 @@ public class FragmentoProducto extends Fragment {
         volverATienda();
     }
 
-    public void volverATienda() {
+    private void volverATienda() {
         if (getParentFragmentManager().getBackStackEntryCount() > 0) {
             getParentFragmentManager().popBackStack();
         } else {

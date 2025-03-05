@@ -28,6 +28,7 @@ public class Tabs extends AppCompatActivity {
     TabItem tiPerfil, tiTienda, tiHistorial;
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class Tabs extends AppCompatActivity {
         setContentView(R.layout.activity_tabs);
 
         Usuario usuario = (Usuario) getIntent().getSerializableExtra("usuario");
-        Bundle bundle = new Bundle();
+        bundle = new Bundle();
         bundle.putSerializable("usuario", usuario);
 
         flContenedor = findViewById(R.id.flContenedor);
@@ -44,8 +45,6 @@ public class Tabs extends AppCompatActivity {
         tiPerfil = findViewById(R.id.tiPerfil);
         tiTienda = findViewById(R.id.tiTienda);
         tiHistorial = findViewById(R.id.tiHistorial);
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -55,31 +54,16 @@ public class Tabs extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
+        // Cargar FragmentoTienda al inicio justo después de inicializar fragmentManager
+        cargarFragmento(1);
+
+        // Seleccionar la pestaña de la tienda visualmente
+        tb.getTabAt(1).select();
+
         tb.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                transaction = fragmentManager.beginTransaction();
-
-                if (tab.getPosition() == 0) {
-                    FragmentoPerfil fragmentoPerfil = new FragmentoPerfil();
-                    fragmentoPerfil.setArguments(bundle);
-                    transaction.replace(R.id.flContenedor, fragmentoPerfil);
-                    transaction.addToBackStack(null);
-                }
-                if (tab.getPosition() == 1) {
-                    FragmentoTienda fragmentoTienda = new FragmentoTienda();
-                    fragmentoTienda.setArguments(bundle);
-                    transaction.replace(R.id.flContenedor, fragmentoTienda);
-                    transaction.addToBackStack(null);
-                }
-                if (tab.getPosition() == 2) {
-                    FragmentoHistorial fragmentoHistorial = new FragmentoHistorial();
-                    fragmentoHistorial.setArguments(bundle);
-                    transaction.replace(R.id.flContenedor, fragmentoHistorial);
-                    transaction.addToBackStack(null);
-                }
-                transaction.commit();
-
+                cargarFragmento(tab.getPosition());
             }
 
             @Override
@@ -89,11 +73,31 @@ public class Tabs extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                cargarFragmento(tab.getPosition());
             }
         });
 
     }
+
+    private void cargarFragmento(int position) {
+        transaction = fragmentManager.beginTransaction();
+        Fragment fragment = null;
+
+        if (position == 0) {
+            fragment = new FragmentoPerfil();
+        } else if (position == 1) {
+            fragment = new FragmentoTienda();
+        } else if (position == 2) {
+            fragment = new FragmentoHistorial();
+        }
+
+        if (fragment != null) {
+            fragment.setArguments(bundle);
+            transaction.replace(R.id.flContenedor, fragment);
+            transaction.commit();
+        }
+    }
+
 
     // Dentro de tu actividad que gestiona los fragmentos con el TabLayout
     public void cerrarSesion() {
