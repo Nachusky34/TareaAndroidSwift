@@ -204,7 +204,8 @@ public class FragmentoProducto extends Fragment {
 
     private int hayCompraIgual(String idCompra) {
         for (Compra compra: listaCompras) {
-            if ((compra.getIdUsuario() + "-" + compra.getIdProducto()).equals(idCompra)) {
+            String idCompraActual = compra.getIdUsuario() + "-" + compra.getIdProducto();
+            if (!compra.isComprado() && (idCompraActual).equals(idCompra)) {
                 return Integer.parseInt(compra.getCantidad());
             }
         }
