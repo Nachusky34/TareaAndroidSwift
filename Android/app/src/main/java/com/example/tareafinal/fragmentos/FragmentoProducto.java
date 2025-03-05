@@ -2,8 +2,10 @@ package com.example.tareafinal.fragmentos;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,16 @@ import com.example.tareafinal.R;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +47,8 @@ public class FragmentoProducto extends Fragment {
     private Ordenador ordenador;
     Bundle bundle;
     private FirebaseDatabase database;
-    private DatabaseReference dbRef;
+    private DatabaseReference dbRefCompras;
+    private List<Compra> listaCompras;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,6 +79,15 @@ public class FragmentoProducto extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bundle = getArguments();
+        usuario = (Usuario) bundle.getSerializable("usuario");
+        ordenador = (Ordenador) bundle.getSerializable("ordenador");
+
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbRefCompras = database.getReference("compras");
+
+        obtenerCompras();
     }
 
     @Override
@@ -93,13 +110,8 @@ public class FragmentoProducto extends Fragment {
         sumar.setOnClickListener(v -> sumar(v));
         restar.setOnClickListener(v -> restar(v));
 
-        Bundle bundle = getArguments();
-
         layout_agregar_carrito.setOnClickListener(v -> agregarAlCarrito(v));
         tv_agregarCarrito.setOnClickListener(v -> agregarAlCarrito(v));
-
-        usuario = (Usuario) bundle.getSerializable("usuario");
-        ordenador = (Ordenador) bundle.getSerializable("ordenador");
 
         String imgOrdenador = ordenador.getImg();
         //Obtenemos la imagen a traves de la que nos ha pasado
@@ -110,13 +122,11 @@ public class FragmentoProducto extends Fragment {
         } else {
             imagen.setImageResource(R.drawable.ordenador1); // Imagen por defecto si no se encuentra
         }
+
         nombre.setText(ordenador.getNombre());
         descripcion.setText(ordenador.getDescripcion());
         precio.setText(ordenador.getPrecio() + " $");
         total.setText(ordenador.getPrecio() + " $");
-
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbRef = database.getReference("compras");
 
 
         // Inflate the layout for this fragment
@@ -128,9 +138,21 @@ public class FragmentoProducto extends Fragment {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String idCompra = usuario.getId() + "-" + ordenador.getId();
+
+        int cantidadCompra = hayCompraIgual(idCompra);
+        if (cantidadCompra != -1) {
+            dbRefCompras.child(idCompra).child("cantidad").setValue(String.valueOf(
+                    cantidadCompra + Integer.parseInt(cantidad.getText().toString())));
+            volverATienda();
+            return;
+        }
 
         compra.setIdUsuario(usuario.getId());
         compra.setIdProducto(ordenador.getId());
+
+
+
         compra.setCantidad(cantidad.getText().toString());
         compra.setComprado(false);
         compra.setFecha(dateFormat.format(calendar.getTime()));
@@ -138,7 +160,7 @@ public class FragmentoProducto extends Fragment {
 
         bundle = new Bundle();
         bundle.putSerializable("compra", compra);
-        dbRef.child(usuario.getId() + "-" + ordenador.getId()).setValue(compra);
+        dbRefCompras.child(idCompra).setValue(compra);
         Toast.makeText(getContext(), "Se ha agregado al carrito", Toast.LENGTH_SHORT).show();
 
         volverATienda();
@@ -171,8 +193,6 @@ public class FragmentoProducto extends Fragment {
         int cantidadInt = Integer.parseInt(cantidad.getText().toString());
 
         if (cantidadInt == 0) {
-            Toast.makeText(getContext(), "Mijo no puedes vender ordenadores",
-                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -180,5 +200,35 @@ public class FragmentoProducto extends Fragment {
 
         this.cantidad.setText(String.valueOf(cantidadInt));
         total.setText(String.valueOf(precioInt * cantidadInt) + " $");
+    }
+
+    private int hayCompraIgual(String idCompra) {
+        for (Compra compra: listaCompras) {
+            if ((compra.getIdUsuario() + "-" + compra.getIdProducto()).equals(idCompra)) {
+                return Integer.parseInt(compra.getCantidad());
+            }
+        }
+        return -1;
+    }
+
+    private void obtenerCompras() {
+        dbRefCompras.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listaCompras = new ArrayList<>();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Compra compra = ds.getValue(Compra.class);
+
+                    if (compra != null) {
+                        listaCompras.add(compra);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error al cargar los datos", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -31,10 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,11 +57,7 @@ public class FragmentoPerfil extends Fragment {
 
     private FirebaseDatabase database;
     private DatabaseReference dbReferenceUsuario;
-    private String ruta;
-
-    FirebaseStorage storage;
-    StorageReference storageRef;
-    ByteArrayOutputStream outputStream;
+    private String rutaImagen;
 
     ActivityResultLauncher<Intent> fotoLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -119,7 +112,7 @@ public class FragmentoPerfil extends Fragment {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
         dbReferenceUsuario = database.getReference("usuarios");
-        ruta = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_"; //Ruta de la imagen
+        rutaImagen = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_"; //Ruta de la imagen
     }
 
     @Override
@@ -174,7 +167,7 @@ public class FragmentoPerfil extends Fragment {
                             postalcode.setText(usuario.getPostalCode());
                             newsletterSwitch.setChecked(usuario.isNewsletter());
 
-                            cargarImagenDesdeRutaAbsoluta(ruta);
+                            cargarImagenDesdeRutaAbsoluta(rutaImagen);
                         }
                     }
                 } else {
