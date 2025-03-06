@@ -41,17 +41,7 @@ public class Registro extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference dbRef;
     private String id;
-    private TextView registroGoogle;
 
-    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
-    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +59,10 @@ public class Registro extends AppCompatActivity {
         email = findViewById(R.id.et_email_registro);
         postalcode = findViewById(R.id.et_postal_registro);
         id = "-1";
-        registroGoogle = findViewById(R.id.tv_google_signup);
 
         database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
         dbRef = database.getReference("usuarios");
 
-        registroGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iniciarRegistroGoogle();
-            }
-        });
     }
 
     public void registrarse(View view) {
@@ -109,34 +92,5 @@ public class Registro extends AppCompatActivity {
         }
 
         return usuario;
-    }
-
-    private void iniciarRegistroGoogle() {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-        );
-
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build();
-        signInLauncher.launch(signInIntent);
-    }
-
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        IdpResponse response = result.getIdpResponse();
-        if (result.getResultCode() == RESULT_OK) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Toast.makeText(this, "Registro exitoso: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-            // nos lleva al login
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-        } else {
-            if (response != null) {
-                Toast.makeText(this, "Error: " + response.getError().getErrorCode(), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Registro cancelado", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }

@@ -1,7 +1,9 @@
 package com.example.tareafinal.UI;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,12 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.db.Usuario;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,9 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 
 public class Login extends AppCompatActivity {
 
@@ -41,15 +41,12 @@ public class Login extends AppCompatActivity {
 
     private EditText username, pwd;
     private TextView loginGoogle;
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final String TAG = "Login";
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
+            new ActivityResultContracts.StartActivityForResult(),
+            this::onSignInResult
     );
 
     ActivityResultLauncher<Intent> launcherRegistro = registerForActivityResult(
@@ -57,26 +54,22 @@ public class Login extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    if(result.getResultCode() == RESULT_OK){
+                    if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
-
                     }
                 }
             });
-
 
     ActivityResultLauncher<Intent> launcherTienda = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    if(result.getResultCode() == RESULT_OK){
+                    if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
-
                     }
                 }
             });
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +85,11 @@ public class Login extends AppCompatActivity {
 
         listaUsuarios = new ArrayList<>();
         cargarUsuarios();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         loginGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +128,6 @@ public class Login extends AppCompatActivity {
         launcherTienda.launch(intent);
     }
 
-
     public void cargarUsuarios() {
         dbReferenceUsuarios.addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,61 +141,79 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Login.this, "Ha surgido un problema",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "Ha surgido un problema", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void iniciarSesionGoogle() {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-        );
-
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setIsSmartLockEnabled(false) // Evita el inicio automático con Smart Lock
-                .build();
-        signInLauncher.launch(signInIntent);
-
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            signInLauncher.launch(signInIntent);
+        });
     }
 
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        IdpResponse response = result.getIdpResponse();
-        if (result.getResultCode() == RESULT_OK) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                String userEmail = user.getEmail();
-                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usuarios");
-                userRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            // Usuario registrado, obtener información de la base de datos
-                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                Usuario usuario = ds.getValue(Usuario.class);
-                                Toast.makeText(Login.this, "Inicio de sesión exitoso: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                                accederTienda(usuario);
-                                return; // Salir del bucle y del listener
-                            }
-                        } else {
-                            Toast.makeText(Login.this, "Cuenta no registrada", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(Login.this, "Error al verificar usuario", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private void onSignInResult(ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                verificarUsuario(account);
+            } catch (ApiException e) {
+                Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show();
             }
         } else {
-            if (response != null) {
-                Toast.makeText(this, "Error: " + response.getError().getErrorCode(), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(this, "Inicio de sesión con Google cancelado", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void verificarUsuario(GoogleSignInAccount account) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usuarios");
+        userRef.orderByChild("email").equalTo(account.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        Usuario usuario = ds.getValue(Usuario.class);
+                        Toast.makeText(Login.this, "Inicio de sesión exitoso: " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
+                        accederTienda(usuario);
+                        return;
+                    }
+                } else {
+                    crearNuevaCuenta(account);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Login.this, "Error al verificar usuario", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+    private void crearNuevaCuenta(GoogleSignInAccount account) {
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setEmail(account.getEmail());
+        nuevoUsuario.setUsername(account.getDisplayName().trim());
+        nuevoUsuario.setPassword("");
+        nuevoUsuario.setPostalCode("");
+        nuevoUsuario.setNewsletter(false);
+        nuevoUsuario.setFotoPerfil("fotoperfil.png");
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usuarios").push();
+        String userId = userRef.getKey(); // Obtener el ID generado
+
+        nuevoUsuario.setId(userId); // Guardar el ID en el objeto Usuario
+
+        userRef.setValue(nuevoUsuario)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(Login.this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show();
+                    accederTienda(nuevoUsuario);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(Login.this, "Error al crear cuenta", Toast.LENGTH_SHORT).show();
+                });
+    }
+}
