@@ -22,7 +22,7 @@ struct Tab: View {
                     }
                     .tag(2)
                 
-                Text("Historial")
+                Historial(usuario: $usuario)
                     .tabItem {
                         Label("Historial", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                     }

@@ -78,7 +78,7 @@ func eliminarCompraJson(compra: Compra) {
 
 func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     let nuevaCompra = Compra(
-        id: "\(idUsuario)-\(idProducto)",
+        id: "\(idUsuario)\(idProducto)\(obtenerMilisegundos())",
         idUsuario: idUsuario,
         idProducto: idProducto,
         fecha: obtenerFecha(),
@@ -91,6 +91,31 @@ func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     print("Compra agregada.")
 }
 
+func actualizarCompra(ids: [String]) {
+    let fileURL = obtenerURLArchivo()
+    var compras = CargarDatosCompra()
+    
+    do {
+        var compras = CargarDatosCompra()
+        
+        // Recorrer las compras
+        for index in 0..<compras.count {
+            if ids.contains(compras[index].id) {
+                // Si el id de la compra está en el array `ids`, actualizar la propiedad `comprado` a true
+                compras[index].comprado = true
+            }
+        }
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(["compra": compras])
+        try data.write(to: fileURL)
+    } catch {
+        print("Error al hacer la compra: \(error)")
+    }
+}
+
+
 
 func obtenerFecha() -> String {
     let formato = DateFormatter()
@@ -102,6 +127,10 @@ func obtenerHora() -> String {
     let formato = DateFormatter()
     formato.dateFormat = "HH:mm"
     return formato.string(from: Date())
+}
+
+func obtenerMilisegundos() -> String {
+    return String(Int(Date().timeIntervalSince1970 * 1000))
 }
 
 func obtenerURLArchivo() -> URL {

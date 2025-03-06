@@ -7,7 +7,12 @@ struct Carrito: View {
     let usuario: Usuario
     
     var comprasFiltradas: [Compra] {
-        compras.filter { !$0.comprado }
+        compras.filter { compra in
+            if !compra.comprado, let ordenador = ordenadores.first(where: { $0.id == compra.idProducto }), compra.idUsuario == usuario.id {
+                return true
+            }
+            return false
+        }
     }
     
     var total: Double {
@@ -96,30 +101,42 @@ struct Carrito: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .frame(maxHeight: .infinity)
                     .background(Color.white)
-                                            
+                
                 Button(action: {
-                    print("Compra realizada")
+                    comprar()
                 }) {
-                Text("COMPRAR YA")
-                    .font(.custom("Times New Roman", size: 25))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(maxHeight: .infinity)
-                    .padding()
-                    .padding(.top, 20)
-                    .background(Color(red: 85/255, green: 183/255, blue: 232/255))
-                                    
+                    Text("COMPRAR YA")
+                        .font(.custom("Times New Roman", size: 25))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
+                        .padding()
+                        .padding(.top, 20)
+                        .background(Color(red: 85/255, green: 183/255, blue: 232/255))
+                    
                 }
             }
             .frame(height: 100)
             .padding(0)
-                        
+            
         }
     }
     func eliminarCompra(_ compra: Compra) {
         eliminarCompraJson(compra: compra)
         
         //Actualizar los datos de compra
+        compras = CargarDatosCompra()
+    }
+    
+    func comprar() {
+        var ids: [String] = []
+        
+        for compra in comprasFiltradas {
+            ids.append(compra.id)
+        }
+        
+        actualizarCompra(ids: ids)
+        
         compras = CargarDatosCompra()
     }
 }
