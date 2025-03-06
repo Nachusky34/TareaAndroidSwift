@@ -117,7 +117,7 @@
                 app:srcCompat="@drawable/logo_google" />
 
             <TextView
-                android:id="@+id/tv_google"
+                android:id="@+id/tv_google_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:fontFamily="serif"

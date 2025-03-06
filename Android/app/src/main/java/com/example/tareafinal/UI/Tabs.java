@@ -29,6 +29,7 @@ public class Tabs extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
     Bundle bundle;
+    String idUserGoogle; // para cuando se inicie sesión con Google
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
