@@ -42,25 +42,37 @@ struct Carrito: View {
             List(comprasFiltradas) { compra in
                 if let ordenador = ordenadores.first(where: { $0.id == compra.idProducto }) {
                     HStack(spacing: 10) {
-                        Image(ordenador.img)
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .cornerRadius(8)
-                        
+                        VStack {
+                            
+                            Image(ordenador.img)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(8)
+                            
+                            Text(compra.fecha)
+                                .font(.custom("Times New Roman", size: 14))
+                            
+                            Text(compra.hora)
+                                .font(.custom("Times New Roman", size: 14))
+                        }
                         VStack(alignment: .leading) {
                             Text(ordenador.nombre)
-                                .font(.headline)
+                                .font(.custom("Times New Roman", size: 20))
                                 .bold()
                             
                             Text("Cantidad: \(compra.cantidad)")
-                                .font(.subheadline)
+                                .font(.custom("Times New Roman", size: 15))
+                                .padding(.top, 15)
+                            
                             
                             Text(String(format: "%.2f$", ordenador.precio * Double(compra.cantidad)))
                                 .font(.title2)
-                                .foregroundColor(.blue)
+                                .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
+                                .padding(.top, 20)
+                                .padding(.leading, 10)
+                            
                         }
                         Spacer()
-                        
                         Button(action: {
                             eliminarCompra(compra)
                         }) {
@@ -72,7 +84,7 @@ struct Carrito: View {
                         }
                     }
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
+                    .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1).frame(width: 320, height: 180))
                 }
             }
             
@@ -84,27 +96,26 @@ struct Carrito: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .frame(maxHeight: .infinity)
                     .background(Color.white)
-                                
+                                            
                 Button(action: {
                     print("Compra realizada")
                 }) {
-                    Text("COMPRAR YA")
-                        .font(.custom("Times New Roman", size: 25))
-                        .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
-                        .frame(maxHeight: .infinity)
-                        .padding()
-                        .padding(.top, 20)
-                        .background(Color(red: 85/255, green: 183/255, blue: 232/255))
-                        
+                Text("COMPRAR YA")
+                    .font(.custom("Times New Roman", size: 25))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(maxHeight: .infinity)
+                    .padding()
+                    .padding(.top, 20)
+                    .background(Color(red: 85/255, green: 183/255, blue: 232/255))
+                                    
                 }
             }
             .frame(height: 100)
             .padding(0)
-            
+                        
         }
     }
-    
     func eliminarCompra(_ compra: Compra) {
         eliminarCompraJson(compra: compra)
         
