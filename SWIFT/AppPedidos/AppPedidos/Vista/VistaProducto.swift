@@ -9,6 +9,7 @@ import SwiftUI
 
 struct VistaProducto: View {
     
+    @Environment(\.dismiss) var dismiss
     let ordenador: Ordenador
     let usuario: Usuario
     
@@ -76,6 +77,7 @@ struct VistaProducto: View {
             
             Button(action: {
                 agregarCompra(idUsuario: usuario.id, idProducto: ordenador.id, cantidad: cantidad)
+                dismiss()
                 print("Producto agregado al carrito")
             }) {
                 HStack {
