@@ -96,36 +96,6 @@
             android:hint="Postal Code"
             android:inputType="textPostalAddress" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout_btngoogle"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="317dp"
-            android:background="#CC000000"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_google"
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:foregroundGravity="center_vertical"
-                app:srcCompat="@drawable/logo_google" />
-
-            <TextView
-                android:id="@+id/tv_google"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="serif"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="SIGN UP with Google"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

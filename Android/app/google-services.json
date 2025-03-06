@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "611677811559",
+    "firebase_url": "https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "pcera-2b2f4",
     "storage_bucket": "pcera-2b2f4.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.tareafinal"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "611677811559-pjb9ddl2b9t3jvvdeomur6ha6aedh077.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tareafinal",
+            "certificate_hash": "9b16be146b97e079ebe708553c9b77556963c3bc"
+          }
+        },
+        {
+          "client_id": "611677811559-a1kgmrqjtlradp1vta5i5n57rcpeuueu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCoMDB7a9hg73RLPAfG043wRzZrAKT16A8"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611677811559-a1kgmrqjtlradp1vta5i5n57rcpeuueu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
