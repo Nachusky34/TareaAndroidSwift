@@ -106,8 +106,10 @@ struct Carrito: View {
     }
     
     func eliminarCompra(_ compra: Compra) {
-        compras.removeAll { $0.id == compra.id }
-        agregarCompra(idUsuario: compra.idUsuario, idProducto: compra.idProducto, cantidad: compra.cantidad)
+        eliminarCompraJson(compra: compra)
+        
+        //Actualizar los datos de compra
+        compras = CargarDatosCompra()
     }
 }
 

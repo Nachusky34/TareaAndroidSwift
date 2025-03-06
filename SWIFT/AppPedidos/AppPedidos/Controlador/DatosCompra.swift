@@ -57,6 +57,25 @@ func guardarCompraJson(compra: Compra) {
     }
 }
 
+func eliminarCompraJson(compra: Compra) {
+    let fileURL = obtenerURLArchivo()
+    
+    do {
+        var compras = CargarDatosCompra()
+        
+        compras.removeAll { $0.id == compra.id }
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(["compra": compras])
+        try data.write(to: fileURL)
+        
+        print("Compra eliminada correctamente.")
+    } catch {
+        print("Error al eliminar la compra: \(error)")
+    }
+}
+
 func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     let nuevaCompra = Compra(
         id: "\(idUsuario)-\(idProducto)",
