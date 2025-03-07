@@ -83,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:clickable="true"
-                android:editable="true"
+                android:editable="false"
                 android:fontFamily="serif"
                 android:gravity="bottom|center_vertical"
                 android:hint="Email"
