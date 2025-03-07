@@ -51,6 +51,8 @@ public class FragmentoPerfil extends Fragment {
     private TextView username, email, postalcode;
     private ImageView imagePerfil;
     private LinearLayout layoutCerrarSesion;
+    private LinearLayout layoutHacerFoto;
+    private LinearLayout layoutGuardarCambios;
     private Switch newsletterSwitch;
     private Usuario usuario;
     private String idUser;
@@ -122,11 +124,13 @@ public class FragmentoPerfil extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         username = view.findViewById(R.id.tv_username);
-        email = view.findViewById(R.id.tv_email);
-        postalcode = view.findViewById(R.id.tv_postalCode);
+        email = view.findViewById(R.id.et_email);
+        postalcode = view.findViewById(R.id.et_postalCode);
         newsletterSwitch = view.findViewById(R.id.switch_newsletter);
         imagePerfil = view.findViewById(R.id.iv_user);
         layoutCerrarSesion = view.findViewById(R.id.layout_cerrar_sesion);
+        layoutHacerFoto = view.findViewById(R.id.layout_hacer_foto);
+        layoutGuardarCambios = view.findViewById(R.id.layout_guardar_cambios);
 
         newsletterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -138,8 +142,9 @@ public class FragmentoPerfil extends Fragment {
 
         layoutCerrarSesion.setOnClickListener(v -> cerrarSesion(v));
 
-        View layoutHacerFoto = view.findViewById(R.id.layout_hacer_foto);
         layoutHacerFoto.setOnClickListener(v -> hacerFoto(v));
+
+        layoutGuardarCambios.setOnClickListener(v -> guardarCambios(v));
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
         System.out.println(usuario.getId());
@@ -195,7 +200,7 @@ public class FragmentoPerfil extends Fragment {
         // Subir imagen a Firebase Storage
         DatabaseReference userRef = dbReferenceUsuario.child(idUser).child("fotoPerfil");
         userRef.setValue(nombreImagen)
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Imagen alamcenada", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Imagen almacenada", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al guardar nombre", Toast.LENGTH_SHORT).show());
     }
 
@@ -208,7 +213,7 @@ public class FragmentoPerfil extends Fragment {
             imagePerfil.setImageBitmap(bitmap);
         } else {
             // Si no encuentra la imagen, pone la de defecto
-            int idImagen = getResources().getIdentifier("foto_perfil_nacho", "drawable", getContext().getPackageName());
+            int idImagen = getResources().getIdentifier("fotoperfil", "drawable", getContext().getPackageName());
 
             if (idImagen != 0) { // Si la imagen existe
                 imagePerfil.setImageResource(idImagen);
@@ -236,6 +241,14 @@ public class FragmentoPerfil extends Fragment {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void guardarCambios(View v) {
+        // modifica en el firebase el usuario
+        dbReferenceUsuario.child(usuario.getId()).child("email").setValue(email.getText().toString());
+        dbReferenceUsuario.child(usuario.getId()).child("postalCode").setValue(postalcode.getText().toString());
+        dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(newsletterSwitch.isChecked());
+        Toast.makeText(getContext(), "Cambios guardados", Toast.LENGTH_SHORT).show();
     }
 
     private void cerrarSesion(View v) {
