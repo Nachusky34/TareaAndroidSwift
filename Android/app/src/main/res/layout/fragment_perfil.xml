@@ -41,44 +41,22 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginBottom="1dp"
-            android:gravity="bottom"
+            android:id="@+id/layout_hacer_foto"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/borde_pc_rounded"
+            android:backgroundTint="#55B7E8"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/iv_email"
-                android:layout_width="34dp"
-                android:layout_height="30dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="1dp"
-                tools:srcCompat="@drawable/icono_email" />
-
-            <TextView
-                android:id="@+id/tv_email"
-                android:layout_width="wrap_content"
+                android:id="@+id/iv_camara"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="10"
-                android:clickable="true"
-                android:editable="true"
-                android:fontFamily="serif"
-                android:gravity="bottom|center_vertical"
-                android:hint="Email"
-                android:paddingLeft="5dp"
-                android:textSize="24sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginHorizontal="20dp"
-            android:background="#55B7E8"
-            android:orientation="vertical">
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/icono_camara_blanco" />
 
         </LinearLayout>
 
@@ -92,40 +70,64 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/iv_postalCode"
-                android:layout_width="34dp"
+                android:id="@+id/icono_correo"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
-                tools:src="@drawable/icono_zip_code" />
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/icono_email_azul" />
 
-            <TextView
-                android:id="@+id/tv_postalCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
+                android:clickable="true"
+                android:editable="false"
+                android:fontFamily="serif"
+                android:gravity="bottom|center_vertical"
+                android:hint="Email"
+                android:paddingLeft="5dp"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="1dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/icono_postal"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/icono_zipcode_azul" />
+
+            <EditText
+                android:id="@+id/et_postalCode"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:clickable="true"
                 android:editable="true"
                 android:fontFamily="serif"
                 android:gravity="center_vertical"
                 android:hint="Postal code"
                 android:paddingLeft="5dp"
-                android:textSize="24sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginHorizontal="20dp"
-            android:background="#55B7E8"
-            android:orientation="vertical">
+                android:textSize="20sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="88dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <TextView
@@ -146,7 +148,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layout_hacer_foto"
+            android:id="@+id/layout_guardar_cambios"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginHorizontal="100dp"
@@ -156,16 +158,16 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/iv_camara"
+                android:id="@+id/iv_guardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:src="@drawable/icono_camara_blanco" />
+                android:src="@drawable/icono_guardar_blanco" />
 
             <TextView
-                android:id="@+id/tv_tomarFoto"
+                android:id="@+id/tv_guardar_cambios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -173,7 +175,7 @@
                 android:layout_weight="3"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Tomar Foto"
+                android:text="Save Changes"
                 android:textColor="#FFF7F7"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -196,18 +198,18 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:src="@drawable/icono_cruz_blanca" />
+                android:src="@drawable/icono_logout_blanco" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="50dp"
                 android:layout_weight="3"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Cerrar Sesión"
+                android:text="Log Out"
                 android:textColor="#FFF7F7"
                 android:textSize="16sp"
                 android:textStyle="bold" />
