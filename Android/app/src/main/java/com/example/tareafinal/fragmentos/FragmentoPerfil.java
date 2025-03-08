@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.UI.Tabs;
+import com.example.tareafinal.controladores.ControladorUsuario;
 import com.example.tareafinal.db.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,10 +57,8 @@ public class FragmentoPerfil extends Fragment {
     private Switch newsletterSwitch;
     private Usuario usuario;
     private String idUser;
-
-    private FirebaseDatabase database;
-    private DatabaseReference dbReferenceUsuario;
-    private String rutaImagen;
+    private ControladorUsuario controladorUsuario;
+    private static final String RUTA_IMAGEN = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_";
 
     ActivityResultLauncher<Intent> fotoLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -112,9 +111,7 @@ public class FragmentoPerfil extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferenceUsuario = database.getReference("usuarios");
-        rutaImagen = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_"; //Ruta de la imagen
+        controladorUsuario = new ControladorUsuario();
     }
 
     @Override
@@ -159,32 +156,11 @@ public class FragmentoPerfil extends Fragment {
     }
 
     private void cargarDatosUsuario() {
-
-        dbReferenceUsuario.orderByChild("id").equalTo(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        Usuario usuario = userSnapshot.getValue(Usuario.class);
-                        if (usuario != null) {
-                            username.setText(usuario.getUsername());
-                            email.setText(usuario.getEmail());
-                            postalcode.setText(usuario.getPostalCode());
-                            newsletterSwitch.setChecked(usuario.isNewsletter());
-
-                            cargarImagenDesdeRutaAbsoluta(rutaImagen);
-                        }
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error de base de datos: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        username.setText(usuario.getUsername());
+        email.setText(usuario.getEmail());
+        postalcode.setText(usuario.getPostalCode());
+        newsletterSwitch.setChecked(usuario.isNewsletter());
+        cargarImagenDesdeRutaAbsoluta(RUTA_IMAGEN + usuario.getFotoPerfil());
     }
 
     public void hacerFoto(View view) {
@@ -244,11 +220,9 @@ public class FragmentoPerfil extends Fragment {
     }
 
     private void guardarCambios(View v) {
-        // modifica en el firebase el usuario
-        dbReferenceUsuario.child(usuario.getId()).child("email").setValue(email.getText().toString());
-        dbReferenceUsuario.child(usuario.getId()).child("postalCode").setValue(postalcode.getText().toString());
-        dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(newsletterSwitch.isChecked());
-        Toast.makeText(getContext(), "Cambios guardados", Toast.LENGTH_SHORT).show();
+        usuario.setEmail(email.getText().toString());
+        usuario.setEmail(postalcode.getText().toString());
+        usuario.setEmail(newsletterSwitch.getText().toString());
     }
 
     private void cerrarSesion(View v) {

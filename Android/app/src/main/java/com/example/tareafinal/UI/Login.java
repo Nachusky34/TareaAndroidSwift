@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tareafinal.R;
+import com.example.tareafinal.controladores.ControladorUsuario;
 import com.example.tareafinal.db.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -43,6 +44,7 @@ public class Login extends AppCompatActivity {
     private TextView loginGoogle;
     private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "Login";
+    private ControladorUsuario controladorUsuario;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -80,9 +82,7 @@ public class Login extends AppCompatActivity {
         pwd = findViewById(R.id.et_pwd);
         loginGoogle = findViewById(R.id.tv_google_signin);
 
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferenceUsuarios = database.getReference("usuarios");
-
+        controladorUsuario = new ControladorUsuario();
         listaUsuarios = new ArrayList<>();
         cargarUsuarios();
 
@@ -129,21 +129,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void cargarUsuarios() {
-        dbReferenceUsuarios.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaUsuarios.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Usuario usuario = ds.getValue(Usuario.class);
-                    listaUsuarios.add(usuario);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Login.this, "Ha surgido un problema", Toast.LENGTH_SHORT).show();
-            }
-        });
+        listaUsuarios = controladorUsuario.getUsuarios();
     }
 
     private void iniciarSesionGoogle() {
