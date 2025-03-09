@@ -40,8 +40,6 @@ public class FragmentoPerfil extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private TextView username, email, postalcode;
     private ImageView imagePerfil;
@@ -52,7 +50,7 @@ public class FragmentoPerfil extends Fragment {
     private Usuario usuario;
     private String idUser;
     private ControladorUsuario controladorUsuario;
-    private static final String RUTA_IMAGEN = "/data/data/com.example.tareafinal/files/fotoPerfil/foto_perfil_";
+    private static final String RUTA_IMAGEN = "/data/data/com.example.tareafinal/files/fotoPerfil/";
 
     ActivityResultLauncher<Intent> fotoLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -96,8 +94,6 @@ public class FragmentoPerfil extends Fragment {
     public static FragmentoPerfil newInstance(String param1, String param2) {
         FragmentoPerfil fragment = new FragmentoPerfil();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -146,7 +142,7 @@ public class FragmentoPerfil extends Fragment {
         email.setText(usuario.getEmail());
         postalcode.setText(usuario.getPostalCode());
         newsletterSwitch.setChecked(usuario.isNewsletter());
-        cargarImagenDesdeRutaAbsoluta(RUTA_IMAGEN + usuario.getFotoPerfil());
+        cargarImagenDesdeRutaAbsoluta();
     }
 
     public void hacerFoto(View view) {
@@ -157,25 +153,24 @@ public class FragmentoPerfil extends Fragment {
     private void subirImagenAFirebase(Bitmap imageBitmap) {
         String nombreImagen = "foto_perfil_" + idUser;
         guardarImagenEnInterno(imageBitmap, nombreImagen);
-        controladorUsuario.actualizarImagen(idUser, nombreImagen);
+        boolean modificado = controladorUsuario.actualizarImagen(idUser, nombreImagen);
+        if (modificado) {
+            Toast.makeText(getContext(), "Se ha guardado la imagen", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "No se ha guardado la imagen", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
-    private void cargarImagenDesdeRutaAbsoluta(String rutaImagen) {
-        File archivoImagen = new File(rutaImagen + idUser + ".png");
+    private void cargarImagenDesdeRutaAbsoluta() {
+        File archivoImagen = new File(RUTA_IMAGEN + usuario.getFotoPerfil() + ".png");
 
         if (archivoImagen.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(archivoImagen.getAbsolutePath());
             imagePerfil.setImageBitmap(bitmap);
         } else {
             // Si no encuentra la imagen, pone la de defecto
-            int idImagen = getResources().getIdentifier("fotoperfil", "drawable", getContext().getPackageName());
-
-            if (idImagen != 0) { // Si la imagen existe
-                imagePerfil.setImageResource(idImagen);
-            } else {
-                imagePerfil.setImageResource(R.drawable.icono_perfil_blanco); // Imagen por defecto si no se encuentra
-            }
+            int idImagen = getResources().getIdentifier("icono_perfil_blanco", "drawable", getContext().getPackageName());
         }
     }
 
@@ -201,8 +196,9 @@ public class FragmentoPerfil extends Fragment {
 
     private void guardarCambios(View v) {
         usuario.setEmail(email.getText().toString());
-        usuario.setEmail(postalcode.getText().toString());
+        usuario.setPostalCode(postalcode.getText().toString());
         usuario.setNewsletter(newsletterSwitch.isChecked());
+        controladorUsuario.actualizarUsuario(usuario);
     }
 
     private void cerrarSesion(View v) {

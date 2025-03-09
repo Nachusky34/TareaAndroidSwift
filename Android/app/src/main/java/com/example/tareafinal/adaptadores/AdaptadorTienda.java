@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tareafinal.R;
 import com.example.tareafinal.db.Ordenador;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.TiendaHolder> {
@@ -23,9 +24,9 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
     private OnItemClickListener listener;
     private boolean estaMarcado;
 
-    public AdaptadorTienda(List<Ordenador> listaOrdenadoresTienda, boolean estaMarcado) {
-        this.listaOrdenadoresTienda = listaOrdenadoresTienda;
-        this.estaMarcado = estaMarcado;
+    public AdaptadorTienda() {
+        this.listaOrdenadoresTienda = new ArrayList<>();
+        this.estaMarcado = false;
     }
 
     public interface OnItemClickListener {
@@ -101,5 +102,10 @@ public class AdaptadorTienda extends RecyclerView.Adapter<AdaptadorTienda.Tienda
             tvNombreOrdenador = itemView.findViewById(R.id.tv_namepc);
             tvPrecio = itemView.findViewById(R.id.tv_price_valor);
         }
+    }
+
+    public void actualizarDatos(List<Ordenador> nuevosDatos) {
+        listaOrdenadoresTienda = nuevosDatos;
+        notifyDataSetChanged();
     }
 }

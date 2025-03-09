@@ -4,6 +4,7 @@ package com.example.tareafinal.fragmentos;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorTienda;
+import com.example.tareafinal.controladores.ControladorProducto;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
 import com.google.firebase.database.DataSnapshot;
@@ -44,10 +46,10 @@ public class FragmentoTienda extends Fragment {
 
     private RecyclerView rvTienda;
     private AdaptadorTienda tiendaAdapter;
-    private List<Ordenador> listaOrdenadoresTienda;
+    private ControladorProducto controladorProducto;
     private Switch switchLayout;
-    private FirebaseDatabase database;
-    private DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
+    private GridLayoutManager gridLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
     private Usuario usuario;
     private ImageButton btnCarrito;
 
@@ -72,6 +74,13 @@ public class FragmentoTienda extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        controladorProducto = new ControladorProducto();
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,61 +88,25 @@ public class FragmentoTienda extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tienda, container, false);
 
+        // Creamos los layouts
+        gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+
         btnCarrito = view.findViewById(R.id.btn_carrito);
         rvTienda = view.findViewById(R.id.rv_tienda);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
 
-        boolean estadoSwitch = switchLayout.isChecked();
+        switchLayout.setChecked(false);
 
-        // para saber el tipo de layout segun el estado del switch
-        if (estadoSwitch) {
-            rvTienda.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        } else {
-            rvTienda.setLayoutManager(new LinearLayoutManager(getContext()));
-        }
+        tiendaAdapter = new AdaptadorTienda(); // hay que pasarle el estado del switch al adaptador
 
-        listaOrdenadoresTienda = new ArrayList<>();
-        tiendaAdapter = new AdaptadorTienda(listaOrdenadoresTienda, estadoSwitch); // hay que pasarle el estado del switch al adaptador
-
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReference = database.getReference("productos");
-
-        usuario = (Usuario) getArguments().getSerializable("usuario");
-
-        dbReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaOrdenadoresTienda.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Ordenador pc = ds.getValue(Ordenador.class);
-                    if (pc != null) {
-                        listaOrdenadoresTienda.add(pc);
-                        Log.d("FirebaseData", "Producto añadido: " + pc.getNombre() + " - " + pc.getPrecio());
-                    }
-                }
-                tiendaAdapter.notifyDataSetChanged();
-                Log.d("FirebaseData", "Total productos cargados: " + listaOrdenadoresTienda.size());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los datos", Toast.LENGTH_SHORT).show();
-            }
-        });
+        // establece el layout
+        rvTienda.setLayoutManager(linearLayoutManager);
 
         rvTienda.setAdapter(tiendaAdapter);
 
-        /*
-        pos_seleccionado = -1;
+        controladorProducto.getAll(tiendaAdapter);
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pos_seleccionado = rvTienda.getChildAdapterPosition(v);
-                iniciarFragmentoProducto(listaOrdenadoresTienda.get(pos_seleccionado));
-            }
-        };
-         */
         btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
 
         tiendaAdapter.setOnItemClickListener(ordenador -> {
