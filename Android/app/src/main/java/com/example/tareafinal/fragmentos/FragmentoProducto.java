@@ -192,7 +192,7 @@ public class FragmentoProducto extends Fragment {
         int precioInt = Integer.parseInt(precioTexto);
         int cantidadInt = Integer.parseInt(cantidad.getText().toString());
 
-        if (cantidadInt == 0) {
+        if (cantidadInt == 1) {
             return;
         }
 

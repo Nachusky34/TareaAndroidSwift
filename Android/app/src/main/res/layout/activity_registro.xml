@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".UI.Registro">
+    tools:context=".actividades.Registro">
 
     <LinearLayout
         android:id="@+id/lay_titulo"

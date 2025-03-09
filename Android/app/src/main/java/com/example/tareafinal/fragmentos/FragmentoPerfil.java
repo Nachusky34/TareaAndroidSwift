@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -24,14 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tareafinal.R;
-import com.example.tareafinal.UI.Tabs;
+import com.example.tareafinal.actividades.Tabs;
 import com.example.tareafinal.controladores.ControladorUsuario;
 import com.example.tareafinal.db.Usuario;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -129,14 +123,6 @@ public class FragmentoPerfil extends Fragment {
         layoutHacerFoto = view.findViewById(R.id.layout_hacer_foto);
         layoutGuardarCambios = view.findViewById(R.id.layout_guardar_cambios);
 
-        newsletterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(true);
-            } else {
-                dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(false);
-            }
-        });
-
         layoutCerrarSesion.setOnClickListener(v -> cerrarSesion(v));
 
         layoutHacerFoto.setOnClickListener(v -> hacerFoto(v));
@@ -169,15 +155,9 @@ public class FragmentoPerfil extends Fragment {
     }
 
     private void subirImagenAFirebase(Bitmap imageBitmap) {
-        // Generar el nombre de la imagen dinámicamente
         String nombreImagen = "foto_perfil_" + idUser;
         guardarImagenEnInterno(imageBitmap, nombreImagen);
-
-        // Subir imagen a Firebase Storage
-        DatabaseReference userRef = dbReferenceUsuario.child(idUser).child("fotoPerfil");
-        userRef.setValue(nombreImagen)
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Imagen almacenada", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al guardar nombre", Toast.LENGTH_SHORT).show());
+        controladorUsuario.actualizarImagen(idUser, nombreImagen);
     }
 
 
@@ -222,7 +202,7 @@ public class FragmentoPerfil extends Fragment {
     private void guardarCambios(View v) {
         usuario.setEmail(email.getText().toString());
         usuario.setEmail(postalcode.getText().toString());
-        usuario.setEmail(newsletterSwitch.getText().toString());
+        usuario.setNewsletter(newsletterSwitch.isChecked());
     }
 
     private void cerrarSesion(View v) {

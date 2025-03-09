@@ -1,4 +1,4 @@
-package com.example.tareafinal.UI;
+package com.example.tareafinal.actividades;
 
 import android.os.Bundle;
 import android.view.View;

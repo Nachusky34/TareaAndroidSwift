@@ -18,8 +18,7 @@ public class ControladorUsuario {
 
     private static final FirebaseDatabase db = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
     private DatabaseReference usuarioRef;
-    boolean creado;
-    boolean modificado;
+    boolean creado, modificado;
 
     public ControladorUsuario() {
         usuarioRef = db.getReference("usuarios");
@@ -27,6 +26,7 @@ public class ControladorUsuario {
 
     public boolean crearUsuario(Usuario usuario) {
         String id = usuarioRef.push().getKey();
+        usuario.setId(id);
         creado = false;
         usuarioRef.child(id).setValue(usuario)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -41,6 +41,19 @@ public class ControladorUsuario {
     public boolean actualizarUsuario(Usuario usuario) {
         modificado = false;
         usuarioRef.child(usuario.getId()).setValue(usuario)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        modificado = true;
+                    }
+                });
+        return modificado;
+    }
+
+    public boolean actualizarImagen(String id, String nombreImg) {
+        modificado = false;
+        usuarioRef.child(id).child("fotoPerfil")
+                .setValue(nombreImg)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

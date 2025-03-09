@@ -1,4 +1,4 @@
-package com.example.tareafinal.UI;
+package com.example.tareafinal.actividades;
 
 import android.app.Activity;
 import android.content.Intent;
