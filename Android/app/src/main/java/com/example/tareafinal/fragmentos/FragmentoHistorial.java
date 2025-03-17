@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorHistorial;
+import com.example.tareafinal.controladores.ControladorCompras;
+import com.example.tareafinal.controladores.ControladorProducto;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
@@ -42,8 +44,6 @@ public class FragmentoHistorial extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView rv;
-    private Switch tipoLayout;
     private ImageButton btnCarrito;
 
     private RecyclerView rvHistorial;
@@ -53,11 +53,9 @@ public class FragmentoHistorial extends Fragment {
     private List<Ordenador> listaOrdenadoresHistorial;
 
     private Switch switchLayout;
-
-    private FirebaseDatabase database;
-    private DatabaseReference dbReferenceCompras;
-    private DatabaseReference dbReferenceOrdenadores;
     private Usuario usuario;
+    private ControladorCompras controladorCompras;
+    private ControladorProducto controladorProducto;
 
     public FragmentoHistorial() {
     }
@@ -85,6 +83,10 @@ public class FragmentoHistorial extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_historial, container, false);
 
+        controladorProducto = new ControladorProducto();
+        controladorCompras = new ControladorCompras();
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+
         rvHistorial = view.findViewById(R.id.rv_historial);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
         btnCarrito = view.findViewById(R.id.btn_carrito);
@@ -104,13 +106,15 @@ public class FragmentoHistorial extends Fragment {
         adaptadorHistorial = new AdaptadorHistorial(listaOrdenadoresHistorial, listaCompras, estadoSwitch);
         rvHistorial.setAdapter(adaptadorHistorial);
 
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferenceCompras = database.getReference("compras");
-        dbReferenceOrdenadores = database.getReference("productos");
+        listaCompras = controladorCompras.buscarComprasPorUsuario(usuario.getId());
+        List<Ordenador> ordenadores = controladorProducto.getAll();
 
-        cargarOrdenadores();
-
-        usuario = (Usuario) getArguments().getSerializable("usuario");
+        for (int i = 0; i < listaCompras.size(); i++) {
+            for (int j = 0; j < ordenadores.size(); j++) {
+                if (ordenadores.get(i).equals(listaCompras.get(i).getIdProducto()))
+                    listaOrdenadoresHistorial.add(ordenadores.get(i));
+            }
+        }
 
         switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -128,64 +132,7 @@ public class FragmentoHistorial extends Fragment {
         return view;
     }
 
-    private void cargarOrdenadores() {
-        dbReferenceOrdenadores.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaOrdenadoresHistorial.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Ordenador pc = ds.getValue(Ordenador.class);
-                    listaOrdenadoresHistorial.add(pc);
-                }
-                cargarCompras(); // cargamos las compras
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los ordenadores", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void cargarCompras() {
-        dbReferenceCompras.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaCompras.clear();
-                List<Ordenador> ordenadoresFiltrados = new ArrayList<>();
-
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Compra compra = ds.getValue(Compra.class);
-                    if (compra != null && compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
-                        listaCompras.add(compra);
-
-                        // busca el ordenador correspondiente a la compra
-                        for (Ordenador ordenador : listaOrdenadoresHistorial) {
-                            if (ordenador.getId().equals(compra.getIdProducto())) {
-                                ordenadoresFiltrados.add(ordenador);
-                                break;
-                            }
-                        }
-                    }
-                }
-                /*
-                if (listaCompras.isEmpty()) {
-                    Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
-                }
-                */
-
-                // actualizar el adaptador con los datos obtenidos
-                listaOrdenadoresHistorial.clear();
-                listaOrdenadoresHistorial.addAll(ordenadoresFiltrados);
-                adaptadorHistorial.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public void iniciarFragmentoCarrito() {
         Bundle bundle = new Bundle();

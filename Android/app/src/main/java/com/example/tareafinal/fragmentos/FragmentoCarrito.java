@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorCarrito;
+import com.example.tareafinal.controladores.ControladorCompras;
+import com.example.tareafinal.controladores.ControladorProducto;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
@@ -53,12 +55,10 @@ public class FragmentoCarrito extends Fragment {
 
     private TextView btnComprarYa;
     private Usuario usuario;
-
-    private FirebaseDatabase database;
-    private DatabaseReference dbReferenceCompras;
-    private DatabaseReference dbReferenceOrdenadores;
     private Double precioTotal;
     private boolean compraEliminada;
+    private ControladorCompras controladorCompras;
+    private ControladorProducto controladorProducto;
 
     public FragmentoCarrito() {
     }
@@ -85,20 +85,17 @@ public class FragmentoCarrito extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Iniciar DDBB
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferenceCompras = database.getReference("compras");
-        dbReferenceOrdenadores = database.getReference("productos");
-
         // Iniciamos las listas
         listaOrdenadores = new ArrayList<>();
         listaCarrito = new ArrayList<>();
+        controladorProducto = new ControladorProducto();
+        controladorCompras = new ControladorCompras();
         precioTotal = 0.0;
         compraEliminada = false;
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
 
-        cargarOrdenadores();
+        listaOrdenadores = controladorProducto.getAll();
 
         adaptadorCarrito = new AdaptadorCarrito(listaOrdenadores, listaCarrito);
     }
@@ -111,8 +108,8 @@ public class FragmentoCarrito extends Fragment {
         precio = view.findViewById(R.id.tv_carrito_precio);
         btnComprarYa = view.findViewById(R.id.btn_comprarya);
         rvCarrito = view.findViewById(R.id.rv_carrito);
-        rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCarrito.setAdapter(adaptadorCarrito);
 
         adaptadorCarrito.setOnItemClickListener(compra -> {
@@ -123,91 +120,57 @@ public class FragmentoCarrito extends Fragment {
             }
         });
 
-        btnComprarYa.setOnClickListener(v -> comprarYa());
+        btnComprarYa.setOnClickListener(v -> {
+            try {
+                comprarYa();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return view;
     }
 
-
-    private void cargarOrdenadores() {
-        dbReferenceOrdenadores.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaOrdenadores.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Ordenador pc = ds.getValue(Ordenador.class);
-                    if (pc != null) {
-                        listaOrdenadores.add(pc);
-                    }
-                }
-                cargarCompras();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los ordenadores", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private Double setPrecioTotal() {
+        for (int i = 0; i < listaCarrito.size(); i++) {
+            precioTotal += Integer.parseInt(listaCarrito.get(i).getCantidad()) *
+                    Integer.parseInt(listaOrdenadores.get(i).getPrecio());
+        }
+        return precioTotal;
     }
 
+    public void cargarOrdenadores() {
+        List<Ordenador> ordenadores = controladorProducto.getAll();
+
+        for (int i = 0; i < listaCarrito.size(); i++) {
+            for (int j = 0; j < ordenadores.size(); j++) {
+                if (ordenadores.get(i).equals(listaCarrito.get(i).getIdProducto()))
+                    listaOrdenadores.add(ordenadores.get(i));
+            }
+        }
+    }
 
     private void cargarCompras() {
-        dbReferenceCompras.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaCarrito.clear();
-                List<Ordenador> ordenadoresFiltrados = new ArrayList<>();
-                precioTotal = 0.0;
 
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Compra compra = ds.getValue(Compra.class);
+        listaCarrito = controladorCompras.buscarCarritoPorIdUsuario(usuario.getId());
+        cargarOrdenadores();
 
-                    if (compra != null && !compra.isComprado()
-                            && compra.getIdUsuario().equals(usuario.getId())) {
-                        listaCarrito.add(compra);
+        adaptadorCarrito.listaOrdenadoresCarrito = listaOrdenadores;
+        adaptadorCarrito.listaCompras = listaCarrito;
+        adaptadorCarrito.notifyDataSetChanged();
 
-                        for (Ordenador ordenador : listaOrdenadores) {
-                            if (ordenador.getId().equals(compra.getIdProducto())) {
-                                ordenadoresFiltrados.add(ordenador);
-                                precioTotal += Double.parseDouble(ordenador.getPrecio()) *
-                                        Double.parseDouble(compra.getCantidad());
-                                break;
-                            }
-                        }
-                    }
-                }
+        precio.setText(String.format("%.2f $", setPrecioTotal()));
 
-                // Actualizar los datos del adaptador y notificarle de los cambios
-                adaptadorCarrito.listaOrdenadoresCarrito = ordenadoresFiltrados;
-                adaptadorCarrito.listaCompras = listaCarrito;
-                adaptadorCarrito.notifyDataSetChanged();
-
-                precio.setText(String.format("%.2f $", precioTotal));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private boolean eliminarCompra(Compra compra) {
         String id = compra.getIdUsuario() + "-" + compra.getIdProducto();
-        dbReferenceCompras.child(id).removeValue()
-                .addOnSuccessListener(aVoid -> {
-                    compraEliminada = true;
-                    Toast.makeText(getContext(), "Producto eliminado correctamente", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    compraEliminada = false;
-                    Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
-                });
+        controladorCompras.eliminarCompra(id);
         cargarCompras();
         return compraEliminada;
     }
 
-    private void comprarYa() {
+    private void comprarYa() throws InterruptedException {
         Date now = new Date();
         for (Compra compraAntigua : listaCarrito) {
             String idCompra = compraAntigua.getIdUsuario() + "-" + compraAntigua.getIdProducto();
@@ -223,12 +186,9 @@ public class FragmentoCarrito extends Fragment {
             //Haseamos la clave
             String idHassed = hassId(idCompra + "-" + obtenerMilisegundos(now));
 
-            dbReferenceCompras.child(idHassed).setValue(compraNueva).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    // Si se crea la compra eliminamos la antigua
-                    dbReferenceCompras.child(idCompra).removeValue();
-                }
-            });
+            controladorCompras.eliminarCompra(compraAntigua.getIdUsuario() + "-"
+                                                + compraAntigua.getIdProducto());
+            controladorCompras.agregarCompra(compraNueva, idHassed);
 
         }
         Toast.makeText(getContext(), "Compra realizada correctamente", Toast.LENGTH_SHORT).show();

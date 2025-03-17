@@ -108,4 +108,9 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
             tvHoraCompra = itemView.findViewById(R.id.tv_hora);
         }
     }
+
+    public void actualizarDatos(List<Ordenador> nuevosDatos) {
+        listaOrdenadoresHistorial = nuevosDatos;
+        notifyDataSetChanged();
+    }
 }

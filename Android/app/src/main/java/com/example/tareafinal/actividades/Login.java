@@ -35,9 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Login extends AppCompatActivity {
-
-    FirebaseDatabase database;
-    DatabaseReference dbReferenceUsuarios;
     List<Usuario> listaUsuarios;
 
     private EditText username, pwd;

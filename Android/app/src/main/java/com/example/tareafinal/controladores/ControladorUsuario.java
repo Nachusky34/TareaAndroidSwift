@@ -16,11 +16,12 @@ import java.util.List;
 
 public class ControladorUsuario {
 
-    private static final FirebaseDatabase db = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+    private final FirebaseDatabase db;
     private DatabaseReference usuarioRef;
     boolean creado, modificado;
 
     public ControladorUsuario() {
+        db = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
         usuarioRef = db.getReference("usuarios");
     }
 

@@ -105,7 +105,7 @@ public class FragmentoTienda extends Fragment {
 
         rvTienda.setAdapter(tiendaAdapter);
 
-        controladorProducto.getAll(tiendaAdapter);
+        controladorProducto.cargarTienda(tiendaAdapter);
 
         btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
 

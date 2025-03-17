@@ -111,5 +111,10 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
             btnEliminar = itemView.findViewById(R.id.btn_papelera);
         }
     }
+
+    public void actualizarDatos(List<Ordenador> nuevosDatos) {
+        listaOrdenadoresCarrito = nuevosDatos;
+        notifyDataSetChanged();
+    }
 }
 
