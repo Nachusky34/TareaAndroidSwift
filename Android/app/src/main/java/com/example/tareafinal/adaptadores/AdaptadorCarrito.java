@@ -22,10 +22,9 @@ import java.util.List;
 
 public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.CarritoHolder> {
 
-    public List<Ordenador> listaOrdenadoresCarrito;
-    public List<Compra> listaCompras;
+    private List<Ordenador> listaOrdenadoresCarrito;
+    private List<Compra> listaCompras;
     private OnItemClickListener listenerEliminar;
-
 
     public AdaptadorCarrito(List<Ordenador> listaOrdenadoresCarrito, List<Compra> listaCompras) {
         this.listaOrdenadoresCarrito = listaOrdenadoresCarrito;
@@ -49,52 +48,57 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
 
     @Override
     public void onBindViewHolder(@NonNull CarritoHolder holder, int position) {
-        Ordenador ordenador = listaOrdenadoresCarrito.get(position);
         Compra compra = listaCompras.get(position);
+        String idProducto = compra.getIdProducto();
 
-        String precioStr = listaOrdenadoresCarrito.get(position).getPrecio();
-        Double precio = Double.parseDouble(precioStr);
+        // Buscar el ordenador correspondiente a esta compra
+        Ordenador ordenador = obtenerOrdenadorPorId(idProducto);
 
-        String cantidadStr = listaCompras.get(position).getCantidad();
-        Double cantidad = Double.parseDouble(cantidadStr);
+        if (ordenador != null) {
+            String precioStr = ordenador.getPrecio();
+            Double precio = Double.parseDouble(precioStr);
 
-        holder.tvNombreOrdenador.setText(ordenador.getNombre());
-        holder.tvCantidad.setText(String.valueOf(compra.getCantidad()));
-        holder.tvPrecioTotal.setText(String.format("%.2f $",(cantidad * precio)));
+            String cantidadStr = compra.getCantidad();
+            Double cantidad = Double.parseDouble(cantidadStr);
 
-        Ordenador pc = listaOrdenadoresCarrito.get(position);
-        Context context = holder.itemView.getContext();
+            holder.tvNombreOrdenador.setText(ordenador.getNombre());
+            holder.tvCantidad.setText(String.valueOf(compra.getCantidad()));
+            holder.tvPrecioTotal.setText(String.format("%.2f $", (cantidad * precio)));
 
-        //  Obtener el ID de la imagen desde los recursos de drawable
-        int imageResource = context.getResources().getIdentifier(
-                pc.getImg(), "drawable", context.getPackageName());
-
-        // Cargar imagen de forma segura con ContextCompat
-        if (imageResource != 0) {
-            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
-        } else {
-            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
-        }
-
-        // Cargar la animación
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
-
-        holder.itemView.startAnimation(animation);
-
-        // HACER QUE SOLO EL BOTÓN SEA CLICKEABLE
-        holder.btnEliminar.setOnClickListener(v -> {
-            System.out.println("1");
-            if (listenerEliminar != null) {
-                System.out.println("2");
-                listenerEliminar.onItemClick(compra);
-                System.out.println("3");
+            // Cargar imagen
+            Context context = holder.itemView.getContext();
+            int imageResource = context.getResources().getIdentifier(ordenador.getImg(), "drawable", context.getPackageName());
+            if (imageResource != 0) {
+                holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
+            } else {
+                holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
             }
-        });
+
+            // Animación
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
+            holder.itemView.startAnimation(animation);
+
+            // HACER QUE SOLO EL BOTÓN SEA CLICKEABLE
+            holder.btnEliminar.setOnClickListener(v -> {
+                if (listenerEliminar != null) {
+                    listenerEliminar.onItemClick(compra);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return Math.min(listaCompras.size(), listaOrdenadoresCarrito.size());
+    }
+
+    private Ordenador obtenerOrdenadorPorId(String idProducto) {
+        for (Ordenador ordenador : listaOrdenadoresCarrito) {
+            if (ordenador.getId().equals(idProducto)) {
+                return ordenador;
+            }
+        }
+        return null;
     }
 
     public static class CarritoHolder extends RecyclerView.ViewHolder {
@@ -112,5 +116,14 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
         }
     }
 
+    public void eliminarCompra(Compra compra) {
+        int position = listaCompras.indexOf(compra);
+        if (position != -1) {
+            listaCompras.remove(position);
+            listaOrdenadoresCarrito.remove(position);  // Asegúrate de eliminar el ordenador correspondiente también
+            notifyItemRemoved(position);
+        }
+    }
 }
+
 

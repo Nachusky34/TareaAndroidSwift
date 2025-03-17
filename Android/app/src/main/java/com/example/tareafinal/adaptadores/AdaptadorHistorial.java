@@ -1,6 +1,7 @@
 package com.example.tareafinal.adaptadores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +60,15 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
         Compra compra = listaCompras.get(position);
         String idProducto = compra.getIdProducto();
 
+        // Añadir log para depurar el idProducto
+        Log.d("AdaptadorHistorial", "ID Producto en la compra: " + idProducto);
+
         // Buscar el ordenador correspondiente a esta compra
         Ordenador ordenador = obtenerOrdenadorPorId(idProducto);
 
+        // Añadir log para depurar el ordenador encontrado
         if (ordenador != null) {
+            Log.d("AdaptadorHistorial", "Ordenador encontrado: " + ordenador.getId());
             String precioStr = ordenador.getPrecio();
             Double precio = Double.parseDouble(precioStr);
 
@@ -87,8 +93,11 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
             // Animación
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
             holder.itemView.startAnimation(animation);
+        } else {
+            Log.d("AdaptadorHistorial", "Ordenador no encontrado para ID: " + idProducto);
         }
     }
+
 
     // Método para obtener el ordenador por su ID
     private Ordenador obtenerOrdenadorPorId(String idProducto) {
