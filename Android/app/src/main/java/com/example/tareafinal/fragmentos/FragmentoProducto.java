@@ -124,7 +124,9 @@ public class FragmentoProducto extends Fragment {
         }
 
         nombre.setText(ordenador.getNombre());
-        descripcion.setText(ordenador.getDescripcion());
+        String descripcion1 = ordenador.getDescripcion();
+        String descripcionFormateada = descripcion1.strip().replace(". ", ".\n");
+        descripcion.setText(descripcionFormateada);
         precio.setText(ordenador.getPrecio() + " $");
         total.setText(ordenador.getPrecio() + " $");
 
