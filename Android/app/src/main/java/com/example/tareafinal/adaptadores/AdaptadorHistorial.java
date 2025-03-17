@@ -54,39 +54,52 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
         HistorialHolder holder = new HistorialHolder(v);
         return holder;
     }
-
     @Override
     public void onBindViewHolder(@NonNull AdaptadorHistorial.HistorialHolder holder, int position) {
-        String precioStr = listaOrdenadoresHistorial.get(position).getPrecio();
-        Double precio = Double.parseDouble(precioStr);
+        Compra compra = listaCompras.get(position);
+        String idProducto = compra.getIdProducto();
 
-        String cantidadStr = listaCompras.get(position).getCantidad();
-        int cantidad = Integer.parseInt(cantidadStr);
+        // Buscar el ordenador correspondiente a esta compra
+        Ordenador ordenador = obtenerOrdenadorPorId(idProducto);
 
-        holder.tvFechaCompra.setText(listaCompras.get(position).getFecha());
-        holder.tvHoraCompra.setText(listaCompras.get(position).getHora());
-        holder.tvNombreOrdenador.setText(listaOrdenadoresHistorial.get(position).getNombre());
-        holder.tvCantidad.setText(String.valueOf(listaCompras.get(position).getCantidad()));
-        holder.tvPrecioTotal.setText(String.format("%.2f $",(cantidad * precio)));
+        if (ordenador != null) {
+            String precioStr = ordenador.getPrecio();
+            Double precio = Double.parseDouble(precioStr);
 
-        Ordenador pc = listaOrdenadoresHistorial.get(position);
-        Context context = holder.itemView.getContext();
+            String cantidadStr = compra.getCantidad();
+            int cantidad = Integer.parseInt(cantidadStr);
 
-        // Obtener el ID de la imagen desde los recursos de drawable
-        int imageResource = context.getResources().getIdentifier(
-                pc.getImg(), "drawable", context.getPackageName());
+            holder.tvFechaCompra.setText(compra.getFecha());
+            holder.tvHoraCompra.setText(compra.getHora());
+            holder.tvNombreOrdenador.setText(ordenador.getNombre());
+            holder.tvCantidad.setText(String.valueOf(compra.getCantidad()));
+            holder.tvPrecioTotal.setText(String.format("%.2f $", (cantidad * precio)));
 
-        // Cargar imagen de forma segura con ContextCompat
-        if (imageResource != 0) {
-            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
-        } else {
-            holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
+            // Cargar imagen
+            Context context = holder.itemView.getContext();
+            int imageResource = context.getResources().getIdentifier(ordenador.getImg(), "drawable", context.getPackageName());
+            if (imageResource != 0) {
+                holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, imageResource));
+            } else {
+                holder.imageOrdenador.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ordenador10)); // Imagen por defecto
+            }
+
+            // Animación
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
+            holder.itemView.startAnimation(animation);
         }
-        // Cargar la animación
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.inflador_recyclerview);
-
-        holder.itemView.startAnimation(animation);
     }
+
+    // Método para obtener el ordenador por su ID
+    private Ordenador obtenerOrdenadorPorId(String idProducto) {
+        for (Ordenador ordenador : listaOrdenadoresHistorial) {
+            if (ordenador.getId().equals(idProducto)) {
+                return ordenador;
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public int getItemCount() {

@@ -15,6 +15,9 @@ import com.example.tareafinal.R;
 import com.example.tareafinal.controladores.ControladorUsuario;
 import com.example.tareafinal.db.Usuario;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 public class Registro extends AppCompatActivity {
 
     private EditText username, pwd, email, postalcode;
@@ -52,18 +55,43 @@ public class Registro extends AppCompatActivity {
 
     public Usuario generarUsuario() {
         Usuario usuario = new Usuario();
-        usuario.setUsername(username.getText().toString());
-        usuario.setPassword(pwd.getText().toString());
+
+        // Convertir usuario y contraseña a hexadecimal
+        String usernameHex = stringToHex(username.getText().toString());
+        String passwordHex = stringToHex(pwd.getText().toString());
+
+        usuario.setUsername(usernameHex);
+        usuario.setPassword(passwordHex);
         usuario.setEmail(email.getText().toString());
         usuario.setPostalCode(postalcode.getText().toString());
         usuario.setNewsletter(false);
         usuario.setFotoPerfil("fotoperfil.png");
 
-        if (usuario.getUsername().isEmpty() || usuario.getPassword().isEmpty() || usuario.getEmail().isEmpty() || usuario.getPostalCode().isEmpty()) {
+        if (usuario.getUsername().isEmpty() || usuario.getPassword().isEmpty() ||
+                usuario.getEmail().isEmpty() || usuario.getPostalCode().isEmpty()) {
             Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
             return null;
         }
 
         return usuario;
+    }
+
+    private String stringToHex(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception e) {
+            System.out.println("Error al convertir a hexadecimal");
+            return null;
+        }
     }
 }

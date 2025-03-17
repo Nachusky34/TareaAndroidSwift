@@ -112,9 +112,5 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
         }
     }
 
-    public void actualizarDatos(List<Ordenador> nuevosDatos) {
-        listaOrdenadoresCarrito = nuevosDatos;
-        notifyDataSetChanged();
-    }
 }
 

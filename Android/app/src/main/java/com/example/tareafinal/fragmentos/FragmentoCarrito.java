@@ -21,6 +21,8 @@ import com.example.tareafinal.controladores.ControladorProducto;
 import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +58,6 @@ public class FragmentoCarrito extends Fragment {
     private TextView btnComprarYa;
     private Usuario usuario;
     private Double precioTotal;
-    private boolean compraEliminada;
     private ControladorCompras controladorCompras;
     private ControladorProducto controladorProducto;
 
@@ -72,8 +73,8 @@ public class FragmentoCarrito extends Fragment {
      * @return A new instance of fragment FragmentoHistorial.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentoHistorial newInstance(String param1, String param2) {
-        FragmentoHistorial fragment = new FragmentoHistorial();
+    public static FragmentoCarrito newInstance(String param1, String param2) {
+        FragmentoCarrito fragment = new FragmentoCarrito();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,11 +92,8 @@ public class FragmentoCarrito extends Fragment {
         controladorProducto = new ControladorProducto();
         controladorCompras = new ControladorCompras();
         precioTotal = 0.0;
-        compraEliminada = false;
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
-
-        listaOrdenadores = controladorProducto.getAll();
 
         adaptadorCarrito = new AdaptadorCarrito(listaOrdenadores, listaCarrito);
     }
@@ -112,13 +110,9 @@ public class FragmentoCarrito extends Fragment {
         rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCarrito.setAdapter(adaptadorCarrito);
 
-        adaptadorCarrito.setOnItemClickListener(compra -> {
-            if (eliminarCompra(compra)) {
-                //Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
-            } else {
-                //Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
-            }
-        });
+        cargarDatos();
+
+        adaptadorCarrito.setOnItemClickListener(compra -> { eliminarCompra(compra); } );
 
         btnComprarYa.setOnClickListener(v -> {
             try {
@@ -131,43 +125,53 @@ public class FragmentoCarrito extends Fragment {
         return view;
     }
 
+
+    public void cargarDatos() {
+        controladorCompras.cargarDatos()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listaCarrito.clear();
+                        listaCarrito.addAll(controladorCompras.cargarCarrito(usuario.getId()));
+                        adaptadorCarrito.notifyDataSetChanged();
+                        precio.setText(setPrecioTotal() + "$");
+                    } else {
+                        Toast.makeText(getContext(), "Error al cargar el carrito", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        controladorProducto.cargarDatos()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listaOrdenadores.clear();
+                        listaOrdenadores.addAll(task.getResult());
+                        adaptadorCarrito.notifyDataSetChanged();
+                        precio.setText(setPrecioTotal() + "$");
+                    } else {
+                        Toast.makeText(getContext(), "Error al cargar productos", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private void eliminarCompra(Compra compra) {
+        String idCompra = compra.getIdUsuario() + "-" + compra.getIdProducto();
+        controladorCompras.eliminarCompra(idCompra);
+        cargarDatos();
+    }
+
+
     private Double setPrecioTotal() {
+
+        if (listaOrdenadores.isEmpty() || listaCarrito.isEmpty()) {
+            return 0.0;
+        }
+
+        precioTotal = 0.0;
         for (int i = 0; i < listaCarrito.size(); i++) {
             precioTotal += Integer.parseInt(listaCarrito.get(i).getCantidad()) *
                     Integer.parseInt(listaOrdenadores.get(i).getPrecio());
         }
         return precioTotal;
-    }
-
-    public void cargarOrdenadores() {
-        List<Ordenador> ordenadores = controladorProducto.getAll();
-
-        for (int i = 0; i < listaCarrito.size(); i++) {
-            for (int j = 0; j < ordenadores.size(); j++) {
-                if (ordenadores.get(i).equals(listaCarrito.get(i).getIdProducto()))
-                    listaOrdenadores.add(ordenadores.get(i));
-            }
-        }
-    }
-
-    private void cargarCompras() {
-
-        listaCarrito = controladorCompras.buscarCarritoPorIdUsuario(usuario.getId());
-        cargarOrdenadores();
-
-        adaptadorCarrito.listaOrdenadoresCarrito = listaOrdenadores;
-        adaptadorCarrito.listaCompras = listaCarrito;
-        adaptadorCarrito.notifyDataSetChanged();
-
-        precio.setText(String.format("%.2f $", setPrecioTotal()));
-
-    }
-
-    private boolean eliminarCompra(Compra compra) {
-        String id = compra.getIdUsuario() + "-" + compra.getIdProducto();
-        controladorCompras.eliminarCompra(id);
-        cargarCompras();
-        return compraEliminada;
     }
 
     private void comprarYa() throws InterruptedException {
@@ -186,9 +190,9 @@ public class FragmentoCarrito extends Fragment {
             //Haseamos la clave
             String idHassed = hassId(idCompra + "-" + obtenerMilisegundos(now));
 
-            controladorCompras.eliminarCompra(compraAntigua.getIdUsuario() + "-"
-                                                + compraAntigua.getIdProducto());
-            controladorCompras.agregarCompra(compraNueva, idHassed);
+            controladorCompras.agregarCompra(compraNueva, idHassed); // Agregar la nueva compra primero
+            controladorCompras.eliminarCompra(compraAntigua.getIdUsuario() + "-" +
+                    compraAntigua.getIdProducto()); // Luego eliminar la anterior
 
         }
         Toast.makeText(getContext(), "Compra realizada correctamente", Toast.LENGTH_SHORT).show();

@@ -106,15 +106,7 @@ public class FragmentoHistorial extends Fragment {
         adaptadorHistorial = new AdaptadorHistorial(listaOrdenadoresHistorial, listaCompras, estadoSwitch);
         rvHistorial.setAdapter(adaptadorHistorial);
 
-        listaCompras = controladorCompras.buscarComprasPorUsuario(usuario.getId());
-        List<Ordenador> ordenadores = controladorProducto.getAll();
-
-        for (int i = 0; i < listaCompras.size(); i++) {
-            for (int j = 0; j < ordenadores.size(); j++) {
-                if (ordenadores.get(i).equals(listaCompras.get(i).getIdProducto()))
-                    listaOrdenadoresHistorial.add(ordenadores.get(i));
-            }
-        }
+        cargarDatos();
 
         switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -132,7 +124,29 @@ public class FragmentoHistorial extends Fragment {
         return view;
     }
 
+    public void cargarDatos() {
+        controladorCompras.cargarDatos()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listaCompras.clear();
+                        listaCompras.addAll(controladorCompras.cargarCompras(usuario.getId()));
+                        adaptadorHistorial.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getContext(), "Error al cargar el carrito", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
+        controladorProducto.cargarDatos()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listaOrdenadoresHistorial.clear();
+                        listaOrdenadoresHistorial.addAll(task.getResult());
+                        adaptadorHistorial.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getContext(), "Error al cargar productos", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     public void iniciarFragmentoCarrito() {
         Bundle bundle = new Bundle();
