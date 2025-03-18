@@ -7,7 +7,7 @@
       "email": "mario@gmail.com",
       "postalcode": "01238",
       "newsletter": false,
-      "foto": "foto"
+      "foto": "fotoMario"
     },
     "user2": {
       "id": 2,
@@ -16,7 +16,7 @@
       "email": "nacho@gmail.com",
       "postalcode": "43210",
       "newsletter": false,
-      "foto": "foto"
+      "foto": "fotoNacho"
     }
   }
 }

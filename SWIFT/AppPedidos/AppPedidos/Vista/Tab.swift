@@ -11,20 +11,20 @@ struct Tab: View {
             TabView {
                 Perfil(usuario: $usuario)
                     .tabItem {
-                        Label("Perfil", systemImage: "person")
+                        Label("Profile", systemImage: "person")
                     }
                     .tag(1)
                 
                 // Otros tabs, por ejemplo, Tienda y Historial, también deberían tener la instancia del usuario si es necesario.
                 Tienda(usuario: $usuario)
                     .tabItem {
-                        Label("Tienda", systemImage: "house")
+                        Label("Shop", systemImage: "house")
                     }
                     .tag(2)
                 
                 Historial(usuario: $usuario)
                     .tabItem {
-                        Label("Historial", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                        Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                     }
                     .tag(3)
             }

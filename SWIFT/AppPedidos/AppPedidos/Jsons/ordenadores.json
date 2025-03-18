@@ -3,70 +3,70 @@
     "pc1": {
       "id": "1",
       "nombre": "PC Gamer Alpha",
-      "descripcion": "Potente PC para gaming en 1080p.",
+      "descripcion": "Processor: Supports high-performance CPUs. Graphics Card: Ready for powerful GPUs. Motherboard: Compatible with ATX/Micro-ATX. RAM: Offers ample slots for fast memory. CPU Cooler: Space for large coolers. Case: White mid-tower with good airflow.",
       "precio": "1500",
       "img": "Ordenador1"
     },
     "pc2": {
       "id": "2",
       "nombre": "PC Creator Pro",
-      "descripcion": "Estación de trabajo para edición de video y diseño gráfico.",
+      "descripcion": "Processor: Supports a variety of CPUs. Graphics Card: Typical expansion card slot. Motherboard: Common sizes compatible. RAM: Multiple slots for memory. CPU Cooler: Accommodates various CPU coolers. Case: Black mid-tower with glass side.",
       "precio": "2500",
       "img": "Ordenador2"
     },
     "pc3": {
       "id": "3",
       "nombre": "PC Office Basic",
-      "descripcion": "Ideal para oficina y tareas básicas.",
+      "descripcion": "Processor: Supports modern Intel/AMD CPUs. Graphics Card: Ready for high-performance GPUs. Motherboard: ATX, Micro-ATX, Mini-ITX support. RAM: Multiple memory slots available. CPU Cooler: Fits various aftermarket coolers. Case: Mid-tower with mesh front and glass side.",
       "precio": "800",
       "img": "Ordenador3"
     },
     "pc4": {
       "id": "4",
       "nombre": "PC Ultra Gaming",
-      "descripcion": "Rendimiento extremo para gaming 4K.",
+      "descripcion": "Processor: Mainstream CPU compatible. Graphics Card: Basic/integrated GPU slot. Motherboard: Standard form factor. RAM: Sufficient memory slots. CPU Cooler: Stock cooler suitable. Case: Compact home/office tower.",
       "precio": "4000",
       "img": "Ordenador4"
     },
     "pc5": {
       "id": "5",
       "nombre": "PC Streamer Edition",
-      "descripcion": "Optimizado para streaming y multitarea.",
+      "descripcion": "Processor: Supports high-performance CPUs. Graphics Card: Accommodates long, powerful GPUs. Motherboard: Compatible with ATX, Micro-ATX. RAM: Offers multiple slots for high-speed memory. CPU Cooler: Fits large aftermarket air and liquid. Case: Red mid-tower with tempered glass panels.",
       "precio": "3000",
       "img": "Ordenador5"
     },
     "pc6": {
       "id": "6",
       "nombre": "PC Mini ITX Compact",
-      "descripcion": "Diseño compacto con gran rendimiento.",
+      "descripcion": "Processor: Supports modern Intel and AMD CPUs. Graphics Card: Ready for high-end gaming GPUs. Motherboard: ATX, Micro-ATX, Mini-ITX compatible. RAM: Ample slots for DDR4/DDR5 memory. CPU Cooler: Fits various aftermarket coolers. Case: Black mid-tower with tempered glass side.",
       "precio": "1800",
       "img": "Ordenador6"
     },
     "pc7": {
       "id": "7",
       "nombre": "PC Workstation AI",
-      "descripcion": "Máquina potente para IA y aprendizaje automático.",
+      "descripcion": "Processor: Supports current generation CPUs. Graphics Card: Accommodates enthusiast-level GPUs. Motherboard: Compatible with Micro-ATX boards. RAM: Multiple slots for high-speed memory modules. CPU Cooler: Supports large air and liquid coolers. Case: Black mid-tower with optimized ventilation.",
       "precio": "5000",
       "img": "Ordenador7"
     },
     "pc8": {
       "id": "8",
       "nombre": "PC Budget Gamer",
-      "descripcion": "PC gamer económico con buen rendimiento en eSports.",
+      "descripcion": "Processor: Supports high-end desktop processors. Graphics Card: Designed for large, powerful GPUs. Motherboard: Compatible with ATX and form factors. RAM: Offers slots for performance memory kits. CPU Cooler: Supports sizes of air and liquid coolers. Case: Unique white circular design with tempered glass.",
       "precio": "1200",
       "img": "Ordenador8"
     },
     "pc9": {
       "id": "9",
       "nombre": "PC Server Home",
-      "descripcion": "Servidor casero para almacenamiento y redes.",
+      "descripcion": "Processor: Supports the latest generation CPUs. Graphics Card: Ready for high-performance cards. Motherboard: Compatible with ATX, Micro-ATX. RAM: Offers multiple slots for high-speed memory. CPU Cooler: Fits a variety of air and liquid coolers. Case: Black mid-tower with tempered glass panel.",
       "precio": "2200",
       "img": "Ordenador9"
     },
     "pc10": {
       "id": "10",
       "nombre": "PC Silent Office",
-      "descripcion": "PC silencioso para oficina sin ruido.",
+      "descripcion": "Processor: Supports Intel and AMD processors. Graphics Card: High-end gaming GPUs. Motherboard: Compatible with ATX, Micro-ATX. RAM: Offers multiple DIMM slots for memory. CPU Cooler: Fits various aftermarket CPU coolers. Case: White mid-tower with tempered glass side.",
       "precio": "1000",
       "img": "Ordenador10"
     }

@@ -38,9 +38,8 @@ struct VistaProducto: View {
             Spacer()
             
             HStack {
-                // Sección de Precio
                 HStack {
-                    Text("Precio:")
+                    Text("Price:")
                         .font(.custom("Times New Roman", size: 22))
                     Text(String(format: "%.2f$", ordenador.precio))
                         .font(.custom("Times New Roman", size: 22))
@@ -49,7 +48,6 @@ struct VistaProducto: View {
                     .border(Color.black)
                 Spacer()
                             
-                // Selector de Cantidad
                 HStack(spacing: 0) {
                     Text("\(cantidad)")
                         .frame(width: 44, height: 56)
@@ -80,7 +78,7 @@ struct VistaProducto: View {
                 print("Producto agregado al carrito")
             }) {
                 HStack {
-                    Text("AGREGAR AL CARRITO")
+                    Text("ADD TO CART")
                         .font(.custom("Times New Roman", size: 22))
                         .foregroundColor(.black)
                                 

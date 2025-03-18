@@ -20,7 +20,7 @@ struct Tienda: View {
     var body: some View {
         VStack {
             HStack {
-                Text("Tienda")
+                Text("Shop")
                     .font(.custom("Times New Roman", size: 40))
                     .fontWeight(.bold)
                     .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
@@ -56,7 +56,7 @@ struct Tienda: View {
                                 
                                 Text(String(format: "%.2f$", ordenador.precio))
                                     .font(.custom("Times New Roman", size: 25))
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
                                     .padding()
                                     .padding(.leading, 60)
                                 

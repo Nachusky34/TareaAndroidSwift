@@ -4,7 +4,7 @@
 //
 //  Created by Mario Seoane on 20/2/25.
 //
-
+import UIKit
 import SwiftUI
 
 struct Perfil: View {
@@ -24,11 +24,27 @@ struct Perfil: View {
                     .frame(width: 405, height: 350)
                     .padding(.top, -78)
                 VStack{
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: 150, height: 150)
-                        .foregroundColor(.white)
-                        
+                    
+                    // lo hacemos de esta manera, que sabemos que es inefeciente pero para que nos carge la imagen correcta, no encuentra las fotos desde el json
+                    if usuario.username.elementsEqual("marioSeoane") {
+                        Image(.fotoMario)
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .foregroundColor(.white)
+                    } else if usuario.username.elementsEqual("nachusky34") {
+                        Image(.fotoNacho)
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .foregroundColor(.white)
+                    } else {
+                        Image(systemName: "person.circle")
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .foregroundColor(.white)
+                    }
+                    
+                    
+                    
                     Text(usuario.username ?? "maritotito")
                         .font(.custom("Times New Roman", size: 32))
                         .fontWeight(.bold)
