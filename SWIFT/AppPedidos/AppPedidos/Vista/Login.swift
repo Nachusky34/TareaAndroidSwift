@@ -25,15 +25,19 @@ struct Login: View {
                         .padding(.trailing, 204)
                         .padding(.top, -79)
                     
-                    Text("NOMBRE\nAPP")
-                        .font(.custom("Times New Roman", size: 38))
+                    Text("PC\nera")
+                        .font(.custom("Times New Roman", size: 55))
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
                         .padding(.leading, 140)
-                        .padding(.top, -120)
+                        .padding(.top, -140)
                     
-                    Spacer()
+                    Image(.logoCircular)
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                        .padding(.top, -40)
+                    
                     
                     VStack {
                         Text("SIGN IN")
@@ -45,19 +49,38 @@ struct Login: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .font(.custom("Times New Roman", size: 25))
                                 .padding(.bottom, 20)
-                                .padding(.top, 30)
+                                .padding(.top, 20)
                                 .autocapitalization(.none)
                             
                             SecureField("Password", text: $password)
                                 .font(.custom("Times New Roman", size: 25))
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .autocapitalization(.none)
+                            
+                            HStack {
+                                Spacer()
+                                
+                                Text("Not have account yet?")
+                                    .font(.custom("Times New Roman", size: 15))
+                                
+                                NavigationLink(destination: Registro().navigationBarBackButtonHidden(true)) {
+                                        Text("SIGN UP")
+                                            .font(.custom("Times New Roman", size: 15))
+                                            .foregroundColor(Color(red: 85/255, green: 183/255, blue: 232/255))
+                                    }
+                                
+                                Spacer()
+                            }
+                            .padding(.top, 10)
+                            
+                                
                         }
                     }
                     .padding(.horizontal, 45)
-                    .padding(.bottom, 100)
+                    .padding(.bottom, 90)
 
                     Button(action: {
+                        print(usuarios)
                         if let usuarioValido = usuarios.first(where: { $0.username == username && $0.password == password }) {
                             usuarioAutenticado = usuarioValido
                             isAuthenticated = true

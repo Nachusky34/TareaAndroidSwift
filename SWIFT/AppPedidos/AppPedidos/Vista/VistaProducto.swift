@@ -1,10 +1,9 @@
 //
-//  Tienda.swift
+//  VistaProducto.swift
 //  AppPedidos
 //
 //  Created by Mario Seoane on 20/2/25.
 //
-
 import SwiftUI
 
 struct VistaProducto: View {
@@ -128,4 +127,3 @@ struct VistaProducto_Previews: PreviewProvider {
         VistaProducto(ordenador: productoFicticio, usuario: usuarioFicticio)
     }
 }
-

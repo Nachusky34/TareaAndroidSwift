@@ -79,13 +79,49 @@ struct Perfil: View {
                     
                     Toggle("Newsletter subscription:", isOn: $subscription)
                         .font(.custom("Times New Roman", size: 23))
-                        .padding(.top, 60)
+                        .padding(.top, 20)
                         .onAppear {
                             subscription = usuario.newsletter ?? false
                         }
                     
                     HStack {
-                        Spacer() // Empuja el botón hacia el centro verticalmente
+                        Spacer()
+                        Button(action: {
+                            // aqui guarda los cambios del usuario (el correo y el codigo postal)
+                            let usuarioActualizado = Usuario(
+                                    id: usuario.id,
+                                    username: usuario.username,
+                                    password: usuario.password,
+                                    email: email,
+                                    postalcode: postalCode,
+                                    newsletter: subscription,
+                                    foto: usuario.foto
+                                )
+                            
+                                guardarCambiosUsuario(usuario: usuarioActualizado)
+                                usuario = usuarioActualizado // Actualizar el usuario en la vista
+                        }) {
+                            HStack {
+                                Text("SAVE CHANGES")
+                                    .padding(.leading, 15)
+                                
+                                Image(systemName: "checkmark.icloud")
+                                    .padding(.leading, 10)
+                                
+                            }.font(.custom("Times New Roman", size: 18))
+                                .frame(width: 200, height: 20)
+                                .padding()
+                                .background(Color.green.opacity(0.9))
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .cornerRadius(10)
+                        }
+                        .padding(.top, 30)
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Spacer()
                         Button(action: {
                             usuario = Usuario(id: -1, username: "", password: "", email: "", postalcode: "", newsletter: false, foto: "")
                         }) {
@@ -95,6 +131,7 @@ struct Perfil: View {
                                 
                                 Image(systemName: "rectangle.portrait.and.arrow.right")
                                     .padding(.leading, 10)
+                                
                             }.font(.custom("Times New Roman", size: 18))
                                 .frame(width: 200, height: 20)
                                 .padding()
@@ -103,8 +140,8 @@ struct Perfil: View {
                                 .fontWeight(.bold)
                                 .cornerRadius(10)
                         }
-                        .padding(.top, 30)
-                        Spacer() // Empuja el botón hacia el centro verticalmente
+                        .padding(.top, 10)
+                        Spacer()
                     }
 
                 }

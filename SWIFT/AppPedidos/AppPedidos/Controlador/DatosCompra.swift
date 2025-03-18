@@ -1,42 +1,75 @@
 import Foundation
 
+// Función para cargar los datos de compras desde el archivo JSON
 func CargarDatosCompra() -> [Compra] {
     let fileURL = obtenerURLArchivo()
     print("Ruta del archivo JSON en el contenedor: \(fileURL.path)")
     
-    // Si el archivo no existe, lo copia desde la carpeta Jsons dentro del bundle
+    // Si el archivo no existe, lo crea por primera vez
     if !FileManager.default.fileExists(atPath: fileURL.path) {
-        if let bundleURL = Bundle.main.url(forResource: "compras", withExtension: "json", subdirectory: "Jsons") {
-            do {
-                try FileManager.default.copyItem(at: bundleURL, to: fileURL)
-                print("Archivo copiado desde la carpeta Jsons del bundle.")
-            } catch {
-                print("Error copiando el archivo JSON desde Jsons: \(error)")
-            }
-        } else {
-            print("No se encontró el archivo 'compras.json' en la carpeta Jsons del bundle.")
-        }
+        print("El archivo no existe, creando un nuevo JSON vacío.")
+        guardarEstructuraInicialCompra()
+    }
+
+    // Validar si el JSON es correcto antes de cargarlo
+    if !validarJSONCompra() {
+        print("Error: JSON corrupto. Se restablecerá el archivo.")
+        guardarEstructuraInicialCompra() // Solo se reinicia si es inválido
     }
     
-    // Cargar datos desde el archivo
+    // Intentar cargar los datos desde el JSON
     do {
         let data = try Data(contentsOf: fileURL)
         let decoder = JSONDecoder()
-        let decodedData = try decoder.decode([String: [Compra]].self, from: data)
-        
-        if let compras = decodedData["compra"] {
-            print("Datos de compras cargados correctamente.")
-            return compras
-        } else {
-            print("Clave 'compra' no encontrada en el archivo JSON.")
-            return []
-        }
+        let decodedData = try decoder.decode(DatosCompra.self, from: data)
+        print("Datos de compras cargados correctamente.")
+        return decodedData.compras
     } catch {
         print("Error al cargar el JSON: \(error)")
         return []
     }
 }
 
+// Estructura del JSON con clave "compras"
+struct DatosCompra: Codable {
+    var compras: [Compra]
+}
+
+// Función para crear el JSON solo la primera vez
+func guardarEstructuraInicialCompra() {
+    let fileURL = obtenerURLArchivo()
+    let datosIniciales = DatosCompra(compras: [])  // Objeto con array vacío
+    
+    do {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(datosIniciales)
+        try data.write(to: fileURL)
+        print("Archivo 'compras.json' creado correctamente con clave 'compras'.")
+    } catch {
+        print("Error al crear el archivo JSON vacío: \(error)")
+    }
+}
+
+// Función para validar si el JSON contiene la clave correcta antes de cargarlo
+func validarJSONCompra() -> Bool {
+    let fileURL = obtenerURLArchivo()
+    
+    do {
+        let data = try Data(contentsOf: fileURL)
+        let json = try JSONSerialization.jsonObject(with: data, options: [])
+        
+        if let dict = json as? [String: Any], dict["compras"] != nil {
+            return true // El JSON es válido
+        } else {
+            return false // Falta la clave "compras"
+        }
+    } catch {
+        return false // Error al leer el JSON (puede estar vacío o dañado)
+    }
+}
+
+// Función para guardar una compra en el JSON
 func guardarCompraJson(compra: Compra) {
     let fileURL = obtenerURLArchivo()
     
@@ -49,7 +82,7 @@ func guardarCompraJson(compra: Compra) {
         // Guardar el array de compras con la nueva compra
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        let data = try encoder.encode(["compra": compras])
+        let data = try encoder.encode(DatosCompra(compras: compras)) // Ahora usa "compras"
         try data.write(to: fileURL)
         print("Compra guardada correctamente.")
     } catch {
@@ -57,6 +90,7 @@ func guardarCompraJson(compra: Compra) {
     }
 }
 
+// Función para eliminar una compra del JSON
 func eliminarCompraJson(compra: Compra) {
     let fileURL = obtenerURLArchivo()
     
@@ -67,7 +101,7 @@ func eliminarCompraJson(compra: Compra) {
         
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        let data = try encoder.encode(["compra": compras])
+        let data = try encoder.encode(DatosCompra(compras: compras)) // Usa "compras"
         try data.write(to: fileURL)
         
         print("Compra eliminada correctamente.")
@@ -76,6 +110,7 @@ func eliminarCompraJson(compra: Compra) {
     }
 }
 
+// Función para agregar una nueva compra
 func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     let nuevaCompra = Compra(
         id: "\(idUsuario)\(idProducto)\(obtenerMilisegundos())",
@@ -91,32 +126,31 @@ func agregarCompra(idUsuario: Int, idProducto: Int, cantidad: Int) {
     print("Compra agregada.")
 }
 
+// Función para actualizar el estado de compra de varios productos
 func actualizarCompra(ids: [String]) {
     let fileURL = obtenerURLArchivo()
-    var compras = CargarDatosCompra()
-    
+    var compras = CargarDatosCompra() // Se carga una sola vez
+
     do {
-        var compras = CargarDatosCompra()
-        
-        // Recorrer las compras
+        // Marcar las compras como "compradas"
         for index in 0..<compras.count {
             if ids.contains(compras[index].id) {
-                // Si el id de la compra está en el array `ids`, actualizar la propiedad `comprado` a true
                 compras[index].comprado = true
             }
         }
         
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        let data = try encoder.encode(["compra": compras])
+        let data = try encoder.encode(DatosCompra(compras: compras)) // Usa "compras"
         try data.write(to: fileURL)
+        
+        print("Estado de compra actualizado correctamente.")
     } catch {
         print("Error al hacer la compra: \(error)")
     }
 }
 
-
-
+// Funciones auxiliares
 func obtenerFecha() -> String {
     let formato = DateFormatter()
     formato.dateFormat = "dd/MM/yyyy"
@@ -139,4 +173,3 @@ func obtenerURLArchivo() -> URL {
     let documentsDirectory = urls[0]
     return documentsDirectory.appendingPathComponent("compras.json")
 }
-
