@@ -218,6 +218,12 @@ public class FragmentoCarrito extends Fragment {
 
     private void comprarYa() {
         Date now = new Date();
+
+        if (listaCarrito.isEmpty()) {
+            Toast.makeText(getContext(), "You must add products to the cart", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         for (Compra compraAntigua : listaCarrito) {
             String idCompra = compraAntigua.getIdUsuario() + "-" + compraAntigua.getIdProducto();
 
