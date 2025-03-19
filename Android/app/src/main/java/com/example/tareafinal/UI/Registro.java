@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +80,9 @@ public class Registro extends AppCompatActivity {
         id = dbRef.push().getKey();
         Usuario usuario = new Usuario();
         usuario.setUsername(username.getText().toString());
-        usuario.setPassword(pwd.getText().toString());
+        String pwdStr = pwd.getText().toString();
+        String hassPwd = hassPassword(pwdStr);
+        usuario.setPassword(hassPwd);
         usuario.setEmail(email.getText().toString());
         usuario.setPostalCode(postalcode.getText().toString());
         usuario.setNewsletter(false);
@@ -92,5 +95,26 @@ public class Registro extends AppCompatActivity {
         }
 
         return usuario;
+    }
+
+    private String hassPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[]passwordBytes = password.getBytes();
+            md.update(passwordBytes);
+            byte[] resumen = md.digest();
+
+
+            // Haseamos en formato haxadecimal para que la base de datos no de error
+            StringBuilder hexPass = new StringBuilder();
+            for (byte b : resumen) {
+                hexPass.append(String.format("%02x", b)); // ("%02x") Representa formato hexadecimal
+            }
+
+            return hexPass.toString();
+
+        }catch (Exception  e) {
+            throw new RuntimeException(e);
+        }
     }
 }

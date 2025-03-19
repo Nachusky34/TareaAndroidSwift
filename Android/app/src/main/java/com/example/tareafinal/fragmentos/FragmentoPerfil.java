@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -49,7 +50,7 @@ public class FragmentoPerfil extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private TextView username, email, postalcode;
-    private ImageView imagePerfil;
+    private ImageView imagePerfil, iconoPostal;
     private LinearLayout layoutCerrarSesion;
     private LinearLayout layoutHacerFoto;
     private LinearLayout layoutGuardarCambios;
@@ -70,7 +71,7 @@ public class FragmentoPerfil extends Fragment {
                         Bundle extras = data.getExtras();
                         if (extras != null) {
                             Bitmap imageBitmap = (Bitmap) extras.get("data"); // Captura la miniatura
-                            if (imagePerfil != null) { // Verificar que no sea null
+                            if (imagePerfil != null) {
                                 imagePerfil.setImageBitmap(imageBitmap); // Muestra la imagen en el ImageView
                                 if (imageBitmap != null) {
                                     subirImagenAFirebase(imageBitmap);
@@ -131,6 +132,7 @@ public class FragmentoPerfil extends Fragment {
         layoutCerrarSesion = view.findViewById(R.id.layout_cerrar_sesion);
         layoutHacerFoto = view.findViewById(R.id.layout_hacer_foto);
         layoutGuardarCambios = view.findViewById(R.id.layout_guardar_cambios);
+        iconoPostal = view.findViewById(R.id.icono_postal);
 
         newsletterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -145,6 +147,8 @@ public class FragmentoPerfil extends Fragment {
         layoutHacerFoto.setOnClickListener(v -> hacerFoto(v));
 
         layoutGuardarCambios.setOnClickListener(v -> guardarCambios(v));
+
+        iconoPostal.setOnClickListener(v -> abrirMapa(v));
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
         System.out.println(usuario.getId());
@@ -259,5 +263,11 @@ public class FragmentoPerfil extends Fragment {
         }
     }
 
+    public void abrirMapa(View v) {
+        String postalcode = usuario.getPostalCode();
+        Uri uriIntent = Uri.parse("geo:0,0?q=" + postalcode);
+        Intent intentMapa = new Intent(Intent.ACTION_VIEW, uriIntent);
+        startActivity(intentMapa);
+    }
 }
 

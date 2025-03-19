@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,9 +109,11 @@ public class Login extends AppCompatActivity {
         String username = this.username.getText().toString();
         String pwd = this.pwd.getText().toString();
 
+        String hassPwd = hassPassword(pwd);
+
         boolean encontrado = false;
         for (Usuario usuario : listaUsuarios) {
-            if (username.equals(usuario.getUsername()) && pwd.equals(usuario.getPassword())) {
+            if (username.equals(usuario.getUsername()) && hassPwd.equals(usuario.getPassword())) {
                 accederTienda(usuario);
                 encontrado = true;
                 break;
@@ -215,5 +218,25 @@ public class Login extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(Login.this, "Error creating account", Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private String hassPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] passwordBytes = password.getBytes();
+            md.update(passwordBytes);
+            byte[] resumen = md.digest();
+
+            // Haseamos en formato hexadecimal para que la base de datos no de error
+            StringBuilder hexPass = new StringBuilder();
+            for (byte b : resumen) {
+                hexPass.append(String.format("%02x", b)); // ("%02x") Representa formato hexadecimal
+            }
+
+            return hexPass.toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
