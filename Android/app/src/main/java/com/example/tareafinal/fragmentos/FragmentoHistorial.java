@@ -96,6 +96,14 @@ public class FragmentoHistorial extends Fragment {
 
         boolean estadoSwitch = switchLayout.isChecked();
 
+        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
+        dbReferenceCompras = database.getReference("compras");
+        dbReferenceOrdenadores = database.getReference("productos");
+
+        usuario = (Usuario) getArguments().getSerializable("usuario");
+
+        cantidadCarrito();
+
         // Configurar el RecyclerView según el estado inicial del Switch
         if (estadoSwitch) {
             rvHistorial.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -109,13 +117,7 @@ public class FragmentoHistorial extends Fragment {
         adaptadorHistorial = new AdaptadorHistorial(listaOrdenadoresHistorial, listaCompras, estadoSwitch);
         rvHistorial.setAdapter(adaptadorHistorial);
 
-        database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
-        dbReferenceCompras = database.getReference("compras");
-        dbReferenceOrdenadores = database.getReference("productos");
-
         cargarOrdenadores();
-
-        usuario = (Usuario) getArguments().getSerializable("usuario");
 
         switchLayout.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -129,8 +131,6 @@ public class FragmentoHistorial extends Fragment {
         });
 
         btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
-
-        cantidadCarrito();
 
         return view;
     }
@@ -218,7 +218,7 @@ public class FragmentoHistorial extends Fragment {
                 contadorCarrito = 0;
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
-                    if (compra != null && compra.getIdUsuario().equals(usuario.getId())) {
+                    if (compra != null && !compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         contadorCarrito++;
                     }
                 }

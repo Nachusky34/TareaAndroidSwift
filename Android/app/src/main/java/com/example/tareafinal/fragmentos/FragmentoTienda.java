@@ -109,6 +109,8 @@ public class FragmentoTienda extends Fragment {
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
 
+        cantidadCarrito();
+
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -148,7 +150,7 @@ public class FragmentoTienda extends Fragment {
             tiendaAdapter.notifyDataSetChanged(); // Refrescar adaptador para que use el nuevo layout
         });
 
-        cantidadCarrito();
+
 
         return view;
 
@@ -189,7 +191,7 @@ public class FragmentoTienda extends Fragment {
                 contadorCarrito = 0;
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Compra compra = ds.getValue(Compra.class);
-                    if (compra != null && compra.getIdUsuario().equals(usuario.getId())) {
+                    if (compra != null && !compra.isComprado() && compra.getIdUsuario().equals(usuario.getId())) {
                         contadorCarrito++;
                     }
                 }
