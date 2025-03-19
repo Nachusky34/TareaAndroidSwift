@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class FragmentoHistorial extends Fragment {
     private RecyclerView rv;
     private Switch tipoLayout;
     private ImageButton btnCarrito;
+    private LinearLayout layout_history_empty;
 
     private RecyclerView rvHistorial;
     private AdaptadorHistorial adaptadorHistorial;
@@ -88,6 +90,7 @@ public class FragmentoHistorial extends Fragment {
         rvHistorial = view.findViewById(R.id.rv_historial);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
         btnCarrito = view.findViewById(R.id.btn_carrito);
+        layout_history_empty = view.findViewById(R.id.layout_history_empty);
 
         boolean estadoSwitch = switchLayout.isChecked();
 
@@ -178,6 +181,14 @@ public class FragmentoHistorial extends Fragment {
                 listaOrdenadoresHistorial.clear();
                 listaOrdenadoresHistorial.addAll(ordenadoresFiltrados);
                 adaptadorHistorial.notifyDataSetChanged();
+
+                if (listaOrdenadoresHistorial.isEmpty()) {
+                    rvHistorial.setVisibility(View.GONE);
+                    layout_history_empty.setVisibility(View.VISIBLE);
+                } else {
+                    rvHistorial.setVisibility(View.VISIBLE);
+                    layout_history_empty.setVisibility(View.GONE);
+                }
             }
 
             @Override

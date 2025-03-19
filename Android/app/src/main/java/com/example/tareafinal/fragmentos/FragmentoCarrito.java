@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class FragmentoCarrito extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private TextView precio;
+    private LinearLayout layout_cart_empty;
 
     private RecyclerView rvCarrito;
     private AdaptadorCarrito adaptadorCarrito;
@@ -108,19 +111,17 @@ public class FragmentoCarrito extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carrito, container, false);
 
+
         precio = view.findViewById(R.id.tv_carrito_precio);
         btnComprarYa = view.findViewById(R.id.btn_comprarya);
         rvCarrito = view.findViewById(R.id.rv_carrito);
+        layout_cart_empty = view.findViewById(R.id.layout_cart_empty);
         rvCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
 
         rvCarrito.setAdapter(adaptadorCarrito);
 
         adaptadorCarrito.setOnItemClickListener(compra -> {
-            if (eliminarCompra(compra)) {
-                //Toast.makeText(getContext(), "Compra eliminada correctamente", Toast.LENGTH_SHORT).show();
-            } else {
-                //Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
-            }
+            eliminarCompra(compra);
         });
 
         btnComprarYa.setOnClickListener(v -> comprarYa());
@@ -183,6 +184,14 @@ public class FragmentoCarrito extends Fragment {
                 adaptadorCarrito.notifyDataSetChanged();
 
                 precio.setText(String.format("%.2f $", precioTotal));
+
+                if (listaCarrito.isEmpty()) {
+                    rvCarrito.setVisibility(View.GONE);
+                    layout_cart_empty.setVisibility(View.VISIBLE);
+                } else {
+                    rvCarrito.setVisibility(View.VISIBLE);
+                    layout_cart_empty.setVisibility(View.GONE);
+                }
             }
 
             @Override

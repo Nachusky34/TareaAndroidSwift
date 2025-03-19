@@ -198,9 +198,6 @@ public class FragmentoProducto extends Fragment {
             cantidadInt--;
             this.cantidad.setText(String.valueOf(cantidadInt));
             total.setText(String.valueOf(precioInt * cantidadInt) + " $");
-        } else {
-            // Si la cantidad es 1, no hacer nada o mostrar un mensaje
-            Toast.makeText(getContext(), "You cannot buy less than 1 computer", Toast.LENGTH_SHORT).show();
         }
     }
 
