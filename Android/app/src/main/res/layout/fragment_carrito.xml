@@ -19,10 +19,11 @@
 
             <ImageView
                 android:id="@+id/iv_logo_circular"
-                android:layout_width="41dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:src="@drawable/logo_circular" />
 
@@ -31,13 +32,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="95dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
-                android:layout_marginRight="100dp"
+                android:layout_marginRight="30dp"
                 android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="CARRITO"
+                android:text="SHOPPING CART"
                 android:textColor="#FFFFFF"
-                android:textSize="40dp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
 
@@ -110,7 +111,7 @@
                 android:background="#55B7E8"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="COMPRAR YA"
+                android:text="BUY NOW!"
                 android:textColor="#020202"
                 android:textSize="16dp"
                 android:textStyle="bold" />

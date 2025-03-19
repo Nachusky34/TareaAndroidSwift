@@ -83,11 +83,8 @@ public class AdaptadorCarrito extends RecyclerView.Adapter<AdaptadorCarrito.Carr
 
         // HACER QUE SOLO EL BOTÓN SEA CLICKEABLE
         holder.btnEliminar.setOnClickListener(v -> {
-            System.out.println("1");
             if (listenerEliminar != null) {
-                System.out.println("2");
                 listenerEliminar.onItemClick(compra);
-                System.out.println("3");
             }
         });
     }

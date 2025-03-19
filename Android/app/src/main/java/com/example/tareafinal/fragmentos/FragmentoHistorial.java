@@ -142,7 +142,7 @@ public class FragmentoHistorial extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los ordenadores", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading computers", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -182,7 +182,7 @@ public class FragmentoHistorial extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading purchases", Toast.LENGTH_SHORT).show();
             }
         });
     }

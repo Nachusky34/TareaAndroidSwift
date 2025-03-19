@@ -117,7 +117,7 @@ public class FragmentoTienda extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
             }
         });
 

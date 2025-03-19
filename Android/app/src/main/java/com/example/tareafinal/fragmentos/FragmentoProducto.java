@@ -163,7 +163,7 @@ public class FragmentoProducto extends Fragment {
         bundle = new Bundle();
         bundle.putSerializable("compra", compra);
         dbRefCompras.child(idCompra).setValue(compra);
-        Toast.makeText(getContext(), "Se ha agregado al carrito", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
 
         volverATienda();
     }
@@ -230,7 +230,7 @@ public class FragmentoProducto extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
             }
         });
     }

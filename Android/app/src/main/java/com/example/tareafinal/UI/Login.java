@@ -118,7 +118,7 @@ public class Login extends AppCompatActivity {
         }
 
         if (!encontrado) {
-            Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -141,7 +141,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Login.this, "Ha surgido un problema", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "A problem has arisen", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -162,10 +162,10 @@ public class Login extends AppCompatActivity {
                 verificarUsuario(account);
             } catch (ApiException e) {
                 Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error signing in with Google", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "Inicio de sesión con Google cancelado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Google login canceled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -177,7 +177,7 @@ public class Login extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Usuario usuario = ds.getValue(Usuario.class);
-                        Toast.makeText(Login.this, "Inicio de sesión exitoso: " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Successful login: " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
                         accederTienda(usuario);
                         return;
                     }
@@ -188,7 +188,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Login.this, "Error al verificar usuario", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "Error verifying user", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -209,11 +209,11 @@ public class Login extends AppCompatActivity {
 
         userRef.setValue(nuevoUsuario)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(Login.this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Successfully created account", Toast.LENGTH_SHORT).show();
                     accederTienda(nuevoUsuario);
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(Login.this, "Error al crear cuenta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Error creating account", Toast.LENGTH_SHORT).show();
                 });
     }
 }

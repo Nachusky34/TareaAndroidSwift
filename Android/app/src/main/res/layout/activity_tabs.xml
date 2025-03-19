@@ -38,21 +38,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/icono_perfil_negro"
-            android:text="Perfil" />
+            android:text="Profile" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tiTienda"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/icono_tienda"
-            android:text="Tienda" />
+            android:text="Shop" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tiHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/icono_historial"
-            android:text="Historial" />
+            android:text="History" />
 
     </com.google.android.material.tabs.TabLayout>
 </LinearLayout>

@@ -145,7 +145,7 @@ public class FragmentoCarrito extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar los ordenadores", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading computers", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -187,7 +187,7 @@ public class FragmentoCarrito extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar las compras", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error loading purchases", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -197,11 +197,11 @@ public class FragmentoCarrito extends Fragment {
         dbReferenceCompras.child(id).removeValue()
                 .addOnSuccessListener(aVoid -> {
                     compraEliminada = true;
-                    Toast.makeText(getContext(), "Producto eliminado correctamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Product has been successfully removed", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     compraEliminada = false;
-                    Toast.makeText(getContext(), "Error al eliminar la compra", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error deleting purchase", Toast.LENGTH_SHORT).show();
                 });
         cargarCompras();
         return compraEliminada;
@@ -231,7 +231,7 @@ public class FragmentoCarrito extends Fragment {
             });
 
         }
-        Toast.makeText(getContext(), "Compra realizada correctamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Purchase made correctly", Toast.LENGTH_SHORT).show();
         volverATienda();
     }
 

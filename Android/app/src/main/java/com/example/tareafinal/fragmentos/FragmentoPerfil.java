@@ -176,13 +176,13 @@ public class FragmentoPerfil extends Fragment {
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "User not found", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error de base de datos: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -200,8 +200,8 @@ public class FragmentoPerfil extends Fragment {
         // Subir imagen a Firebase Storage
         DatabaseReference userRef = dbReferenceUsuario.child(idUser).child("fotoPerfil");
         userRef.setValue(nombreImagen)
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Imagen almacenada", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al guardar nombre", Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Stored Image", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error saving name", Toast.LENGTH_SHORT).show());
     }
 
 
@@ -248,7 +248,7 @@ public class FragmentoPerfil extends Fragment {
         dbReferenceUsuario.child(usuario.getId()).child("email").setValue(email.getText().toString());
         dbReferenceUsuario.child(usuario.getId()).child("postalCode").setValue(postalcode.getText().toString());
         dbReferenceUsuario.child(usuario.getId()).child("newsletter").setValue(newsletterSwitch.isChecked());
-        Toast.makeText(getContext(), "Cambios guardados", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Saved changes", Toast.LENGTH_SHORT).show();
     }
 
     private void cerrarSesion(View v) {
