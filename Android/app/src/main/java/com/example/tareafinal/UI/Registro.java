@@ -69,7 +69,7 @@ public class Registro extends AppCompatActivity {
     public void registrarse(View view) {
         Usuario usuario = generarUsuario();
         if (usuario == null) {
-            Toast.makeText(this, "Intente otra vez", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please try again filling all fields", Toast.LENGTH_SHORT).show();
             return;
         }
         dbRef.child(id).setValue(usuario);
@@ -89,8 +89,8 @@ public class Registro extends AppCompatActivity {
         usuario.setFotoPerfil("fotoperfil.png"); // foto por defecto
         usuario.setId(id);
 
-        if (usuario.getUsername().isEmpty() || usuario.getPassword().isEmpty() || usuario.getEmail().isEmpty() || usuario.getPostalCode().isEmpty()) {
-            Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+        if (usuario.getUsername().isEmpty() || usuario.getPassword().isEmpty() ||
+                usuario.getEmail().isEmpty() || usuario.getPostalCode().isEmpty()) {
             return null;
         }
 

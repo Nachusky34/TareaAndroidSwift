@@ -17,10 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tareafinal.R;
 import com.example.tareafinal.adaptadores.AdaptadorTienda;
+import com.example.tareafinal.db.Compra;
 import com.example.tareafinal.db.Ordenador;
 import com.example.tareafinal.db.Usuario;
 import com.google.firebase.database.DataSnapshot;
@@ -45,11 +47,14 @@ public class FragmentoTienda extends Fragment {
     private RecyclerView rvTienda;
     private AdaptadorTienda tiendaAdapter;
     private List<Ordenador> listaOrdenadoresTienda;
+    private int contadorCarrito;
     private Switch switchLayout;
     private FirebaseDatabase database;
-    private DatabaseReference dbReference; //para la referencia de la base de datos de Firebase
+    private DatabaseReference dbReference, dbCompras; //para la referencia de la base de datos de Firebase
     private Usuario usuario;
     private ImageButton btnCarrito;
+    private View circulito;
+    private TextView contador;
 
     public FragmentoTienda() {}
 
@@ -82,6 +87,9 @@ public class FragmentoTienda extends Fragment {
         btnCarrito = view.findViewById(R.id.btn_carrito);
         rvTienda = view.findViewById(R.id.rv_tienda);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
+        btnCarrito = view.findViewById(R.id.btn_carrito);
+        circulito = view.findViewById(R.id.circulito);
+        contador = view.findViewById(R.id.contador);
 
         boolean estadoSwitch = switchLayout.isChecked();
 
@@ -97,6 +105,7 @@ public class FragmentoTienda extends Fragment {
 
         database = FirebaseDatabase.getInstance("https://pcera-2b2f4-default-rtdb.europe-west1.firebasedatabase.app/");
         dbReference = database.getReference("productos");
+        dbCompras = database.getReference("compras");
 
         usuario = (Usuario) getArguments().getSerializable("usuario");
 
@@ -123,17 +132,6 @@ public class FragmentoTienda extends Fragment {
 
         rvTienda.setAdapter(tiendaAdapter);
 
-        /*
-        pos_seleccionado = -1;
-
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pos_seleccionado = rvTienda.getChildAdapterPosition(v);
-                iniciarFragmentoProducto(listaOrdenadoresTienda.get(pos_seleccionado));
-            }
-        };
-         */
         btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
 
         tiendaAdapter.setOnItemClickListener(ordenador -> {
@@ -149,6 +147,8 @@ public class FragmentoTienda extends Fragment {
             tiendaAdapter.setEstaMarcado(isChecked); // Actualiza el adaptador
             tiendaAdapter.notifyDataSetChanged(); // Refrescar adaptador para que use el nuevo layout
         });
+
+        cantidadCarrito();
 
         return view;
 
@@ -179,5 +179,33 @@ public class FragmentoTienda extends Fragment {
         transaction.replace(R.id.flContenedor, fragmentoCarrito);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void cantidadCarrito() {
+        contadorCarrito = 0;
+        dbCompras.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                contadorCarrito = 0;
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Compra compra = ds.getValue(Compra.class);
+                    if (compra != null && compra.getIdUsuario().equals(usuario.getId())) {
+                        contadorCarrito++;
+                    }
+                }
+
+                if (contadorCarrito > 0) {
+                    circulito.setVisibility(View.VISIBLE);
+                    contador.setText(String.valueOf(contadorCarrito));
+                } else {
+                    circulito.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

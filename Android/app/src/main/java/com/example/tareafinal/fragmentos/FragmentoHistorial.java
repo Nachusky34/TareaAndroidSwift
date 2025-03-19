@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tareafinal.R;
@@ -43,9 +44,10 @@ public class FragmentoHistorial extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView rv;
-    private Switch tipoLayout;
+    private Switch tipoLayout, switchLayout;
     private ImageButton btnCarrito;
+    private View circulito;
+    private TextView contador;
     private LinearLayout layout_history_empty;
 
     private RecyclerView rvHistorial;
@@ -53,12 +55,10 @@ public class FragmentoHistorial extends Fragment {
 
     private List<Compra> listaCompras;
     private List<Ordenador> listaOrdenadoresHistorial;
-
-    private Switch switchLayout;
+    private int contadorCarrito;
 
     private FirebaseDatabase database;
-    private DatabaseReference dbReferenceCompras;
-    private DatabaseReference dbReferenceOrdenadores;
+    private DatabaseReference dbReferenceCompras, dbReferenceOrdenadores;
     private Usuario usuario;
 
     public FragmentoHistorial() {
@@ -89,8 +89,10 @@ public class FragmentoHistorial extends Fragment {
 
         rvHistorial = view.findViewById(R.id.rv_historial);
         switchLayout = view.findViewById(R.id.switch_tipolayout);
-        btnCarrito = view.findViewById(R.id.btn_carrito);
+        btnCarrito = view.findViewById(R.id.btn_carrito_hitorial);
         layout_history_empty = view.findViewById(R.id.layout_history_empty);
+        circulito = view.findViewById(R.id.circulito_historial);
+        contador = view.findViewById(R.id.contador_historial);
 
         boolean estadoSwitch = switchLayout.isChecked();
 
@@ -127,6 +129,8 @@ public class FragmentoHistorial extends Fragment {
         });
 
         btnCarrito.setOnClickListener(v -> iniciarFragmentoCarrito());
+
+        cantidadCarrito();
 
         return view;
     }
@@ -171,11 +175,6 @@ public class FragmentoHistorial extends Fragment {
                         }
                     }
                 }
-                /*
-                if (listaCompras.isEmpty()) {
-                    Toast.makeText(getContext(), "No hay compras realizadas", Toast.LENGTH_SHORT).show();
-                }
-                */
 
                 // actualizar el adaptador con los datos obtenidos
                 listaOrdenadoresHistorial.clear();
@@ -209,5 +208,33 @@ public class FragmentoHistorial extends Fragment {
         transaction.replace(R.id.flContenedor, fragmentoCarrito);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void cantidadCarrito() {
+        contadorCarrito = 0;
+        dbReferenceCompras.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                contadorCarrito = 0;
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Compra compra = ds.getValue(Compra.class);
+                    if (compra != null && compra.getIdUsuario().equals(usuario.getId())) {
+                        contadorCarrito++;
+                    }
+                }
+
+                if (contadorCarrito > 0) {
+                    circulito.setVisibility(View.VISIBLE);
+                    contador.setText(String.valueOf(contadorCarrito));
+                } else {
+                    circulito.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

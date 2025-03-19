@@ -41,14 +41,37 @@
                 android:textSize="40dp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btn_carrito"
+            <FrameLayout
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="29dp"
-                android:layout_marginRight="20dp"
-                android:background="#55B7E8"
-                app:srcCompat="@drawable/icono_carrito_blanco" />
+                android:layout_marginHorizontal="20dp">
+
+                <ImageButton
+                    android:id="@+id/btn_carrito_hitorial"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#55B7E8"
+                    app:srcCompat="@drawable/icono_carrito_blanco" />
+
+                <View
+                    android:id="@+id/circulito_historial"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="35dp"
+                    android:background="@drawable/circulo_rojo" />
+
+                <TextView
+                    android:id="@+id/contador_historial"
+                    android:layout_width="17dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="35dp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:textSize="12sp" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
